@@ -1,0 +1,99 @@
+.user-info {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40rpx 0;
+}
+
+.user-avatar {
+  width: 128rpx;
+  height: 128rpx;
+  border-radius: 50%;
+  margin-bottom: 20rpx;
+}
+
+.user-nickname {
+  font-size: 32rpx;
+  color: var(--text-color);
+}
+
+.game-time-info {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  padding: 30rpx;
+}
+
+.info-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.label {
+  font-size: 24rpx;
+  color: var(--secondary-color);
+  margin-bottom: 10rpx;
+}
+
+.value {
+  font-size: 36rpx;
+  color: var(--text-color);
+  font-weight: bold;
+}
+
+.action-buttons {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  margin: 40rpx 0;
+}
+
+.action-buttons button {
+  width: 45%;
+}
+
+.sport-records {
+  width: 100%;
+}
+
+.section-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: var(--text-color);
+  margin-bottom: 20rpx;
+}
+
+.record-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20rpx 0;
+  border-bottom: 1rpx solid #eee;
+}
+
+.record-item:last-child {
+  border-bottom: none;
+}
+
+.sport-type {
+  font-size: 28rpx;
+  color: var(--text-color);
+}
+
+.sport-duration {
+  font-size: 28rpx;
+  color: var(--primary-color);
+}
+
+.sport-time {
+  font-size: 24rpx;
+  color: var(--secondary-color);
+}
+
+.empty-records {
+  text-align: center;
+  padding: 40rpx 0;
+  color: var(--secondary-color);
+}

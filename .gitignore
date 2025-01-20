@@ -1,0 +1,16 @@
+# IDE specific files
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Node modules
+node_modules/
+
+# miniprogram specific
+miniprogram_npm/
+project.private.config.json
+
+# System files
+.DS_Store
+Thumbs.db
