@@ -26,10 +26,14 @@ Page({
       }
     }
     
-    // 获取游戏时间余额和使用情况
+    // 首次加载时更新数据
     this.getGameTimeInfo()
-    // 获取最近运动记录
     this.getSportRecords()
+  },
+
+  // 每次页面显示时更新游戏时间余额
+  onShow() {
+    this.getGameTimeInfo()
   },
 
   getUserInfo(e) {
@@ -43,7 +47,7 @@ Page({
   },
 
   getGameTimeInfo() {
-    // TODO: 从服务器获取游戏时间信息
+    // 从全局数据中获取最新的游戏时间余额
     this.setData({
       gameTimeBalance: app.globalData.gameTimeBalance,
       todayGameTime: 0,

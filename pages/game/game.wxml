@@ -6,5 +6,10 @@
     <text class="label">可用游戏时间:</text>
     <text class="value">{{gameTimeBalance}} 分钟</text>
   </view>
-  <button class="btn-primary" bindtap="startGame">开始游戏</button>
+  <view class="timer">
+    <text>计时: {{elapsedTime}} 秒</text>
+  </view>
+  <button class="btn-primary" bindtap="startGame">
+    {{gameStarted ? '结束游戏' : '开始游戏'}}
+  </button>
 </view> 

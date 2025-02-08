@@ -1,3 +1,5 @@
+const app = getApp();
+
 Page({
   data: {
     duration: ''
@@ -6,16 +8,19 @@ Page({
     this.setData({ duration: e.detail.value });
   },
   submitSportRecord() {
-    if (!this.data.duration) {
+    const duration = parseInt(this.data.duration);
+    if (!duration || duration <= 0) {
       wx.showToast({
-        title: '请输入运动时长',
+        title: '请输入有效的运动时长',
         icon: 'none'
       });
       return;
     }
-    // 此处可添加调用接口记录运动数据的逻辑
+    // 记录运动成功后，将运动时长（单位：分钟）兑换为游戏时间，假设1:1兑换
+    app.globalData.gameTimeBalance += duration;
+    
     wx.showToast({
-      title: '记录成功',
+      title: `记录成功，增加 ${duration} 分钟游戏时间`,
       icon: 'success'
     });
     // 重置输入框
