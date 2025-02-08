@@ -1,7 +1,7 @@
 <!-- 登录页面的 WXML -->
 <view class="container">
   <text class="title">欢迎使用动乐时光</text>
-  <button class="btn-login" open-type="getUserInfo" bindgetuserinfo="handleUserInfo">
+  <button class="btn-login" bindtap="getUserProfile">
     点击微信登录
   </button>
 </view> 
