@@ -16,8 +16,20 @@ Page({
       });
       return;
     }
-    // 记录运动成功后，将运动时长（单位：分钟）兑换为游戏时间，假设1:1兑换
+    // 将运动时长兑换为游戏时间（假设1:1兑换）
     app.globalData.gameTimeBalance += duration;
+    
+    // 保存当前的运动记录到全局变量中
+    const now = new Date();
+    const record = {
+      type: '运动',
+      duration: duration,
+      time: now.toLocaleString()
+    };
+    if (!app.globalData.sportRecords) {
+      app.globalData.sportRecords = [];
+    }
+    app.globalData.sportRecords.push(record);
     
     wx.showToast({
       title: `记录成功，增加 ${duration} 分钟游戏时间`,

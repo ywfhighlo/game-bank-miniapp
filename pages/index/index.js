@@ -26,14 +26,15 @@ Page({
       }
     }
     
-    // 首次加载时更新数据
+    // 获取游戏时间余额和运动记录
     this.getGameTimeInfo()
     this.getSportRecords()
   },
 
-  // 每次页面显示时更新游戏时间余额
+  // 每次页面显示时更新游戏时间余额和运动记录
   onShow() {
     this.getGameTimeInfo()
+    this.getSportRecords()
   },
 
   getUserInfo(e) {
@@ -47,7 +48,7 @@ Page({
   },
 
   getGameTimeInfo() {
-    // 从全局数据中获取最新的游戏时间余额
+    // 获取全局最新游戏时间余额
     this.setData({
       gameTimeBalance: app.globalData.gameTimeBalance,
       todayGameTime: 0,
@@ -56,9 +57,9 @@ Page({
   },
 
   getSportRecords() {
-    // TODO: 从服务器获取运动记录
+    // 从全局变量中获取运动记录，如果没有则返回空数组
     this.setData({
-      sportRecords: []
+      sportRecords: app.globalData.sportRecords || []
     })
   },
 
