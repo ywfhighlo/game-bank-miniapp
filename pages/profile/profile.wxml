@@ -1,0 +1,9 @@
+<view class="container">
+  <view class="profile-header">
+    <image class="avatar" src="{{user.avatarUrl}}" mode="cover" />
+    <text class="nickname">{{user.nickName}}</text>
+  </view>
+  <view class="profile-content">
+    <button class="btn-secondary" bindtap="logout">退出登录</button>
+  </view>
+</view> 

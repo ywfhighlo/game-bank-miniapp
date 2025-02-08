@@ -1,9 +1,10 @@
 {
   "description": "动乐时光 - 管理孩子运动和游戏时间的小程序",
   "packOptions": {
-    "ignore": []
+    "ignore": [],
+    "include": []
   },
-  "miniprogramRoot": "miniprogram/",
+  "miniprogramRoot": "",
   "compileType": "miniprogram",
   "projectname": "game-bank-miniapp",
   "setting": {
@@ -27,11 +28,21 @@
     "lazyloadPlaceholderEnable": false,
     "useMultiFrameRuntime": true,
     "useApiHook": true,
-    "useApiHostProcess": true
+    "useApiHostProcess": true,
+    "babelSetting": {
+      "ignore": [],
+      "disablePlugins": [],
+      "outputPath": ""
+    }
   },
-  "appid": "your_appid_here",
+  "appid": "wxfa2e2aac0a23a52d",
   "libVersion": "2.30.2",
   "simulatorType": "wechat",
   "simulatorPluginLibVersion": {},
-  "condition": {}
+  "condition": {},
+  "srcMiniprogramRoot": "miniprogram/",
+  "editorSetting": {
+    "tabIndent": "insertSpaces",
+    "tabSize": 2
+  }
 }

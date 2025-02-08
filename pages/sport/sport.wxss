@@ -1,0 +1,27 @@
+.container { 
+  padding: 20rpx; 
+}
+.header { 
+  text-align: center; 
+  margin-bottom: 20rpx; 
+}
+.title { 
+  font-size: 32rpx; 
+  font-weight: bold; 
+}
+.form { 
+  margin-bottom: 20rpx; 
+}
+.input { 
+  border: 1rpx solid #ccc; 
+  padding: 10rpx; 
+  width: 100%; 
+}
+.btn-primary { 
+  background-color: #3cc51f; 
+  color: #fff; 
+  padding: 20rpx; 
+  border: none; 
+  border-radius: 8rpx; 
+  width: 100%;
+} 

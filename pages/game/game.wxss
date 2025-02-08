@@ -1,0 +1,30 @@
+.container { 
+  padding: 20rpx; 
+}
+.header { 
+  text-align: center; 
+  margin-bottom: 20rpx; 
+}
+.title { 
+  font-size: 32rpx; 
+  font-weight: bold; 
+}
+.info { 
+  text-align: center; 
+  margin-bottom: 20rpx; 
+}
+.label { 
+  font-size: 28rpx; 
+}
+.value { 
+  font-size: 32rpx; 
+  color: var(--primary-color); 
+}
+.btn-primary { 
+  background-color: #3cc51f; 
+  color: #fff; 
+  padding: 20rpx; 
+  border: none; 
+  border-radius: 8rpx; 
+  width: 100%;
+} 

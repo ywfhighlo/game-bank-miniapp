@@ -1,0 +1,10 @@
+<view class="container">
+  <view class="header">
+    <text class="title">游戏时间</text>
+  </view>
+  <view class="info">
+    <text class="label">可用游戏时间:</text>
+    <text class="value">{{gameTimeBalance}} 分钟</text>
+  </view>
+  <button class="btn-primary" bindtap="startGame">开始游戏</button>
+</view> 

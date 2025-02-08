@@ -1,0 +1,9 @@
+<view class="container">
+  <view class="header">
+    <text class="title">记录运动</text>
+  </view>
+  <view class="form">
+    <input class="input" placeholder="请输入运动时长（分钟）" type="number" confirm-type="done" bindinput="onInput" />
+  </view>
+  <button class="btn-primary" bindtap="submitSportRecord">提交记录</button>
+</view> 
