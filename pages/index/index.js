@@ -8,7 +8,8 @@ Page({
     gameTimeBalance: 0,
     todayGameTime: 0,
     weekGameTime: 0,
-    sportRecords: []
+    sportRecords: [],
+    gameRecords: []  // 新增：最近游戏记录
   },
 
   onLoad() {
@@ -26,41 +27,50 @@ Page({
       }
     }
     
-    // 获取游戏时间余额和运动记录
-    this.getGameTimeInfo()
-    this.getSportRecords()
+    // 初次加载时更新数据
+    this.getGameTimeInfo();
+    this.getSportRecords();
+    this.getGameRecords();
   },
 
-  // 每次页面显示时更新游戏时间余额和运动记录
+  // 每次页面显示时更新最新数据
   onShow() {
-    this.getGameTimeInfo()
-    this.getSportRecords()
+    this.getGameTimeInfo();
+    this.getSportRecords();
+    this.getGameRecords();
   },
 
   getUserInfo(e) {
     if (e.detail.userInfo) {
-      app.globalData.userInfo = e.detail.userInfo
+      app.globalData.userInfo = e.detail.userInfo;
       this.setData({
         userInfo: e.detail.userInfo,
         hasUserInfo: true
-      })
+      });
     }
   },
 
   getGameTimeInfo() {
-    // 获取全局最新游戏时间余额
+    // 从全局获取游戏余额
     this.setData({
       gameTimeBalance: app.globalData.gameTimeBalance,
       todayGameTime: 0,
       weekGameTime: 0
-    })
+    });
   },
 
+  // 获取最近运动记录
   getSportRecords() {
-    // 从全局变量中获取运动记录，如果没有则返回空数组
     this.setData({
       sportRecords: app.globalData.sportRecords || []
-    })
+    });
+  },
+
+  // 新增：获取最近游戏记录
+  getGameRecords() {
+    this.setData({
+      gameRecords: app.globalData.gameRecords || []
+    });
   },
 
   navigateToSport() {

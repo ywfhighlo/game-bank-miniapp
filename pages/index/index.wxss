@@ -97,3 +97,17 @@
   padding: 40rpx 0;
   color: var(--secondary-color);
 }
+
+.record-list {
+  margin: 20rpx;
+  padding: 20rpx;
+  background-color: #fff;
+  border-radius: 8rpx;
+}
+
+.record-type, 
+.record-duration, 
+.record-time {
+  font-size: 28rpx;
+  color: var(--text-color);
+}

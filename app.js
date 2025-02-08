@@ -7,6 +7,8 @@ App({
     weeklyLimit: 36000, // 10小时，单位：秒
     restInterval: 1800, // 30分钟，单位：秒
     restDuration: 300, // 5分钟，单位：秒
+    sportRecords: [],
+    gameRecords: []
   },
 
   onLaunch() {

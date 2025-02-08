@@ -1,5 +1,11 @@
 .container { 
-  padding: 20rpx; 
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #f8f8f8;
+  padding: 20rpx;
 }
 .header { 
   text-align: center; 
@@ -11,6 +17,7 @@
 }
 .form { 
   margin-bottom: 20rpx; 
+  width: 80%;
 }
 .input { 
   border: 1rpx solid #ccc; 
@@ -23,5 +30,6 @@
   padding: 20rpx; 
   border: none; 
   border-radius: 8rpx; 
-  width: 100%;
+  width: 80%;
+  text-align: center;
 } 

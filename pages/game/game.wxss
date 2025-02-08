@@ -1,5 +1,11 @@
 .container { 
-  padding: 20rpx; 
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #f8f8f8;
+  padding: 20rpx;
 }
 .header { 
   text-align: center; 
@@ -20,11 +26,16 @@
   font-size: 32rpx; 
   color: var(--primary-color); 
 }
+.timer {
+  font-size: 28rpx;
+  margin-bottom: 20rpx;
+}
 .btn-primary { 
   background-color: #3cc51f; 
   color: #fff; 
   padding: 20rpx; 
   border: none; 
   border-radius: 8rpx; 
-  width: 100%;
+  width: 80%;
+  text-align: center;
 } 

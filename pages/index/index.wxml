@@ -12,34 +12,48 @@
   <view class="game-time-info card">
     <view class="info-item">
       <text class="label">游戏时间余额</text>
-      <text class="value">{{gameTimeBalance}}分钟</text>
+      <text class="value">{{gameTimeBalance}} 分钟</text>
     </view>
     <view class="info-item">
       <text class="label">今日已用</text>
-      <text class="value">{{todayGameTime}}分钟</text>
+      <text class="value">{{todayGameTime}} 分钟</text>
     </view>
     <view class="info-item">
       <text class="label">本周已用</text>
-      <text class="value">{{weekGameTime}}分钟</text>
+      <text class="value">{{weekGameTime}} 分钟</text>
+    </view>
+  </view>
+
+  <view class="record-list card">
+    <view class="section-title">最近运动记录</view>
+    <block wx:if="{{sportRecords.length > 0}}">
+      <view class="record-item" wx:for="{{sportRecords}}" wx:key="index">
+        <text class="record-type">运动</text>
+        <text class="record-duration">{{item.duration}} 分钟</text>
+        <text class="record-time">{{item.time}}</text>
+      </view>
+    </block>
+    <view class="empty-records" wx:else>
+      <text>暂无运动记录</text>
+    </view>
+  </view>
+
+  <view class="record-list card">
+    <view class="section-title">最近游戏记录</view>
+    <block wx:if="{{gameRecords.length > 0}}">
+      <view class="record-item" wx:for="{{gameRecords}}" wx:key="index">
+        <text class="record-type">游戏{{item.mode ? ' (' + item.mode + ')' : ''}}</text>
+        <text class="record-duration">{{item.duration}} 分钟</text>
+        <text class="record-time">{{item.time}}</text>
+      </view>
+    </block>
+    <view class="empty-records" wx:else>
+      <text>暂无游戏记录</text>
     </view>
   </view>
 
   <view class="action-buttons">
     <button class="btn-primary" bindtap="navigateToSport">记录运动</button>
     <button class="btn-secondary" bindtap="navigateToGame">开始游戏</button>
-  </view>
-
-  <view class="sport-records card">
-    <view class="section-title">最近运动记录</view>
-    <block wx:if="{{sportRecords.length > 0}}">
-      <view class="record-item" wx:for="{{sportRecords}}" wx:key="index">
-        <text class="sport-type">{{item.type}}</text>
-        <text class="sport-duration">{{item.duration}}分钟</text>
-        <text class="sport-time">{{item.time}}</text>
-      </view>
-    </block>
-    <view class="empty-records" wx:else>
-      <text>暂无运动记录</text>
-    </view>
   </view>
 </view>
