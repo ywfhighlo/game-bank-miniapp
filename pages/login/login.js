@@ -35,6 +35,7 @@ Page({
     this.setData({ password: e.detail.value });
   },
   login() {
+    const app = getApp();
     wx.cloud.callFunction({
       name: 'api', // 云函数名称
       data: {
@@ -43,16 +44,19 @@ Page({
         password: this.data.password
       },
       success: res => {
+        console.log('登录返回结果:', res);
         if (res.result.code === 200) {
+          // 保存 userId 在全局变量中
+          app.globalData.userId = res.result.userId;
+          console.log("登录后全局 userId:", app.globalData.userId);
           getApp().globalData.token = res.result.token;
-          getApp().globalData.userId = res.result.userId;
           wx.showToast({ title: '登录成功', icon: 'success' });
         } else {
           wx.showToast({ title: res.result.message, icon: 'none' });
         }
       },
       fail: err => {
-        wx.showToast({ title: '云函数调用失败', icon: 'none' });
+        wx.showToast({ title: '登录接口调用失败', icon: 'none' });
       }
     });
   }

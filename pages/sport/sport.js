@@ -6,19 +6,25 @@ Page({
     recordId: '',
     code: ''
   },
-  onInputDuration(e) {
+  // onInput 事件处理函数，用于接收用户的输入
+  onInput(e) {
+    console.log("输入运动时长:", e.detail.value);
     this.setData({ duration: e.detail.value });
   },
+  // 提交运动记录方法
   submitSportRecord() {
+    console.log("全局用户信息:", app.globalData);
+    
+    const userId = app.globalData.userId;
+    console.log("当前 userId:", userId);
+    
+    if (!userId) {
+      wx.showToast({ title: '请先登录', icon: 'none' });
+      return;
+    }
     const duration = parseFloat(this.data.duration);
     if (!duration || duration <= 0) {
       wx.showToast({ title: '请输入有效运动时长', icon: 'none' });
-      return;
-    }
-    // 确保用户已登录
-    const userId = app.globalData.userId;
-    if (!userId) {
-      wx.showToast({ title: '请先登录', icon: 'none' });
       return;
     }
     wx.cloud.callFunction({
@@ -42,9 +48,14 @@ Page({
     });
     this.setData({ duration: '' });
   },
-  // 提交验证码
+  // 输入验证码时的处理函数
+  onInputCode(e) {
+    this.setData({ code: e.detail.value });
+  },
+  // 验证记录方法
   verifyRecord() {
-    const userId = app.globalData.userId;
+    const userId = getApp().globalData.userId;
+    console.log("验证记录时的 userId:", userId);
     if (!userId) {
       wx.showToast({ title: '请先登录', icon: 'none' });
       return;
@@ -72,9 +83,5 @@ Page({
         wx.showToast({ title: '云函数调用失败', icon: 'none' });
       }
     });
-  },
-  // 输入验证码时调用
-  onInputCode(e) {
-    this.setData({ code: e.detail.value });
   }
 }); 

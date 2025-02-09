@@ -17,6 +17,7 @@ const uuidv4 = () => {
   });
 };
 
+// 云函数入口函数必须导出 main
 exports.main = async (event, context) => {
   const action = event.action;
   switch (action) {
@@ -29,10 +30,7 @@ exports.main = async (event, context) => {
     case 'verifyRecord':
       return await verifyRecord(event);
     default:
-      return {
-        code: 400,
-        message: 'Invalid action'
-      };
+      return { code: 400, message: 'Invalid action' };
   }
 };
 
@@ -44,21 +42,31 @@ async function registerUser(event) {
   }
 
   // 检查用户名是否已存在
-  const existRes = await usersCollection.where({ username }).get();
+  const existRes = await db.collection('users').where({ username }).get();
   if (existRes.data && existRes.data.length > 0) {
     return { code: 400, message: '用户名已存在' };
   }
-  
-  const userId = uuidv4();
-  await usersCollection.add({
-    data: {
-      userId,
-      username,
-      password,  // 生产环境下请进行加密处理
-      helper_phone,
-      createTime: new Date()
-    }
-  });
+
+  // 生成 userId（当前时间戳加随机数）
+  const userId = Date.now().toString() + Math.floor(Math.random() * 1000).toString();
+  console.log("生成的 userId:", userId);
+
+  // 用 try-catch 捕获数据库写入错误
+  try {
+    await db.collection('users').add({
+      data: {
+        userId,
+        username,
+        password, // 生产环境下请对密码做加密处理
+        helper_phone,
+        createTime: new Date()
+      }
+    });
+  } catch (err) {
+    console.error("添加用户错误:", err);
+    return { code: 500, message: "注册失败, 数据库错误" };
+  }
+
   return { code: 200, message: '注册成功', userId };
 }
 
@@ -68,10 +76,9 @@ async function loginUser(event) {
   if (!username || !password) {
     return { code: 400, message: '缺少用户名或密码' };
   }
-  const res = await usersCollection.where({ username, password }).get();
+  const res = await db.collection('users').where({ username, password }).get();
   if (res.data && res.data.length > 0) {
-    const token = uuidv4();
-    // 这里可以将 token 信息写回数据库，便于后续校验
+    const token = Date.now().toString() + Math.floor(Math.random() * 1000).toString();
     return { code: 200, message: '登录成功', token, userId: res.data[0].userId };
   } else {
     return { code: 401, message: '用户名或密码错误' };
