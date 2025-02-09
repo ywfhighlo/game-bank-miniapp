@@ -1,8 +1,11 @@
 // 云函数入口文件
 const cloud = require('wx-server-sdk');
+const axios = require('axios');
+
 cloud.init({
   env: cloud.DYNAMIC_CURRENT_ENV
 });
+
 const db = cloud.database();
 // 数据库集合
 const usersCollection = db.collection('users');
@@ -25,6 +28,8 @@ exports.main = async (event, context) => {
       return await registerUser(event);
     case 'login':
       return await loginUser(event);
+    case 'wxLogin':
+      return await wxLogin(event);
     case 'createRecord':
       return await createRecord(event);
     case 'verifyRecord':
@@ -77,12 +82,13 @@ async function loginUser(event) {
     return { code: 400, message: '缺少用户名或密码' };
   }
   const res = await db.collection('users').where({ username, password }).get();
+  console.log("登录查询结果：", res.data); // 查看查询结果是否正常
   if (res.data && res.data.length > 0) {
     const token = Date.now().toString() + Math.floor(Math.random() * 1000).toString();
+    console.log("登录查询到的 userId：", res.data[0].userId);
     return { code: 200, message: '登录成功', token, userId: res.data[0].userId };
-  } else {
-    return { code: 401, message: '用户名或密码错误' };
   }
+  return { code: 401, message: '用户名或密码错误' };
 }
 
 // 提交运动记录接口：传入 userId, duration；生成随机6位验证码（用作短信验证模拟）
@@ -128,4 +134,50 @@ async function verifyRecord(event) {
   // 更新记录状态为已验证
   await recordsCollection.doc(record._id).update({ data: { is_verified: true } });
   return { code: 200, message: '运动记录验证成功' };
+}
+
+// 新增微信登录处理逻辑
+async function wxLogin(event) {
+  const { code } = event;
+  if (!code) {
+    return { code: 400, message: '缺少微信登录 code' };
+  }
+
+  // 请替换以下 APPID 和 APPSECRET 为你自己的小程序的信息
+  const appid = 'wxfa2e2aac0a23a52d';
+  const secret = 'd31f6143a5c0fd7495b9ac72b5138987';
+
+  try {
+    // 调用微信接口获取 openid 和 session_key
+    const url = `https://api.weixin.qq.com/sns/jscode2session?appid=${appid}&secret=${secret}&js_code=${code}&grant_type=authorization_code`;
+    const response = await axios.get(url);
+    console.log("微信登录接口返回数据：", response.data);
+
+    if (response.data && response.data.openid) {
+      const openid = response.data.openid;
+      // 查询数据库中是否存在该 openid 对应的用户
+      const userQuery = await db.collection('users').where({ openid }).get();
+      let userId;
+      if (userQuery.data && userQuery.data.length > 0) {
+        // 如果用户已存在，直接返回该记录的 userId
+        userId = userQuery.data[0].userId;
+      } else {
+        // 如果用户不存在，则创建新的用户记录
+        userId = Date.now().toString() + Math.floor(Math.random() * 1000).toString();
+        await db.collection('users').add({
+          data: {
+            openid,
+            userId,
+            createTime: new Date()
+          }
+        });
+      }
+      return { code: 200, message: '微信登录成功', userId };
+    } else {
+      return { code: 400, message: '微信登录失败，无法获取 openid', data: response.data };
+    }
+  } catch (err) {
+    console.error("微信登录异常：", err);
+    return { code: 500, message: '微信登录异常', err };
+  }
 } 

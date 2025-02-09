@@ -12,6 +12,15 @@ App({
   },
 
   onLaunch() {
+    if (!wx.cloud) {
+      console.error('请使用 2.2.3 或更高版本的基础库以使用云能力');
+    } else {
+      wx.cloud.init({
+        env: 'gamebank-3gx3otq16ff2ac9d', // 请替换成你的云环境 ID
+        traceUser: true
+      });
+    }
+    
     // 登录
     wx.login({
       success: res => {

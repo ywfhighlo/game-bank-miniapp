@@ -6,6 +6,24 @@ Page({
     recordId: '',
     code: ''
   },
+  // 页面加载时检查用户登录状态
+  onLoad() {
+    // 尝试从全局变量和本地缓存中读取 userId
+    const userId = app.globalData.userId || wx.getStorageSync('userId');
+    console.log("运动页面加载时获取的 userId:", userId);
+    if (!userId) {
+      wx.showToast({ title: '请先登录', icon: 'none' });
+      // 跳转到登录页面
+      wx.navigateTo({
+        url: '/pages/login/login'
+      });
+    }
+  },
+  onShow() {
+    const app = getApp();
+    const userId = app.globalData.userId || wx.getStorageSync('userId');
+    console.log("运动页面 onShow 时获取的 userId:", userId);
+  },
   // onInput 事件处理函数，用于接收用户的输入
   onInput(e) {
     console.log("输入运动时长:", e.detail.value);
@@ -13,11 +31,9 @@ Page({
   },
   // 提交运动记录方法
   submitSportRecord() {
-    console.log("全局用户信息:", app.globalData);
-    
-    const userId = app.globalData.userId;
-    console.log("当前 userId:", userId);
-    
+    const app = getApp();
+    const userId = app.globalData.userId || wx.getStorageSync('userId');
+    console.log("提交记录时全局 userId:", userId);
     if (!userId) {
       wx.showToast({ title: '请先登录', icon: 'none' });
       return;
@@ -54,7 +70,7 @@ Page({
   },
   // 验证记录方法
   verifyRecord() {
-    const userId = getApp().globalData.userId;
+    const userId = app.globalData.userId || wx.getStorageSync('userId');
     console.log("验证记录时的 userId:", userId);
     if (!userId) {
       wx.showToast({ title: '请先登录', icon: 'none' });
