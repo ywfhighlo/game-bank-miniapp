@@ -2,40 +2,79 @@ const app = getApp();
 
 Page({
   data: {
-    duration: ''
+    duration: '',
+    recordId: '',
+    code: ''
   },
-  onInput(e) {
+  onInputDuration(e) {
     this.setData({ duration: e.detail.value });
   },
   submitSportRecord() {
-    const duration = parseInt(this.data.duration);
+    const duration = parseFloat(this.data.duration);
     if (!duration || duration <= 0) {
-      wx.showToast({
-        title: '请输入有效的运动时长',
-        icon: 'none'
-      });
+      wx.showToast({ title: '请输入有效运动时长', icon: 'none' });
       return;
     }
-    // 将运动时长兑换为游戏时间（假设1:1兑换）
-    app.globalData.gameTimeBalance += duration;
-    
-    // 保存当前的运动记录到全局变量中
-    const now = new Date();
-    const record = {
-      type: '运动',
-      duration: duration,
-      time: now.toLocaleString()
-    };
-    if (!app.globalData.sportRecords) {
-      app.globalData.sportRecords = [];
+    // 确保用户已登录
+    const userId = app.globalData.userId;
+    if (!userId) {
+      wx.showToast({ title: '请先登录', icon: 'none' });
+      return;
     }
-    app.globalData.sportRecords.push(record);
-    
-    wx.showToast({
-      title: `记录成功，增加 ${duration} 分钟游戏时间`,
-      icon: 'success'
+    wx.cloud.callFunction({
+      name: 'api',
+      data: {
+        action: 'createRecord',
+        userId,
+        duration
+      },
+      success: res => {
+        if (res.result.code === 200) {
+          wx.showToast({ title: '记录提交成功，验证码已发送', icon: 'success' });
+          this.setData({ recordId: res.result.recordId });
+        } else {
+          wx.showToast({ title: res.result.message, icon: 'none' });
+        }
+      },
+      fail: err => {
+        wx.showToast({ title: '云函数调用失败', icon: 'none' });
+      }
     });
-    // 重置输入框
     this.setData({ duration: '' });
+  },
+  // 提交验证码
+  verifyRecord() {
+    const userId = app.globalData.userId;
+    if (!userId) {
+      wx.showToast({ title: '请先登录', icon: 'none' });
+      return;
+    }
+    if (!this.data.recordId || !this.data.code) {
+      wx.showToast({ title: '记录ID或验证码不能为空', icon: 'none' });
+      return;
+    }
+    wx.cloud.callFunction({
+      name: 'api',
+      data: {
+        action: 'verifyRecord',
+        userId,
+        recordId: this.data.recordId,
+        code: this.data.code
+      },
+      success: res => {
+        if (res.result.code === 200) {
+          wx.showToast({ title: '记录验证成功', icon: 'success' });
+        } else {
+          wx.showToast({ title: res.result.message, icon: 'none' });
+        }
+      },
+      fail: err => {
+        wx.showToast({ title: '云函数调用失败', icon: 'none' });
+      }
+    });
+  },
+  // 输入验证码时调用
+  onInputCode(e) {
+    this.setData({ code: e.detail.value });
   }
 }); 
