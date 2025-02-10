@@ -9,9 +9,9 @@ Page({
     message: ''           // 游戏页提示信息
   },
   onLoad() {
-    // 从全局变量获取余额，同时更新页面显示
+    // 根据是否已登录，展示相应的数据（未登录则为初始的临时数据）
     this.setData({
-      gameTimeBalance: app.globalData.gameTimeBalance
+      gameTimeBalance: app.globalData.gameTimeBalance || 0
     });
   },
   startGame() {
@@ -35,9 +35,13 @@ Page({
         app.globalData.gameRecords = [];
       }
       app.globalData.gameRecords.push(record);
-      // 更新全局余额及持久化保存
+      
+      // 只有登录后才持久化数据
+      if (app.globalData.userInfo) {
+        wx.setStorageSync('gameTimeBalance', newBalance);
+      }
+      
       app.globalData.gameTimeBalance = newBalance;
-      wx.setStorageSync('gameTimeBalance', newBalance);
       
       this.setData({
         gameStarted: false,
@@ -76,9 +80,11 @@ Page({
             app.globalData.gameRecords = [];
           }
           app.globalData.gameRecords.push(record);
-          // 自动结束时，将余额扣为0
+          // 仅在登录状态下持久化更新
+          if (app.globalData.userInfo) {
+            wx.setStorageSync('gameTimeBalance', 0);
+          }
           app.globalData.gameTimeBalance = 0;
-          wx.setStorageSync('gameTimeBalance', 0);
           this.setData({
             gameStarted: false,
             timer: null,

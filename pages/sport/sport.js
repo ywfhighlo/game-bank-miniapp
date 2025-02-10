@@ -87,20 +87,21 @@ Page({
     }
     const pendingRecord = this.data.pendingRecord;
     if (pendingRecord && pendingRecord.duration > 0) {
-      // 把全局余额和运动时长转换为数字后相加
+      // 累加当前运动时长到全局游戏余额
       app.globalData.gameTimeBalance = Number(app.globalData.gameTimeBalance) + Number(pendingRecord.duration);
-      // 更新本地存储中游戏时间余额
-      wx.setStorageSync('gameTimeBalance', app.globalData.gameTimeBalance);
       
-      // 更新提示信息，同时重置输入状态
+      // 如果用户已登录才保存到持久化存储，否则只保留当前会话的临时数据
+      if (app.globalData.userInfo) {
+        wx.setStorageSync('gameTimeBalance', app.globalData.gameTimeBalance);
+      }
+
       this.setData({
         message: `验证成功，增加 ${pendingRecord.duration} 分钟游戏时间`,
         pendingRecord: null,
         verificationCode: '',
         duration: ''
       });
-      
-      // 保存运动记录到全局 sportRecords 数组中，并持久化保存
+
       const now = new Date().toLocaleString();
       const record = {
         type: '运动',
@@ -111,7 +112,9 @@ Page({
         app.globalData.sportRecords = [];
       }
       app.globalData.sportRecords.push(record);
-      wx.setStorageSync('sportRecords', app.globalData.sportRecords);
+      if (app.globalData.userInfo) {
+        wx.setStorageSync('sportRecords', app.globalData.sportRecords);
+      }
     }
   }
 }); 

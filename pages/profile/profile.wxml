@@ -1,12 +1,14 @@
 <view class="container">
   <view class="header">
-    <text class="title">个人设置</text>
+    <text class="title">个人资料</text>
   </view>
   <view class="form">
     <text class="label">帮手手机号码</text>
-    <input class="input" placeholder="请输入帮手手机号码" type="number" bindinput="onInputHelperPhone" value="{{helperPhone}}" />
-    <button class="btn-primary" bindtap="saveHelperPhone">保存手机号码</button>
+    <input class="input" placeholder="请输入帮手手机号码" type="number" bindinput="onInputHelper" value="{{helperPhone}}" />
+    <button class="btn-primary" bindtap="saveHelperPhone">保存号码</button>
+    <button class="btn-primary" bindtap="logout">退出登录</button>
   </view>
+  <view class="message">{{message}}</view>
   <view class="sms-test">
     <button class="btn-secondary" bindtap="sendTestSMS">发送测试短信</button>
   </view>

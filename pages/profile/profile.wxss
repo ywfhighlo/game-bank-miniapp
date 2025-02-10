@@ -2,6 +2,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   padding: 20rpx;
   background-color: #f8f8f8;
   height: 100vh;
@@ -16,7 +17,7 @@
 }
 .form {
   width: 80%;
-  margin-bottom: 20rpx;
+  margin-bottom: 40rpx;
 }
 .label {
   font-size: 28rpx;
@@ -25,8 +26,9 @@
 .input {
   width: 100%;
   border: 1rpx solid #ccc;
-  padding: 10rpx;
-  margin-bottom: 20rpx;
+  padding: 20rpx;
+  font-size: 32rpx;
+  margin-bottom: 40rpx;
 }
 .btn-primary, .btn-secondary {
   width: 100%;
@@ -61,4 +63,11 @@
 }
 .profile-content { 
   text-align: center; 
+}
+.message {
+  margin-top: 20rpx;
+  font-size: 28rpx;
+  color: #333;
+  text-align: center;
+  padding: 10rpx;
 } 

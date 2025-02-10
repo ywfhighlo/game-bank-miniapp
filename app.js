@@ -22,30 +22,36 @@ App({
       });
     }
     
-    // 登录
-    wx.login({
-      success: res => {
-        // 发送 res.code 到后台换取 openId, sessionKey, unionId
-      }
-    })
-    
-    // 获取用户信息
-    wx.getSetting({
-      success: res => {
-        if (res.authSetting['scope.userInfo']) {
-          wx.getUserInfo({
-            success: res => {
-              this.globalData.userInfo = res.userInfo
-              if (this.userInfoReadyCallback) {
-                this.userInfoReadyCallback(res)
-              }
-            }
-          })
+    // 检查本地缓存中是否有已登录的用户信息，若有则加载持久化数据
+    const storedUser = wx.getStorageSync('userInfo');
+    if (storedUser) {
+      this.globalData.userInfo = storedUser;
+      this.loadPersistentData();
+    } else {
+      // 如果本地无用户信息，则进行微信登录及授权获取用户信息
+      wx.login({
+        success: res => {
+          // 登录成功后的自定义逻辑
         }
-      }
-    })
+      });
+      wx.getSetting({
+        success: res => {
+          if (res.authSetting['scope.userInfo']) {
+            wx.getUserInfo({
+              success: res => {
+                this.globalData.userInfo = res.userInfo;
+                wx.setStorageSync('userInfo', res.userInfo);
+                this.loadPersistentData();
+              }
+            });
+          }
+        }
+      });
+    }
+  },
 
-    // 从本地存储加载运动记录、游戏记录以及游戏时间余额，防止重启后数据丢失
+  // 用户登录成功后加载持久化数据
+  loadPersistentData() {
     try {
       const storedGameBalance = wx.getStorageSync('gameTimeBalance');
       if (storedGameBalance !== null && storedGameBalance !== undefined) {
@@ -59,8 +65,22 @@ App({
       if (storedGameRecords) {
         this.globalData.gameRecords = storedGameRecords;
       }
+      const storedHelperPhone = wx.getStorageSync('helperPhone');
+      if (storedHelperPhone) {
+        this.globalData.helperPhone = storedHelperPhone;
+      }
     } catch (e) {
       console.error("加载持久化数据失败", e);
+    }
+  },
+
+  // 新增通用重新登录接口
+  reLogin(newUser, callback) {
+    this.globalData.userInfo = newUser;
+    wx.setStorageSync('userInfo', newUser);
+    this.loadPersistentData();
+    if (callback && typeof callback === 'function') {
+      callback();
     }
   }
 })

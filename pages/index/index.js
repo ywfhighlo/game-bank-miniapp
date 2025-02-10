@@ -2,7 +2,7 @@ const app = getApp()
 
 Page({
   data: {
-    userInfo: {},
+    userInfo: null,
     hasUserInfo: false,
     canIUse: wx.canIUse('button.open-type.getUserInfo'),
     gameTimeBalance: 0,
@@ -13,28 +13,25 @@ Page({
   },
 
   onLoad() {
-    // 如果已存在用户信息，则直接显示
     if (app.globalData.userInfo) {
       this.setData({
         userInfo: app.globalData.userInfo,
-        hasUserInfo: true
+        gameTimeBalance: app.globalData.gameTimeBalance,
+        sportRecords: app.globalData.sportRecords,
+        gameRecords: app.globalData.gameRecords
       });
     }
-    // 从全局变量中读取持久化的游戏时间余额和记录数据
-    this.setData({
-      gameTimeBalance: app.globalData.gameTimeBalance || 0,
-      sportRecords: app.globalData.sportRecords || [],
-      gameRecords: app.globalData.gameRecords || []
-    });
   },
 
   onShow() {
-    // 每次页面显示时，重新从全局数据中同步最新数据
-    this.setData({
-      gameTimeBalance: app.globalData.gameTimeBalance || 0,
-      sportRecords: app.globalData.sportRecords || [],
-      gameRecords: app.globalData.gameRecords || []
-    });
+    if (app.globalData.userInfo) {
+      this.setData({
+        userInfo: app.globalData.userInfo,
+        gameTimeBalance: app.globalData.gameTimeBalance,
+        sportRecords: app.globalData.sportRecords,
+        gameRecords: app.globalData.gameRecords
+      });
+    }
   },
 
   getUserInfo(e) {
@@ -56,6 +53,33 @@ Page({
   navigateToGame() {
     wx.switchTab({
       url: '/pages/game/game'
+    });
+  },
+
+  onLogin() {
+    wx.getUserProfile({
+      desc: '用于登录',
+      success: res => {
+        app.reLogin(res.userInfo, () => {
+          this.setData({
+            userInfo: app.globalData.userInfo,
+            gameTimeBalance: app.globalData.gameTimeBalance,
+            sportRecords: app.globalData.sportRecords,
+            gameRecords: app.globalData.gameRecords
+          });
+        });
+        wx.showToast({
+          title: '登录成功',
+          icon: 'success'
+        });
+      },
+      fail: err => {
+        console.error('登录失败', err);
+        wx.showToast({
+          title: '登录失败',
+          icon: 'none'
+        });
+      }
     });
   }
 });
