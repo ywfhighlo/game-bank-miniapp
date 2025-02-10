@@ -1,9 +1,13 @@
 <view class="container">
-  <view class="profile-header">
-    <image class="avatar" src="{{user.avatarUrl}}" mode="cover" />
-    <text class="nickname">{{user.nickName}}</text>
+  <view class="header">
+    <text class="title">个人设置</text>
   </view>
-  <view class="profile-content">
-    <button class="btn-secondary" bindtap="logout">退出登录</button>
+  <view class="form">
+    <text class="label">帮手手机号码</text>
+    <input class="input" placeholder="请输入帮手手机号码" type="number" bindinput="onInputHelperPhone" value="{{helperPhone}}" />
+    <button class="btn-primary" bindtap="saveHelperPhone">保存手机号码</button>
+  </view>
+  <view class="sms-test">
+    <button class="btn-secondary" bindtap="sendTestSMS">发送测试短信</button>
   </view>
 </view> 

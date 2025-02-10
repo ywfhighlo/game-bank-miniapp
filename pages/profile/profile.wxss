@@ -1,5 +1,47 @@
-.container { 
-  padding: 20rpx; 
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20rpx;
+  background-color: #f8f8f8;
+  height: 100vh;
+}
+.header {
+  margin-bottom: 20rpx;
+  text-align: center;
+}
+.title {
+  font-size: 32rpx;
+  font-weight: bold;
+}
+.form {
+  width: 80%;
+  margin-bottom: 20rpx;
+}
+.label {
+  font-size: 28rpx;
+  margin-bottom: 10rpx;
+}
+.input {
+  width: 100%;
+  border: 1rpx solid #ccc;
+  padding: 10rpx;
+  margin-bottom: 20rpx;
+}
+.btn-primary, .btn-secondary {
+  width: 100%;
+  background-color: #3cc51f;
+  color: #fff;
+  padding: 20rpx;
+  border-radius: 8rpx;
+  text-align: center;
+  margin-bottom: 20rpx;
+}
+.btn-secondary {
+  background-color: #ff9900;
+}
+.sms-test {
+  width: 80%;
 }
 .profile-header { 
   display: flex; 
@@ -19,12 +61,4 @@
 }
 .profile-content { 
   text-align: center; 
-}
-.btn-secondary { 
-  background-color: #fff; 
-  color: #3cc51f; 
-  border: 1rpx solid #3cc51f; 
-  padding: 20rpx; 
-  border-radius: 8rpx; 
-  width: 100%;
 } 

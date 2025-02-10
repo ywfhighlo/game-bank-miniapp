@@ -8,7 +8,8 @@ App({
     restInterval: 1800, // 30分钟，单位：秒
     restDuration: 300, // 5分钟，单位：秒
     sportRecords: [],
-    gameRecords: []
+    gameRecords: [],
+    helperPhone: ""  // 新增：帮手手机号码
   },
 
   onLaunch() {

@@ -3,7 +3,15 @@
     <text class="title">记录运动</text>
   </view>
   <view class="form">
-    <input class="input" placeholder="请输入运动时长（分钟）" type="number" confirm-type="done" bindinput="onInput" />
+    <input class="input" placeholder="请输入运动时长（分钟）" type="number" confirm-type="done" bindinput="onInput" value="{{duration}}" />
   </view>
   <button class="btn-primary" bindtap="submitSportRecord">提交记录</button>
+
+  <!-- 当 pendingRecord 存在时显示验证码输入区域 -->
+  <block wx:if="{{pendingRecord}}">
+    <view class="verification">
+      <input class="input" placeholder="请输入验证码" type="number" bindinput="onInputVerification" value="{{verificationCode}}" />
+      <button class="btn-primary" bindtap="confirmRecord">确认验证码</button>
+    </view>
+  </block>
 </view> 

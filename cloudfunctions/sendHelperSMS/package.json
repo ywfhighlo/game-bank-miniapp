@@ -1,0 +1,15 @@
+{
+  "name": "sendHelperSMS",
+  "version": "1.0.0",
+  "description": "发送短信云函数",
+  "main": "index.js",
+  "dependencies": {
+    "wx-server-sdk": "^2.0.0"
+  },
+  "engines": {
+    "node": "12"
+  },
+  "scripts": {
+    "start": "node index.js"
+  }
+} 
