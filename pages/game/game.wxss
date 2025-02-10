@@ -38,4 +38,11 @@
   border-radius: 8rpx; 
   width: 80%;
   text-align: center;
+}
+.message {
+  margin-top: 20rpx;
+  font-size: 28rpx;
+  color: #333;
+  text-align: center;
+  padding: 10rpx;
 } 

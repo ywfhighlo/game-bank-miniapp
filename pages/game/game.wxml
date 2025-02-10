@@ -12,4 +12,6 @@
   <button class="btn-primary" bindtap="startGame">
     {{gameStarted ? '结束游戏' : '开始游戏'}}
   </button>
+  <!-- 用于显示提示信息的区域 -->
+  <view class="message">{{message}}</view>
 </view> 

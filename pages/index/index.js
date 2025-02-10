@@ -9,35 +9,32 @@ Page({
     todayGameTime: 0,
     weekGameTime: 0,
     sportRecords: [],
-    gameRecords: []  // 新增：最近游戏记录
+    gameRecords: []
   },
 
   onLoad() {
+    // 如果已存在用户信息，则直接显示
     if (app.globalData.userInfo) {
       this.setData({
         userInfo: app.globalData.userInfo,
         hasUserInfo: true
-      })
-    } else if (this.data.canIUse) {
-      app.userInfoReadyCallback = res => {
-        this.setData({
-          userInfo: res.userInfo,
-          hasUserInfo: true
-        })
-      }
+      });
     }
-    
-    // 初次加载时更新数据
-    this.getGameTimeInfo();
-    this.getSportRecords();
-    this.getGameRecords();
+    // 从全局变量中读取持久化的游戏时间余额和记录数据
+    this.setData({
+      gameTimeBalance: app.globalData.gameTimeBalance || 0,
+      sportRecords: app.globalData.sportRecords || [],
+      gameRecords: app.globalData.gameRecords || []
+    });
   },
 
-  // 每次页面显示时更新最新数据
   onShow() {
-    this.getGameTimeInfo();
-    this.getSportRecords();
-    this.getGameRecords();
+    // 每次页面显示时，重新从全局数据中同步最新数据
+    this.setData({
+      gameTimeBalance: app.globalData.gameTimeBalance || 0,
+      sportRecords: app.globalData.sportRecords || [],
+      gameRecords: app.globalData.gameRecords || []
+    });
   },
 
   getUserInfo(e) {
@@ -50,38 +47,15 @@ Page({
     }
   },
 
-  getGameTimeInfo() {
-    // 从全局获取游戏余额
-    this.setData({
-      gameTimeBalance: app.globalData.gameTimeBalance,
-      todayGameTime: 0,
-      weekGameTime: 0
-    });
-  },
-
-  // 获取最近运动记录
-  getSportRecords() {
-    this.setData({
-      sportRecords: app.globalData.sportRecords || []
-    });
-  },
-
-  // 新增：获取最近游戏记录
-  getGameRecords() {
-    this.setData({
-      gameRecords: app.globalData.gameRecords || []
-    });
-  },
-
   navigateToSport() {
     wx.switchTab({
       url: '/pages/sport/sport'
-    })
+    });
   },
 
   navigateToGame() {
     wx.switchTab({
       url: '/pages/game/game'
-    })
+    });
   }
-})
+});

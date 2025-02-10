@@ -44,5 +44,23 @@ App({
         }
       }
     })
+
+    // 从本地存储加载运动记录、游戏记录以及游戏时间余额，防止重启后数据丢失
+    try {
+      const storedGameBalance = wx.getStorageSync('gameTimeBalance');
+      if (storedGameBalance !== null && storedGameBalance !== undefined) {
+        this.globalData.gameTimeBalance = Number(storedGameBalance);
+      }
+      const storedSportRecords = wx.getStorageSync('sportRecords');
+      if (storedSportRecords) {
+        this.globalData.sportRecords = storedSportRecords;
+      }
+      const storedGameRecords = wx.getStorageSync('gameRecords');
+      if (storedGameRecords) {
+        this.globalData.gameRecords = storedGameRecords;
+      }
+    } catch (e) {
+      console.error("加载持久化数据失败", e);
+    }
   }
 })

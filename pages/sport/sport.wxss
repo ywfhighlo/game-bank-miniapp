@@ -1,35 +1,47 @@
 .container { 
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
-  height: 100vh;
-  background-color: #f8f8f8;
   padding: 20rpx;
+  background-color: #f8f8f8;
+  height: 100vh;
 }
 .header { 
-  text-align: center; 
-  margin-bottom: 20rpx; 
+  margin-bottom: 20rpx;
+  text-align: center;
 }
 .title { 
   font-size: 32rpx; 
   font-weight: bold; 
 }
 .form { 
-  margin-bottom: 20rpx; 
   width: 80%;
+  margin-bottom: 40rpx;
 }
 .input { 
+  width: 100%;
   border: 1rpx solid #ccc; 
-  padding: 10rpx; 
-  width: 100%; 
+  padding: 20rpx;
+  font-size: 32rpx;
+  margin-bottom: 40rpx;
 }
 .btn-primary { 
+  width: 100%;
   background-color: #3cc51f; 
   color: #fff; 
   padding: 20rpx; 
-  border: none; 
   border-radius: 8rpx; 
-  width: 80%;
   text-align: center;
+  margin-bottom: 20rpx;
+}
+.verification {
+  width: 80%;
+  margin-top: 40rpx;
+}
+.message {
+  margin-top: 20rpx;
+  font-size: 28rpx;
+  color: #333;
+  text-align: center;
+  padding: 10rpx;
 } 

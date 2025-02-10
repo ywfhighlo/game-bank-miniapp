@@ -24,6 +24,11 @@
     </view>
   </view>
 
+  <view class="action-buttons">
+    <button class="btn-primary" bindtap="navigateToSport">记录运动</button>
+    <button class="btn-secondary" bindtap="navigateToGame">开始游戏</button>
+  </view>
+
   <view class="record-list card">
     <view class="section-title">最近运动记录</view>
     <block wx:if="{{sportRecords.length > 0}}">
@@ -50,10 +55,5 @@
     <view class="empty-records" wx:else>
       <text>暂无游戏记录</text>
     </view>
-  </view>
-
-  <view class="action-buttons">
-    <button class="btn-primary" bindtap="navigateToSport">记录运动</button>
-    <button class="btn-secondary" bindtap="navigateToGame">开始游戏</button>
   </view>
 </view>

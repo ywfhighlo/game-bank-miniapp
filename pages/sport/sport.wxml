@@ -14,4 +14,7 @@
       <button class="btn-primary" bindtap="confirmRecord">确认验证码</button>
     </view>
   </block>
+  
+  <!-- 提示信息区域，放在页面下方 -->
+  <view class="message">{{message}}</view>
 </view> 
