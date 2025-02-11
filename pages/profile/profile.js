@@ -2,12 +2,22 @@ const app = getApp();
 
 Page({
   data: {
+    userInfo: null,
+    hasUserInfo: false,
+    canIUse: wx.canIUse('button.open-type.getUserInfo'),
     user: {},
     helperPhone: '',
     maskedPhone: '',
     message: ''
   },
   onLoad() {
+    // 检查全局状态中是否已有用户信息
+    if (app.globalData.userInfo) {
+      this.setData({
+        userInfo: app.globalData.userInfo,
+        hasUserInfo: true
+      });
+    }
     // 从本地缓存中获取用户信息
     const user = wx.getStorageSync('userInfo');
     if (user) {
@@ -19,6 +29,44 @@ Page({
     this.setData({
       helperPhone: phone,
       maskedPhone: masked
+    });
+  },
+  onLogin() {
+    wx.getUserProfile({
+      desc: '用于完善用户资料',
+      success: res => {
+        // 更新全局状态
+        app.globalData.userInfo = res.userInfo;
+        // 保存到本地存储
+        wx.setStorageSync('userInfo', res.userInfo);
+        
+        this.setData({
+          userInfo: res.userInfo,
+          hasUserInfo: true
+        });
+
+        // 更新首页数据
+        const pages = getCurrentPages();
+        const indexPage = pages.find(page => page.route === 'pages/index/index');
+        if (indexPage) {
+          indexPage.setData({
+            userInfo: res.userInfo,
+            hasUserInfo: true
+          });
+        }
+
+        wx.showToast({
+          title: '登录成功',
+          icon: 'success'
+        });
+      },
+      fail: err => {
+        console.error('登录失败', err);
+        wx.showToast({
+          title: '登录失败',
+          icon: 'none'
+        });
+      }
     });
   },
   logout() {

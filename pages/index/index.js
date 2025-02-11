@@ -13,23 +13,29 @@ Page({
   },
 
   onLoad() {
-    if (app.globalData.userInfo) {
+    // 检查本地存储和全局状态
+    const userInfo = wx.getStorageSync('userInfo') || app.globalData.userInfo;
+    if (userInfo) {
       this.setData({
-        userInfo: app.globalData.userInfo,
-        gameTimeBalance: app.globalData.gameTimeBalance,
-        sportRecords: app.globalData.sportRecords,
-        gameRecords: app.globalData.gameRecords
+        userInfo: userInfo,
+        hasUserInfo: true,
+        gameTimeBalance: app.globalData.gameTimeBalance || 0,
+        sportRecords: app.globalData.sportRecords || [],
+        gameRecords: app.globalData.gameRecords || []
       });
     }
   },
 
   onShow() {
-    if (app.globalData.userInfo) {
+    // 每次显示页面时检查登录状态
+    const userInfo = wx.getStorageSync('userInfo') || app.globalData.userInfo;
+    if (userInfo) {
       this.setData({
-        userInfo: app.globalData.userInfo,
-        gameTimeBalance: app.globalData.gameTimeBalance,
-        sportRecords: app.globalData.sportRecords,
-        gameRecords: app.globalData.gameRecords
+        userInfo: userInfo,
+        hasUserInfo: true,
+        gameTimeBalance: app.globalData.gameTimeBalance || 0,
+        sportRecords: app.globalData.sportRecords || [],
+        gameRecords: app.globalData.gameRecords || []
       });
     }
   },

@@ -1,14 +1,4 @@
 <view class="container">
-  <view class="user-info">
-    <block wx:if="{{!hasUserInfo && canIUse}}">
-      <button class="btn-primary" open-type="getUserInfo" bindgetuserinfo="getUserInfo">登录</button>
-    </block>
-    <block wx:else>
-      <image class="user-avatar" src="{{userInfo.avatarUrl}}" mode="cover"></image>
-      <text class="user-nickname">{{userInfo.nickName}}</text>
-    </block>
-  </view>
-
   <view class="game-time-info card">
     <view class="info-item">
       <text class="label">游戏时间余额</text>
