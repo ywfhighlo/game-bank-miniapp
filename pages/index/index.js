@@ -39,6 +39,7 @@ Page({
           // 更新全局数据
           app.globalData.gameTime = data.gameTime;
           app.globalData.sportRecords = data.sportRecords;
+          app.globalData.gameRecords = data.gameRecords || [];
           app.globalData.dailyLimit = data.dailyLimit;
           app.globalData.weeklyLimit = data.weeklyLimit;
           app.globalData.restInterval = data.restInterval;
@@ -47,8 +48,11 @@ Page({
           // 更新页面数据
           this.setData({
             gameTimeBalance: data.gameTime,
-            sportRecords: data.sportRecords,
+            sportRecords: data.sportRecords.slice(0, 5), // 只显示最近5条运动记录
+            gameRecords: (data.gameRecords || []).slice(0, 5), // 只显示最近5条游戏记录
             totalSportTime: data.totalSportTime,
+            todayGameTime: data.todayGameTime || 0,
+            weekGameTime: data.weekGameTime || 0,
             dailyLimit: data.dailyLimit,
             weeklyLimit: data.weeklyLimit,
             restInterval: data.restInterval,
@@ -59,7 +63,10 @@ Page({
           wx.setStorageSync('userData', {
             gameTime: data.gameTime,
             sportRecords: data.sportRecords,
+            gameRecords: data.gameRecords || [],
             totalSportTime: data.totalSportTime,
+            todayGameTime: data.todayGameTime || 0,
+            weekGameTime: data.weekGameTime || 0,
             dailyLimit: data.dailyLimit,
             weeklyLimit: data.weeklyLimit,
             restInterval: data.restInterval,
@@ -74,9 +81,9 @@ Page({
         }
       },
       fail: err => {
-        console.error('调用获取用户数据失败：', err);
+        console.error('获取用户数据失败：', err);
         wx.showToast({
-          title: '网络错误',
+          title: '获取数据失败',
           icon: 'none'
         });
       }

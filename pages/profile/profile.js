@@ -52,29 +52,33 @@ Page({
     wx.cloud.callFunction({
       name: 'api',
       data: {
-        action: 'getUserRecords',
+        action: 'getUserProfile',
         userId: app.globalData.userId
       },
       success: res => {
-        console.log('获取用户数据成功：', res);
+        console.log('获取用户资料成功：', res);
         if (res.result.code === 200) {
           const data = res.result.data;
+          const helperPhone = data.helperPhone || '';
           
-          // 更新页面数据
           this.setData({
-            helperPhone: data.helperPhone || '',
-            maskedHelperPhone: this.maskPhoneNumber(data.helperPhone)
+            helperPhone: helperPhone,
+            maskedHelperPhone: this.maskPhoneNumber(helperPhone),
+            showPhoneInput: !helperPhone // 如果没有手机号，显示输入框
           });
 
-          // 保存到本地存储
-          wx.setStorageSync('userData', {
-            ...wx.getStorageSync('userData'),
-            helperPhone: data.helperPhone
-          });
+          // 更新本地存储
+          const userData = wx.getStorageSync('userData') || {};
+          userData.helperPhone = helperPhone;
+          wx.setStorageSync('userData', userData);
         }
       },
       fail: err => {
-        console.error('获取用户数据失败：', err);
+        console.error('获取用户资料失败：', err);
+        wx.showToast({
+          title: '获取资料失败',
+          icon: 'none'
+        });
       }
     });
   },

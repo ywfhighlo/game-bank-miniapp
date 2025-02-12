@@ -51,10 +51,12 @@ exports.main = async (event, context) => {
       return await createRecord(event);
     case 'verifyRecord':
       return await verifyRecord(event);
-    case 'updateHelperPhone':
-      return await updateHelperPhone(event);
     case 'getUserRecords':
       return await getUserRecords(event);
+    case 'getUserProfile':
+      return await getUserProfile(event);
+    case 'updateHelperPhone':
+      return await updateHelperPhone(event);
     case 'updateGameTime':
       return await updateGameTime(event);
     case 'logLogout':
@@ -314,6 +316,103 @@ async function wxLogin(event) {
   }
 }
 
+// 获取用户资料接口：传入 userId
+async function getUserProfile(event) {
+  const { userId } = event;
+  if (!userId) {
+    return { code: 400, message: '缺少 userId' };
+  }
+
+  try {
+    // 查询用户信息
+    const userQuery = await db.collection('users').where({ userId }).get();
+    if (!userQuery.data || userQuery.data.length === 0) {
+      return { code: 404, message: '用户不存在' };
+    }
+
+    const user = userQuery.data[0];
+
+    return {
+      code: 200,
+      message: '获取用户资料成功',
+      data: {
+        helperPhone: user.helperPhone || '',
+        userId: user.userId,
+        nickName: user.nickName,
+        avatarUrl: user.avatarUrl,
+        settings: user.settings || {}
+      }
+    };
+  } catch (err) {
+    console.error("获取用户资料失败：", err);
+    return { code: 500, message: '获取用户资料失败', error: err };
+  }
+}
+
+// 获取用户记录接口：传入 userId
+async function getUserRecords(event) {
+  const { userId } = event;
+  if (!userId) {
+    return { code: 400, message: '缺少 userId' };
+  }
+
+  try {
+    // 查询用户信息
+    const userQuery = await db.collection('users').where({ userId }).get();
+    if (!userQuery.data || userQuery.data.length === 0) {
+      return { code: 404, message: '用户不存在' };
+    }
+
+    const user = userQuery.data[0];
+
+    // 查询最近的运动记录
+    const recentRecords = await recordsCollection
+      .where({
+        userId,
+        status: 'verified'
+      })
+      .orderBy('createTime', 'desc')
+      .limit(10)
+      .get();
+
+    // 计算今日游戏时间
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const todayGameRecords = (user.gameRecords || []).filter(record => {
+      const recordDate = new Date(record.time);
+      return recordDate >= today;
+    });
+    const todayGameTime = todayGameRecords.reduce((total, record) => total + (record.duration || 0), 0);
+
+    // 计算本周游戏时间
+    const weekStart = new Date();
+    weekStart.setDate(weekStart.getDate() - weekStart.getDay()); // 设置为本周日
+    weekStart.setHours(0, 0, 0, 0);
+    const weekGameRecords = (user.gameRecords || []).filter(record => {
+      const recordDate = new Date(record.time);
+      return recordDate >= weekStart;
+    });
+    const weekGameTime = weekGameRecords.reduce((total, record) => total + (record.duration || 0), 0);
+
+    return {
+      code: 200,
+      message: '获取记录成功',
+      data: {
+        sportTime: user.sportTime || 0,
+        gameTime: user.gameTime || 0,
+        todayGameTime,
+        weekGameTime,
+        sportRecords: user.sportRecords || [],
+        gameRecords: user.gameRecords || [],
+        recentRecords: recentRecords.data || []
+      }
+    };
+  } catch (err) {
+    console.error("获取用户记录失败：", err);
+    return { code: 500, message: '获取用户记录失败', error: err };
+  }
+}
+
 // 更新帮手手机号
 async function updateHelperPhone(event) {
   const { userId, helperPhone } = event;
@@ -344,58 +443,6 @@ async function updateHelperPhone(event) {
   } catch (err) {
     console.error("更新帮手手机号失败：", err);
     return { code: 500, message: '更新帮手手机号失败', error: err };
-  }
-}
-
-// 获取用户记录接口：传入 userId
-async function getUserRecords(event) {
-  const { userId } = event;
-  if (!userId) {
-    return { code: 400, message: '缺少 userId' };
-  }
-
-  try {
-    // 查询用户信息
-    const userQuery = await db.collection('users').where({ userId }).get();
-    if (!userQuery.data || userQuery.data.length === 0) {
-      return { code: 404, message: '用户不存在' };
-    }
-
-    const user = userQuery.data[0];
-
-    // 查询最近的运动记录
-    const recentRecords = await recordsCollection
-      .where({
-        userId,
-        status: 'verified'
-      })
-      .orderBy('createTime', 'desc')
-      .limit(10)
-      .get();
-
-    // 打印日志以便调试
-    console.log('获取用户记录：', {
-      userId,
-      sportTime: user.sportTime,
-      gameTime: user.gameTime,
-      sportRecordsLength: user.sportRecords?.length,
-      gameRecordsLength: user.gameRecords?.length
-    });
-
-    return {
-      code: 200,
-      message: '获取记录成功',
-      data: {
-        sportTime: user.sportTime || 0,
-        gameTime: user.gameTime || 0,
-        sportRecords: user.sportRecords || [],
-        gameRecords: user.gameRecords || [],
-        recentRecords: recentRecords.data || []
-      }
-    };
-  } catch (err) {
-    console.error("获取用户记录失败：", err);
-    return { code: 500, message: '获取用户记录失败', error: err };
   }
 }
 
