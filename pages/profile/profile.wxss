@@ -45,29 +45,182 @@
 .sms-test {
   width: 80%;
 }
-.profile-header { 
-  display: flex; 
-  flex-direction: column; 
-  align-items: center; 
-  margin-bottom: 20rpx; 
+.profile-container {
+  min-height: 100vh;
+  background-color: #f7f7f7;
+  position: relative;
 }
-.avatar { 
-  width: 120rpx; 
-  height: 120rpx; 
-  border-radius: 50%; 
-  margin-bottom: 10rpx; 
+
+/* 用户信息区域 */
+.user-info {
+  background-color: #ffffff;
+  padding: 20rpx 30rpx;
+  margin-bottom: 20rpx;
 }
-.nickname { 
-  font-size: 32rpx; 
-  color: #333; 
+
+.user-header {
+  display: flex;
+  align-items: center;
+  position: relative;
 }
-.profile-content { 
-  text-align: center; 
+
+.user-avatar {
+  width: 120rpx;
+  height: 120rpx;
+  border-radius: 12rpx;
 }
+
+.user-detail {
+  flex: 1;
+  margin-left: 20rpx;
+}
+
+.user-name {
+  font-size: 36rpx;
+  font-weight: 500;
+  margin-bottom: 8rpx;
+  display: block;
+}
+
+.wechat-id {
+  font-size: 28rpx;
+  color: #888;
+  display: block;
+}
+
+.btn-login {
+  width: 100%;
+  background-color: #07c160;
+  color: #fff;
+  font-size: 32rpx;
+  padding: 20rpx;
+  border-radius: 8rpx;
+}
+
+/* 菜单列表 */
+.menu-list {
+  background-color: #ffffff;
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  padding: 30rpx;
+  border-bottom: 1rpx solid #f5f5f5;
+  position: relative;
+}
+
+.menu-icon {
+  width: 48rpx;
+  height: 48rpx;
+  margin-right: 20rpx;
+  background-color: #07c160;
+  border-radius: 8rpx;
+}
+
+.menu-item text {
+  font-size: 32rpx;
+  margin-right: 20rpx;
+}
+
+.menu-input {
+  flex: 1;
+  font-size: 32rpx;
+  padding: 10rpx;
+}
+
+.btn-save, .btn-test {
+  margin: 0;
+  padding: 10rpx 30rpx;
+  font-size: 28rpx;
+  background-color: #07c160;
+  color: #fff;
+  border-radius: 8rpx;
+}
+
+.btn-test {
+  background-color: #10aeff;
+}
+
+.arrow {
+  color: #ccc;
+}
+
+.arrow::after {
+  content: '';
+  display: inline-block;
+  width: 16rpx;
+  height: 16rpx;
+  border-top: 2rpx solid #ccc;
+  border-right: 2rpx solid #ccc;
+  transform: rotate(45deg);
+}
+
 .message {
   margin-top: 20rpx;
   font-size: 28rpx;
-  color: #333;
+  color: #07c160;
   text-align: center;
   padding: 10rpx;
-} 
+}
+
+/* 底部导航栏 */
+.tab-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 110rpx;
+  background-color: #f7f7f7;
+  border-top: 1rpx solid #eee;
+  display: flex;
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+.tab-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 24rpx;
+  color: #7f7f7f;
+}
+
+.tab-item.active {
+  color: #07c160;
+}
+
+.tab-icon {
+  width: 54rpx;
+  height: 54rpx;
+  margin-bottom: 4rpx;
+  position: relative;
+}
+
+.badge {
+  position: absolute;
+  top: -8rpx;
+  right: -8rpx;
+  background-color: #fa5151;
+  color: #fff;
+  font-size: 20rpx;
+  padding: 2rpx 8rpx;
+  border-radius: 18rpx;
+  min-width: 32rpx;
+  text-align: center;
+}
+
+/* 图标样式 */
+.service-icon { background-color: #10aeff; }
+.collect-icon { background-color: #ffc300; }
+.friends-icon { background-color: #07c160; }
+.video-icon { background-color: #fa5151; }
+.wallet-icon { background-color: #ff9c19; }
+.emoji-icon { background-color: #ffc300; }
+.settings-icon { background-color: #10aeff; }
+
+.message-icon { background-color: #07c160; }
+.contacts-icon { background-color: #07c160; }
+.discover-icon { background-color: #07c160; }
+.profile-icon { background-color: #07c160; }
