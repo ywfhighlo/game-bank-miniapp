@@ -33,28 +33,16 @@ Page({
   },
   onLogin() {
     wx.getUserProfile({
-      desc: '用于完善用户资料',
+      desc: '用于登录',
       success: res => {
-        // 更新全局状态
-        app.globalData.userInfo = res.userInfo;
-        // 保存到本地存储
-        wx.setStorageSync('userInfo', res.userInfo);
-        
-        this.setData({
-          userInfo: res.userInfo,
-          hasUserInfo: true
-        });
-
-        // 更新首页数据
-        const pages = getCurrentPages();
-        const indexPage = pages.find(page => page.route === 'pages/index/index');
-        if (indexPage) {
-          indexPage.setData({
-            userInfo: res.userInfo,
-            hasUserInfo: true
+        app.reLogin(res.userInfo, () => {
+          this.setData({
+            userInfo: app.globalData.userInfo,
+            gameTimeBalance: app.globalData.gameTimeBalance,
+            sportRecords: app.globalData.sportRecords,
+            gameRecords: app.globalData.gameRecords
           });
-        }
-
+        });
         wx.showToast({
           title: '登录成功',
           icon: 'success'
