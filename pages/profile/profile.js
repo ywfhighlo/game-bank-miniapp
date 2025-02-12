@@ -1,141 +1,323 @@
-const app = getApp();
+const app = getApp()
 
 Page({
   data: {
     userInfo: null,
-    hasUserInfo: false,
-    canIUse: wx.canIUse('button.open-type.getUserInfo'),
-    user: {},
     helperPhone: '',
-    maskedPhone: '',
-    message: ''
+    maskedHelperPhone: '',
+    showPhoneInput: false,
+    newHelperPhone: '',
+    userId: ''
   },
+
   onLoad() {
-    // 检查全局状态中是否已有用户信息
-    if (app.globalData.userInfo) {
+    // 从本地存储获取用户数据
+    const userInfo = wx.getStorageSync('userInfo');
+    const userData = wx.getStorageSync('userData');
+    
+    if (userInfo) {
       this.setData({
-        userInfo: app.globalData.userInfo,
-        hasUserInfo: true
+        userInfo: userInfo
       });
     }
-    // 从本地缓存中获取用户信息
-    const user = wx.getStorageSync('userInfo');
-    if (user) {
-      this.setData({ user });
+    
+    if (userData) {
+      this.setData({
+        userId: userData.userId,
+        helperPhone: userData.helperPhone || '',
+        maskedHelperPhone: this.maskPhoneNumber(userData.helperPhone)
+      });
     }
-    // 尝试从持久化存储中加载帮手手机号，确保退出登录后再次登录时能恢复数据
-    let phone = wx.getStorageSync('helperPhone') || '';
-    let masked = phone ? phone.replace(/(\d{3})\d{4}(\d{4})/, '$1****$2') : '';
-    this.setData({
-      helperPhone: phone,
-      maskedPhone: masked
-    });
+
+    // 检查全局数据
+    if (app.globalData.userInfo) {
+      this.setData({
+        userInfo: app.globalData.userInfo
+      });
+    }
   },
-  onLogin() {
-    wx.getUserProfile({
-      desc: '用于登录',
+
+  onShow() {
+    // 每次显示页面时刷新数据
+    this.loadUserData();
+  },
+
+  // 从云端获取最新的用户数据
+  loadUserData() {
+    if (!app.globalData.userId) {
+      console.log('用户未登录，跳过加载数据');
+      return;
+    }
+
+    wx.cloud.callFunction({
+      name: 'api',
+      data: {
+        action: 'getUserRecords',
+        userId: app.globalData.userId
+      },
       success: res => {
-        app.reLogin(res.userInfo, () => {
+        console.log('获取用户数据成功：', res);
+        if (res.result.code === 200) {
+          const data = res.result.data;
+          
+          // 更新页面数据
           this.setData({
-            userInfo: app.globalData.userInfo,
-            gameTimeBalance: app.globalData.gameTimeBalance,
-            sportRecords: app.globalData.sportRecords,
-            gameRecords: app.globalData.gameRecords
+            helperPhone: data.helperPhone || '',
+            maskedHelperPhone: this.maskPhoneNumber(data.helperPhone)
           });
-        });
-        wx.showToast({
-          title: '登录成功',
-          icon: 'success'
-        });
+
+          // 保存到本地存储
+          wx.setStorageSync('userData', {
+            ...wx.getStorageSync('userData'),
+            helperPhone: data.helperPhone
+          });
+        }
       },
       fail: err => {
-        console.error('登录失败', err);
-        wx.showToast({
-          title: '登录失败',
-          icon: 'none'
-        });
+        console.error('获取用户数据失败：', err);
       }
     });
   },
-  logout() {
-    app.globalData.userInfo = null;  // 清除全局登录信息
-    wx.removeStorageSync('userInfo');  // 移除本地缓存的用户信息
 
+  // 显示手机号输入框
+  showPhoneInput() {
     this.setData({
-      message: '已退出登录'
-    });
-
-    wx.showToast({
-      title: '已退出登录',
-      icon: 'success'
-    });
-
-    // 延迟后使用 wx.reLaunch 跳转主页，使首页刷新并显示未登录状态
-    setTimeout(() => {
-      wx.reLaunch({
-        url: '/pages/index/index'
-      });
-    }, 1500);
-  },
-  onInputHelper(e) {
-    this.setData({
-      helperPhone: e.detail.value
+      showPhoneInput: true,
+      newHelperPhone: this.data.helperPhone
     });
   },
-  saveHelperPhone() {
-    const phone = this.data.helperPhone;
-    if (!phone || phone.length !== 11) {
-      this.setData({
-        message: '请输入有效手机号'
-      });
-      return;
-    }
-    const maskedPhone = phone.replace(/(\d{3})\d{4}(\d{4})/, '$1****$2');
-    // 保存帮手手机号到全局以及持久化存储（如果用户已登录，则写入，否则仅更新全局数据）
-    app.globalData.helperPhone = phone;
-    if (app.globalData.userInfo) {
-      wx.setStorageSync('helperPhone', phone);
-    }
+
+  // 隐藏手机号输入框
+  hidePhoneInput() {
     this.setData({
-      maskedPhone: maskedPhone,
-      message: '帮手手机号已保存'
+      showPhoneInput: false,
+      newHelperPhone: ''
     });
   },
-  sendTestSMS() {
-    const phone = this.data.helperPhone;
+
+  // 更新手机号
+  updateHelperPhone() {
+    const phone = this.data.newHelperPhone;
     if (!phone) {
       wx.showToast({
-        title: '请先设置帮手手机号码',
+        title: '请输入手机号',
         icon: 'none'
       });
       return;
     }
-    // 调用云函数发送短信
+
+    if (!/^1[3-9]\d{9}$/.test(phone)) {
+      wx.showToast({
+        title: '请输入正确的手机号',
+        icon: 'none'
+      });
+      return;
+    }
+
+    // 获取全局的 userId
+    const userId = app.globalData.userId;
+    if (!userId) {
+      wx.showToast({
+        title: '请先登录',
+        icon: 'none'
+      });
+      return;
+    }
+
     wx.cloud.callFunction({
-      name: 'sendHelperSMS',
+      name: 'api',
       data: {
-        phone: phone,
-        message: '这是测试短信，您的短信发送功能正常。'
+        action: 'updateHelperPhone',
+        userId: userId,
+        helperPhone: phone
       },
       success: res => {
-        console.log('短信发送成功', res);
-        wx.showToast({
-          title: '测试短信已发送',
-          icon: 'success'
-        });
+        console.log('更新手机号结果：', res);
+        if (res.result.code === 200) {
+          wx.showToast({
+            title: '更新成功',
+            icon: 'success'
+          });
+          
+          // 更新页面数据
+          this.setData({
+            helperPhone: phone,
+            maskedHelperPhone: this.maskPhoneNumber(phone),
+            showPhoneInput: false
+          });
+
+          // 更新全局数据
+          app.globalData.helperPhone = phone;
+
+          // 更新本地存储
+          const userData = wx.getStorageSync('userData') || {};
+          userData.helperPhone = phone;
+          wx.setStorageSync('userData', userData);
+        } else {
+          wx.showToast({
+            title: res.result.message || '更新失败',
+            icon: 'none'
+          });
+        }
       },
       fail: err => {
-        console.error('短信发送失败', err);
+        console.error('更新手机号失败：', err);
         wx.showToast({
-          title: '短信发送失败',
+          title: '更新失败',
           icon: 'none'
         });
       }
     });
   },
+
+  // 手机号输入处理
+  onPhoneInput(e) {
+    this.setData({
+      newHelperPhone: e.detail.value
+    });
+  },
+
+  // 手机号码脱敏处理
+  maskPhoneNumber(phone) {
+    if (!phone) return '未设置';
+    return phone.replace(/(\d{3})\d{4}(\d{4})/, '$1****$2');
+  },
+
+  // 获取用户信息
+  onGetUserInfo() {
+    wx.getUserProfile({
+      desc: '用于完善用户资料',
+      success: (res) => {
+        console.log('获取用户信息成功：', res);
+        const userInfo = res.userInfo;
+        app.globalData.userInfo = userInfo;
+        
+        this.setData({
+          userInfo: userInfo
+        });
+        
+        // 保存用户信息到本地存储
+        wx.setStorageSync('userInfo', userInfo);
+        
+        // 获取用户openid并生成userId
+        wx.cloud.callFunction({
+          name: 'api',
+          data: {
+            action: 'login'
+          },
+          success: res => {
+            console.log('登录结果：', res);
+            if (res.result.code === 200) {
+              const userId = res.result.data.userId;
+              app.globalData.userId = userId;
+              wx.setStorageSync('userId', userId);
+
+              // 更新全局数据
+              app.globalData.gameTime = res.result.data.gameTime;
+              app.globalData.sportRecords = res.result.data.sportRecords;
+              app.globalData.gameRecords = res.result.data.gameRecords;
+              app.globalData.dailyLimit = res.result.data.dailyLimit;
+              app.globalData.weeklyLimit = res.result.data.weeklyLimit;
+              app.globalData.restInterval = res.result.data.restInterval;
+              app.globalData.restDuration = res.result.data.restDuration;
+              app.globalData.helperPhone = res.result.data.helperPhone;
+              
+              // 保存到本地存储
+              wx.setStorageSync('userData', {
+                userId: userId,
+                gameTime: res.result.data.gameTime,
+                sportRecords: res.result.data.sportRecords,
+                gameRecords: res.result.data.gameRecords,
+                dailyLimit: res.result.data.dailyLimit,
+                weeklyLimit: res.result.data.weeklyLimit,
+                restInterval: res.result.data.restInterval,
+                restDuration: res.result.data.restDuration,
+                helperPhone: res.result.data.helperPhone
+              });
+              
+              // 显示登录成功提示
+              wx.showToast({
+                title: '登录成功',
+                icon: 'success',
+                duration: 1500,
+                success: () => {
+                  // 延迟跳转，让用户看到成功提示
+                  setTimeout(() => {
+                    wx.switchTab({
+                      url: '/pages/index/index'
+                    });
+                  }, 1500);
+                }
+              });
+            } else {
+              wx.showToast({
+                title: res.result.message || '登录失败',
+                icon: 'none'
+              });
+            }
+          },
+          fail: err => {
+            console.error('登录失败：', err);
+            wx.showToast({
+              title: '登录失败',
+              icon: 'none'
+            });
+          }
+        });
+      },
+      fail: (err) => {
+        console.error('获取用户信息失败：', err);
+        wx.showToast({
+          title: '请授权用户信息',
+          icon: 'none'
+        });
+      }
+    });
+  },
+
+  // 发送测试短信
+  sendTestSMS() {
+    if (!this.data.helperPhone) {
+      wx.showToast({
+        title: '请先设置手机号',
+        icon: 'none'
+      });
+      return;
+    }
+
+    wx.cloud.callFunction({
+      name: 'api',
+      data: {
+        action: 'sendTestSMS',
+        helperPhone: this.data.helperPhone
+      },
+      success: res => {
+        if (res.result.code === 200) {
+          wx.showToast({
+            title: '发送成功',
+            icon: 'success'
+          });
+        } else {
+          wx.showToast({
+            title: res.result.message || '发送失败',
+            icon: 'none'
+          });
+        }
+      },
+      fail: err => {
+        console.error('发送测试短信失败：', err);
+        wx.showToast({
+          title: '发送失败',
+          icon: 'none'
+        });
+      }
+    });
+  },
+
+  // 跳转到设置页面
   navigateToSettings() {
     wx.navigateTo({
       url: '/pages/settings/settings'
     });
   }
-}); 
+});

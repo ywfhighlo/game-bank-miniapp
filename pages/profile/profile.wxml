@@ -1,15 +1,15 @@
 <view class="profile-container">
   <!-- 用户信息区域 -->
   <view class="user-info">
-    <block wx:if="{{!hasUserInfo}}">
-      <button class="btn-login" bindtap="onLogin">登录</button>
+    <block wx:if="{{!userInfo}}">
+      <button class="btn-login" bindtap="onGetUserInfo">微信登录</button>
     </block>
     <block wx:else>
       <view class="user-header">
         <image class="user-avatar" src="{{userInfo.avatarUrl}}" mode="aspectFill"></image>
         <view class="user-detail">
           <text class="user-name">{{userInfo.nickName}}</text>
-          <text class="wechat-id">手机号：{{helperPhone || '未设置'}}</text>
+          <text class="wechat-id">手机号：{{maskedHelperPhone}}</text>
         </view>
       </view>
     </block>
@@ -20,8 +20,8 @@
     <view class="menu-item">
       <view class="menu-icon phone-icon"></view>
       <text>帮手手机号码</text>
-      <input class="menu-input" placeholder="请输入帮手手机号码" type="number" bindinput="onInputHelper" value="{{helperPhone}}" />
-      <button class="btn-save" bindtap="saveHelperPhone">保存</button>
+      <input class="menu-input" placeholder="请输入帮手手机号码" type="number" bindinput="onPhoneInput" value="{{helperPhone}}" />
+      <button class="btn-save" bindtap="updateHelperPhone">保存</button>
     </view>
     
     <view class="menu-item">
@@ -37,5 +37,5 @@
     </view>
   </view>
 
-  <view class="message">{{message}}</view>
+  <view class="message" wx:if="{{message}}">{{message}}</view>
 </view>

@@ -48,20 +48,19 @@
 .profile-container {
   min-height: 100vh;
   background-color: #f7f7f7;
-  position: relative;
+  padding-bottom: env(safe-area-inset-bottom);
 }
 
 /* 用户信息区域 */
 .user-info {
   background-color: #ffffff;
-  padding: 20rpx 30rpx;
+  padding: 30rpx;
   margin-bottom: 20rpx;
 }
 
 .user-header {
   display: flex;
   align-items: center;
-  position: relative;
 }
 
 .user-avatar {
@@ -114,32 +113,54 @@
   width: 48rpx;
   height: 48rpx;
   margin-right: 20rpx;
-  background-color: #07c160;
+  background-size: cover;
   border-radius: 8rpx;
 }
 
 .menu-item text {
   font-size: 32rpx;
-  margin-right: 20rpx;
+}
+
+.menu-value {
+  flex: 1;
+  text-align: right;
+  color: #888;
+  margin-right: 10rpx;
 }
 
 .menu-input {
   flex: 1;
   font-size: 32rpx;
   padding: 10rpx;
+  border: 1rpx solid #eee;
+  border-radius: 6rpx;
 }
 
-.btn-save, .btn-test {
+.button-group {
+  display: flex;
+  gap: 20rpx;
+  margin-left: 20rpx;
+}
+
+.btn-save, .btn-test, .btn-cancel {
   margin: 0;
   padding: 10rpx 30rpx;
   font-size: 28rpx;
-  background-color: #07c160;
   color: #fff;
   border-radius: 8rpx;
+  min-width: 120rpx;
+}
+
+.btn-save {
+  background-color: #07c160;
 }
 
 .btn-test {
   background-color: #10aeff;
+}
+
+.btn-cancel {
+  background-color: #999;
 }
 
 .arrow {
@@ -157,12 +178,19 @@
 }
 
 .message {
-  margin-top: 20rpx;
+  margin: 20rpx;
+  padding: 20rpx;
   font-size: 28rpx;
   color: #07c160;
   text-align: center;
-  padding: 10rpx;
+  background-color: #fff;
+  border-radius: 8rpx;
 }
+
+/* 图标样式 */
+.phone-icon { background-color: #07c160; }
+.sms-icon { background-color: #10aeff; }
+.settings-icon { background-color: #999; }
 
 /* 底部导航栏 */
 .tab-bar {

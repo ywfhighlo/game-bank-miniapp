@@ -3,10 +3,23 @@ const cloud = require('wx-server-sdk');
 const axios = require('axios');
 
 cloud.init({
-  env: cloud.DYNAMIC_CURRENT_ENV
+  env: 'gamebank-3gx3otq16ff2ac9d'  // 使用具体的环境ID而不是DYNAMIC_CURRENT_ENV
 });
 
 const db = cloud.database();
+const command = db.command;  // 获取数据库操作符
+
+// 确保数据库集合存在的辅助函数
+async function ensureCollectionExists(collectionName) {
+  try {
+    await db.createCollection(collectionName);
+    console.log(`Created collection: ${collectionName}`);
+  } catch (err) {
+    // 如果集合已存在，会抛出错误，这是正常的
+    console.log(`Collection ${collectionName} already exists or error:`, err);
+  }
+}
+
 // 数据库集合
 const usersCollection = db.collection('users');
 const recordsCollection = db.collection('records');
@@ -22,6 +35,10 @@ const uuidv4 = () => {
 
 // 云函数入口函数必须导出 main
 exports.main = async (event, context) => {
+  // 确保必要的集合存在
+  await ensureCollectionExists('users');
+  await ensureCollectionExists('records');
+
   const action = event.action;
   switch (action) {
     case 'register':
@@ -34,15 +51,23 @@ exports.main = async (event, context) => {
       return await createRecord(event);
     case 'verifyRecord':
       return await verifyRecord(event);
+    case 'updateHelperPhone':
+      return await updateHelperPhone(event);
+    case 'getUserRecords':
+      return await getUserRecords(event);
+    case 'updateGameTime':
+      return await updateGameTime(event);
+    case 'logLogout':
+      return await logLogout(event);
     default:
-      return { code: 400, message: 'Invalid action' };
+      return { code: 400, message: '未知的操作类型' };
   }
 };
 
-// 注册接口：传入 username, password, helper_phone
+// 注册接口：传入 username, password, helperPhone
 async function registerUser(event) {
-  const { username, password, helper_phone } = event;
-  if (!username || !password || !helper_phone) {
+  const { username, password, helperPhone } = event;
+  if (!username || !password || !helperPhone) {
     return { code: 400, message: '缺少必要字段' };
   }
 
@@ -63,8 +88,9 @@ async function registerUser(event) {
         userId,
         username,
         password, // 生产环境下请对密码做加密处理
-        helper_phone,
-        createTime: new Date()
+        helperPhone,
+        createTime: new Date(),
+        updateTime: new Date()
       }
     });
   } catch (err) {
@@ -95,89 +121,385 @@ async function loginUser(event) {
 async function createRecord(event) {
   const { userId, duration } = event;
   if (!userId || !duration) {
-    return { code: 400, message: '缺少 userId 或 duration' };
+    return { code: 400, message: '缺少用户ID或运动时长' };
   }
-  const recordId = uuidv4();
-  const verificationCode = Math.floor(100000 + Math.random()*900000).toString(); // 生成验证码
 
-  await recordsCollection.add({
-    data: {
+  try {
+    // 生成随机验证码
+    const verifyCode = Math.floor(100000 + Math.random() * 900000).toString();
+    const recordId = uuidv4();
+    const record = {
       recordId,
       userId,
-      duration,
-      is_verified: false,
-      verificationCode, // 模拟发送验证码，实际业务中可以对接短信服务接口
-      createTime: new Date()
-    }
-  });
+      duration: parseInt(duration),
+      verifyCode,
+      status: 'pending',
+      createTime: new Date(),
+      updateTime: new Date()
+    };
 
-  // 模拟短信发送：服务器端打印日志。正式环境下应调用短信服务发送验证码给帮手
-  console.log(`模拟短信：帮手手机号将收到验证码 ${verificationCode}`);
+    // 添加记录
+    await recordsCollection.add({
+      data: record
+    });
 
-  return { code: 200, message: '记录提交成功，验证码已发送', recordId };
+    // 更新用户运动时间和游戏时间
+    await usersCollection.where({
+      userId: userId
+    }).update({
+      data: {
+        sportTime: command.inc(parseInt(duration)),
+        gameTime: command.inc(parseInt(duration)),  // 同时增加游戏时间
+        updateTime: new Date()
+      }
+    });
+
+    return {
+      code: 200,
+      message: '记录创建成功',
+      data: {
+        recordId,
+        verifyCode
+      }
+    };
+  } catch (err) {
+    console.error("创建记录失败：", err);
+    return { code: 500, message: '创建记录失败', error: err };
+  }
 }
 
 // 验证验证码接口：传入 userId, recordId, code
 async function verifyRecord(event) {
   const { userId, recordId, code } = event;
   if (!userId || !recordId || !code) {
-    return { code: 400, message: '缺少必要字段' };
+    return { code: 400, message: '缺少必要参数' };
   }
-  const res = await recordsCollection.where({ recordId, userId }).get();
-  if (!res.data || res.data.length === 0) {
-    return { code: 404, message: '记录不存在' };
+
+  try {
+    // 查询记录
+    const recordQuery = await recordsCollection.where({
+      userId,
+      recordId,
+      status: 'pending'
+    }).get();
+
+    if (!recordQuery.data || recordQuery.data.length === 0) {
+      return { code: 404, message: '记录不存在或已验证' };
+    }
+
+    const record = recordQuery.data[0];
+    if (record.verifyCode !== code) {
+      return { code: 400, message: '验证码错误' };
+    }
+
+    const now = new Date();
+    const duration = parseInt(record.duration);
+
+    // 更新记录状态为已验证
+    await recordsCollection.where({ recordId }).update({
+      data: {
+        status: 'verified',
+        verifyTime: now
+      }
+    });
+
+    // 更新用户游戏时间
+    await usersCollection.where({
+      userId: userId
+    }).update({
+      data: {
+        gameTime: command.inc(duration),  // 增加游戏时间
+        updateTime: now
+      }
+    });
+
+    return {
+      code: 200,
+      message: '验证成功',
+      data: {
+        recordId,
+        duration
+      }
+    };
+  } catch (err) {
+    console.error("验证记录失败：", err);
+    return { code: 500, message: '验证记录失败', error: err };
   }
-  const record = res.data[0];
-  if (record.verificationCode !== code) {
-    return { code: 400, message: '验证码错误' };
-  }
-  // 更新记录状态为已验证
-  await recordsCollection.doc(record._id).update({ data: { is_verified: true } });
-  return { code: 200, message: '运动记录验证成功' };
 }
 
-// 新增微信登录处理逻辑
+// 微信登录接口：传入 code
 async function wxLogin(event) {
   const { code } = event;
   if (!code) {
-    return { code: 400, message: '缺少微信登录 code' };
+    return { code: 400, message: '缺少code' };
   }
-
-  // 请替换以下 APPID 和 APPSECRET 为你自己的小程序的信息
-  const appid = 'wxfa2e2aac0a23a52d';
-  const secret = 'd31f6143a5c0fd7495b9ac72b5138987';
 
   try {
-    // 调用微信接口获取 openid 和 session_key
-    const url = `https://api.weixin.qq.com/sns/jscode2session?appid=${appid}&secret=${secret}&js_code=${code}&grant_type=authorization_code`;
-    const response = await axios.get(url);
-    console.log("微信登录接口返回数据：", response.data);
+    // 获取 openid，在云函数中可以直接通过 context 获取
+    const wxContext = cloud.getWXContext();
+    const openid = wxContext.OPENID;
 
-    if (response.data && response.data.openid) {
-      const openid = response.data.openid;
-      // 查询数据库中是否存在该 openid 对应的用户
-      const userQuery = await db.collection('users').where({ openid }).get();
-      let userId;
-      if (userQuery.data && userQuery.data.length > 0) {
-        // 如果用户已存在，直接返回该记录的 userId
-        userId = userQuery.data[0].userId;
-      } else {
-        // 如果用户不存在，则创建新的用户记录
-        userId = Date.now().toString() + Math.floor(Math.random() * 1000).toString();
+    if (!openid) {
+      console.error('获取openid失败');
+      return { code: 500, message: '获取openid失败' };
+    }
+
+    console.log('用户登录，openid:', openid);
+
+    // 查询用户是否存在
+    const userQuery = await db.collection('users').where({
+      openid: openid
+    }).get();
+
+    let userId;
+    let userData;
+    const token = Date.now().toString() + Math.floor(Math.random() * 1000).toString();
+
+    if (!userQuery.data || userQuery.data.length === 0) {
+      // 用户不存在，创建新用户
+      userId = uuidv4();
+      userData = {
+        userId,
+        openid,
+        token,
+        createTime: new Date(),
+        updateTime: new Date(),
+        sportTime: 0,
+        gameTime: 0,
+        sportRecords: [],
+        gameRecords: [],
+        dailyLimit: 7200,    // 每日运动上限，默认7200秒（2小时）
+        weeklyLimit: 36000,  // 每周运动上限，默认36000秒（10小时）
+        restInterval: 1800,  // 休息间隔，默认1800秒（30分钟）
+        restDuration: 300,   // 休息时长，默认300秒（5分钟）
+        helperPhone: ''      // 帮手手机号，初始为空
+      };
+
+      try {
         await db.collection('users').add({
+          data: userData
+        });
+      } catch (err) {
+        console.error('创建用户失败：', err);
+        return { code: 500, message: '创建用户失败', error: err };
+      }
+    } else {
+      // 用户已存在，更新token
+      userData = userQuery.data[0];
+      userId = userData.userId;
+      
+      try {
+        await db.collection('users').where({ userId }).update({
           data: {
-            openid,
-            userId,
-            createTime: new Date()
+            token,
+            updateTime: new Date()
           }
         });
+        userData.token = token;
+        userData.updateTime = new Date();
+      } catch (err) {
+        console.error('更新用户token失败：', err);
+        return { code: 500, message: '更新用户token失败', error: err };
       }
-      return { code: 200, message: '微信登录成功', userId };
-    } else {
-      return { code: 400, message: '微信登录失败，无法获取 openid', data: response.data };
     }
+
+    return {
+      code: 200,
+      message: '登录成功',
+      data: userData
+    };
   } catch (err) {
-    console.error("微信登录异常：", err);
-    return { code: 500, message: '微信登录异常', err };
+    console.error('微信登录失败：', err);
+    return { code: 500, message: '微信登录失败', error: err };
   }
-} 
+}
+
+// 更新帮手手机号
+async function updateHelperPhone(event) {
+  const { userId, helperPhone } = event;
+  if (!userId || !helperPhone) {
+    return { code: 400, message: '缺少用户ID或手机号' };
+  }
+
+  try {
+    // 查询用户是否存在
+    const userQuery = await db.collection('users').where({ userId }).get();
+    if (!userQuery.data || userQuery.data.length === 0) {
+      return { code: 404, message: '用户不存在' };
+    }
+
+    // 更新帮手手机号
+    await db.collection('users').where({ userId }).update({
+      data: {
+        helperPhone,
+        updateTime: new Date()
+      }
+    });
+
+    return { 
+      code: 200, 
+      message: '帮手手机号更新成功',
+      helperPhone 
+    };
+  } catch (err) {
+    console.error("更新帮手手机号失败：", err);
+    return { code: 500, message: '更新帮手手机号失败', error: err };
+  }
+}
+
+// 获取用户记录接口：传入 userId
+async function getUserRecords(event) {
+  const { userId } = event;
+  if (!userId) {
+    return { code: 400, message: '缺少 userId' };
+  }
+
+  try {
+    // 查询用户信息
+    const userQuery = await db.collection('users').where({ userId }).get();
+    if (!userQuery.data || userQuery.data.length === 0) {
+      return { code: 404, message: '用户不存在' };
+    }
+
+    const user = userQuery.data[0];
+
+    // 查询最近的运动记录
+    const recentRecords = await recordsCollection
+      .where({
+        userId,
+        status: 'verified'
+      })
+      .orderBy('createTime', 'desc')
+      .limit(10)
+      .get();
+
+    // 打印日志以便调试
+    console.log('获取用户记录：', {
+      userId,
+      sportTime: user.sportTime,
+      gameTime: user.gameTime,
+      sportRecordsLength: user.sportRecords?.length,
+      gameRecordsLength: user.gameRecords?.length
+    });
+
+    return {
+      code: 200,
+      message: '获取记录成功',
+      data: {
+        sportTime: user.sportTime || 0,
+        gameTime: user.gameTime || 0,
+        sportRecords: user.sportRecords || [],
+        gameRecords: user.gameRecords || [],
+        recentRecords: recentRecords.data || []
+      }
+    };
+  } catch (err) {
+    console.error("获取用户记录失败：", err);
+    return { code: 500, message: '获取用户记录失败', error: err };
+  }
+}
+
+// 更新游戏时间
+async function updateGameTime(event) {
+  const { userId, duration, mode } = event;
+  if (!userId || !duration) {
+    return { code: 400, message: '缺少用户ID或游戏时长' };
+  }
+
+  try {
+    // 查询用户当前游戏时间
+    const userQuery = await usersCollection.where({
+      userId: userId
+    }).get();
+
+    if (!userQuery.data || userQuery.data.length === 0) {
+      return { code: 404, message: '用户不存在' };
+    }
+
+    const user = userQuery.data[0];
+    const currentGameTime = user.gameTime || 0;
+    // 不足一分钟按一分钟算
+    const consumeMinutes = Math.ceil(duration / 60);
+
+    // 检查游戏时间是否足够
+    if (currentGameTime < consumeMinutes) {
+      return { code: 400, message: '游戏时间不足' };
+    }
+
+    const now = new Date();
+    // 创建新的游戏记录
+    const gameRecord = {
+      recordId: uuidv4(),
+      duration: consumeMinutes,
+      createTime: now,
+      mode: mode || '手动结束'
+    };
+
+    // 获取现有游戏记录
+    const gameRecords = user.gameRecords || [];
+    
+    // 添加新记录到数组开头
+    gameRecords.unshift(gameRecord);
+
+    // 如果记录超过50条，删除最老的记录
+    if (gameRecords.length > 50) {
+      gameRecords.pop();
+    }
+
+    // 更新用户游戏时间和记录
+    await usersCollection.where({
+      userId: userId
+    }).update({
+      data: {
+        gameTime: command.inc(-consumeMinutes),  // 减去消耗的游戏时间（分钟）
+        gameRecords: gameRecords,
+        updateTime: now
+      }
+    });
+
+    // 添加游戏记录到records集合
+    await recordsCollection.add({
+      data: {
+        recordId: gameRecord.recordId,
+        userId,
+        type: 'game',
+        duration: consumeMinutes,
+        mode: gameRecord.mode,
+        createTime: now,
+        updateTime: now
+      }
+    });
+
+    return {
+      code: 200,
+      message: '游戏时间更新成功',
+      data: {
+        remainingTime: currentGameTime - consumeMinutes,
+        consumedTime: consumeMinutes,
+        gameRecord
+      }
+    };
+  } catch (err) {
+    console.error("更新游戏时间失败：", err);
+    return { code: 500, message: '更新游戏时间失败', error: err };
+  }
+}
+
+// 记录退出登录日志
+async function logLogout(event) {
+  const { userId, nickName } = event;
+  if (!userId) {
+    return { code: 400, message: '缺少用户ID' };
+  }
+
+  try {
+    console.log(`用户退出登录：${userId}, 昵称: ${nickName || '未知'}`);
+    return {
+      code: 200,
+      message: '退出成功'
+    };
+  } catch (err) {
+    console.error('记录退出日志失败：', err);
+    return { code: 500, message: '记录退出日志失败', error: err };
+  }
+}

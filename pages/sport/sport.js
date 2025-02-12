@@ -32,40 +32,65 @@ Page({
       message: ''
     });
   },
-  // 提交运动记录，调用云函数（模拟发送短信，验证码固定为123456）
+  // 提交运动记录
   submitSportRecord() {
+    const app = getApp();
+    const userId = app.globalData.userId || wx.getStorageSync('userId');
+    
+    if (!userId) {
+      wx.showToast({
+        title: '请先登录',
+        icon: 'none',
+        duration: 1500
+      });
+      // 延迟跳转到登录页面
+      setTimeout(() => {
+        wx.redirectTo({
+          url: '/pages/login/login'
+        });
+      }, 1500);
+      return;
+    }
+
     const duration = parseInt(this.data.duration);
     if (!duration || duration <= 0) {
-      this.setData({ 
-         message: '请输入有效的运动时长'
+      wx.showToast({
+        title: '请先开始运动',
+        icon: 'none'
       });
       return;
     }
-    const userId = app.globalData.userId || wx.getStorageSync('userId');
-    if (!userId) {
-      this.setData({ message: '请先登录' });
-      return;
-    }
+
+    wx.showLoading({
+      title: '提交中...',
+      mask: true
+    });
+
+    const token = app.globalData.token || wx.getStorageSync('token');
     wx.cloud.callFunction({
       name: 'api',
       data: {
         action: 'createRecord',
-        userId,
-        duration
+        userId: userId,
+        token: token,
+        duration: duration
       },
       success: res => {
-         if (res.result.code === 200) {
-             // 更新提示信息和待确认记录
-             this.setData({
-                message: '记录提交成功，验证码已发送',
-                pendingRecord: { duration }
-             });
-         } else {
-             this.setData({ message: res.result.message });
-         }
+        wx.hideLoading();
+        console.log('提交运动记录结果：', res);
+        if (res.result.code === 200) {
+          this.setData({
+            message: '记录提交成功，验证码已发送',
+            pendingRecord: { duration }
+          });
+        } else {
+          this.setData({ message: res.result.message });
+        }
       },
       fail: err => {
-         this.setData({ message: '记录提交失败' });
+        wx.hideLoading();
+        console.error('提交运动记录失败：', err);
+        this.setData({ message: '记录提交失败' });
       }
     });
   },

@@ -1,6 +1,7 @@
 App({
   globalData: {
     userInfo: null,
+    userId: null,
     isParent: false,
     gameTimeBalance: 0,
     dailyLimit: 7200, // 2小时，单位：秒
@@ -21,31 +22,18 @@ App({
         traceUser: true
       });
     }
-    
-    // 检查本地缓存中是否有已登录的用户信息，若有则加载持久化数据
+
+    // 检查本地缓存中是否有已登录的用户信息
     const storedUser = wx.getStorageSync('userInfo');
-    if (storedUser) {
+    const storedUserId = wx.getStorageSync('userId');
+    if (storedUser && storedUserId) {
       this.globalData.userInfo = storedUser;
+      this.globalData.userId = storedUserId;
       this.loadPersistentData();
     } else {
-      // 如果本地无用户信息，则进行微信登录及授权获取用户信息
-      wx.login({
-        success: res => {
-          // 登录成功后的自定义逻辑
-        }
-      });
-      wx.getSetting({
-        success: res => {
-          if (res.authSetting['scope.userInfo']) {
-            wx.getUserInfo({
-              success: res => {
-                this.globalData.userInfo = res.userInfo;
-                wx.setStorageSync('userInfo', res.userInfo);
-                this.loadPersistentData();
-              }
-            });
-          }
-        }
+      // 如果没有登录信息，重定向到登录页
+      wx.redirectTo({
+        url: '/pages/login/login'
       });
     }
   },
@@ -72,15 +60,5 @@ App({
     } catch (e) {
       console.error("加载持久化数据失败", e);
     }
-  },
-
-  // 新增通用重新登录接口
-  reLogin(newUser, callback) {
-    this.globalData.userInfo = newUser;
-    wx.setStorageSync('userInfo', newUser);
-    this.loadPersistentData();
-    if (callback && typeof callback === 'function') {
-      callback();
-    }
   }
-})
+});
