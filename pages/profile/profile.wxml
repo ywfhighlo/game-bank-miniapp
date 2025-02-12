@@ -30,7 +30,7 @@
       <button class="btn-test" bindtap="sendTestSMS">发送测试</button>
     </view>
 
-    <view class="menu-item">
+    <view class="menu-item" bindtap="navigateToSettings">
       <view class="menu-icon settings-icon"></view>
       <text>设置</text>
       <text class="arrow"></text>

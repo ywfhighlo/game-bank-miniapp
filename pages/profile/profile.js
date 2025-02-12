@@ -144,5 +144,10 @@ Page({
         });
       }
     });
+  },
+  navigateToSettings() {
+    wx.navigateTo({
+      url: '/pages/settings/settings'
+    });
   }
 }); 

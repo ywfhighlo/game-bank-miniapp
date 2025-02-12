@@ -5,7 +5,8 @@
     "pages/login/login",
     "pages/sport/sport",
     "pages/game/game",
-    "pages/profile/profile"
+    "pages/profile/profile",
+    "pages/settings/settings"
   ],
   "window": {
     "backgroundTextStyle": "light",
