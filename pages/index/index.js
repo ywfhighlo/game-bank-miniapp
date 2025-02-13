@@ -19,12 +19,29 @@ Page({
 
   // 获取用户运动记录和游戏时间数据
   loadUserData() {
+    console.log('=== loadUserData开始 ===');
+    console.log('当前globalData:', app.globalData);
+    
     if (!app.globalData.userId) {
-      console.log('用户未登录，跳过加载数据');
-      return;
+      console.log('用户未登录，尝试从storage恢复');
+      // 尝试从storage获取用户信息
+      const storedUserInfo = wx.getStorageSync('userInfo');
+      const userData = wx.getStorageSync('userData');
+      console.log('Storage中的用户信息:', storedUserInfo);
+      console.log('Storage中的用户数据:', userData);
+      
+      if (userData && userData.userId) {
+        console.log('从storage恢复用户ID:', userData.userId);
+        app.globalData.userId = userData.userId;
+      } else {
+        console.log('找不到用户登录信息，需要先登录');
+        return;
+      }
     }
 
-    console.log('开始加载用户数据');
+    console.log('准备调用云函数 getUserRecords');
+    console.log('使用的userId:', app.globalData.userId);
+    
     wx.cloud.callFunction({
       name: 'api',
       data: {
@@ -32,13 +49,16 @@ Page({
         userId: app.globalData.userId
       },
       success: res => {
-        console.log('获取用户数据成功：', res);
+        console.log('调用云函数成功，完整响应：', res);
+        console.log('云函数返回数据：', res.result);
+        
         if (res.result.code === 200) {
           const data = res.result.data;
+          console.log('获取到的数据详情：', data);
+          console.log('运动记录数据：', data.recentRecords);
           
           // 更新全局数据
-          app.globalData.gameTime = data.gameTime;
-          app.globalData.sportRecords = data.sportRecords;
+          app.globalData.gameTimeBalance = data.gameTimeBalance;
           app.globalData.gameRecords = data.gameRecords || [];
           app.globalData.dailyLimit = data.dailyLimit;
           app.globalData.weeklyLimit = data.weeklyLimit;
@@ -46,31 +66,27 @@ Page({
           app.globalData.restDuration = data.restDuration;
 
           // 更新页面数据
-          this.setData({
-            gameTimeBalance: data.gameTime,
-            sportRecords: data.sportRecords.slice(0, 5), // 只显示最近5条运动记录
-            gameRecords: (data.gameRecords || []).slice(0, 5), // 只显示最近5条游戏记录
-            totalSportTime: data.totalSportTime,
+          const pageData = {
+            gameTimeBalance: data.gameTimeBalance || 0,
+            sportRecords: data.recentRecords || [],
+            gameRecords: (data.gameRecords || []).slice(0, 5),
+            totalSportTime: data.sportTime || 0,
             todayGameTime: data.todayGameTime || 0,
             weekGameTime: data.weekGameTime || 0,
             dailyLimit: data.dailyLimit,
             weeklyLimit: data.weeklyLimit,
             restInterval: data.restInterval,
             restDuration: data.restDuration
-          });
-
-          // 保存到本地存储
-          wx.setStorageSync('userData', {
-            gameTime: data.gameTime,
-            sportRecords: data.sportRecords,
-            gameRecords: data.gameRecords || [],
-            totalSportTime: data.totalSportTime,
-            todayGameTime: data.todayGameTime || 0,
-            weekGameTime: data.weekGameTime || 0,
-            dailyLimit: data.dailyLimit,
-            weeklyLimit: data.weeklyLimit,
-            restInterval: data.restInterval,
-            restDuration: data.restDuration
+          };
+          
+          console.log('准备更新页面数据：', pageData);
+          console.log('运动记录数组长度：', (data.recentRecords || []).length);
+          console.log('运动记录具体内容：', data.recentRecords);
+          
+          this.setData(pageData, () => {
+            console.log('页面数据更新完成');
+            console.log('当前页面运动记录：', this.data.sportRecords);
+            console.log('=== loadUserData结束 ===');
           });
         } else {
           console.error('获取用户数据失败：', res.result.message);
@@ -81,7 +97,7 @@ Page({
         }
       },
       fail: err => {
-        console.error('获取用户数据失败：', err);
+        console.error('调用云函数失败：', err);
         wx.showToast({
           title: '获取数据失败',
           icon: 'none'
@@ -91,22 +107,42 @@ Page({
   },
 
   onLoad() {
-    if (app.globalData.userInfo) {
+    console.log('Index page onLoad');
+    console.log('Global user info:', app.globalData.userInfo);
+    console.log('Global userId:', app.globalData.userId);
+    
+    // 检查用户是否已登录
+    const storedUserInfo = wx.getStorageSync('userInfo');
+    if (storedUserInfo && storedUserInfo.userId) {
+      console.log('Found stored user info:', storedUserInfo);
+      app.globalData.userInfo = storedUserInfo;
+      app.globalData.userId = storedUserInfo.userId;
       this.setData({
-        userInfo: app.globalData.userInfo,
+        userInfo: storedUserInfo,
         hasUserInfo: true
       });
       this.loadUserData();
+    } else {
+      console.log('No stored user info found');
     }
   },
 
   onShow() {
-    if (app.globalData.userInfo) {
-      this.setData({
-        userInfo: app.globalData.userInfo,
-        hasUserInfo: true
-      });
+    console.log('Index page onShow');
+    console.log('Current globalData:', app.globalData);
+    // 每次显示页面时重新加载数据
+    if (app.globalData.userId) {
       this.loadUserData();
+    } else {
+      console.log('No userId in globalData, checking storage...');
+      const storedUserInfo = wx.getStorageSync('userInfo');
+      if (storedUserInfo && storedUserInfo.userId) {
+        console.log('Found userId in storage:', storedUserInfo.userId);
+        app.globalData.userId = storedUserInfo.userId;
+        this.loadUserData();
+      } else {
+        console.log('No user info found in storage');
+      }
     }
   },
 

@@ -11,17 +11,23 @@ Page({
   },
 
   onLoad() {
+    console.log('Profile page onLoad');
     // 从本地存储获取用户数据
     const userInfo = wx.getStorageSync('userInfo');
     const userData = wx.getStorageSync('userData');
     
+    console.log('Storage userInfo:', userInfo);
+    console.log('Storage userData:', userData);
+    
+    // 设置用户信息
     if (userInfo) {
       this.setData({
         userInfo: userInfo
       });
     }
     
-    if (userData) {
+    // 设置用户数据
+    if (userData && userData.userId) {  // 确保userId存在
       this.setData({
         userId: userData.userId,
         helperPhone: userData.helperPhone || '',
@@ -30,16 +36,29 @@ Page({
     }
 
     // 检查全局数据
+    console.log('Global data:', app.globalData);
     if (app.globalData.userInfo) {
       this.setData({
         userInfo: app.globalData.userInfo
       });
     }
+    
+    // 如果全局数据中有userId，确保页面数据同步
+    if (app.globalData.userId) {
+      this.setData({
+        userId: app.globalData.userId
+      });
+    }
   },
 
   onShow() {
+    console.log('Profile page onShow');
     // 每次显示页面时刷新数据
-    this.loadUserData();
+    if (app.globalData.userId) {
+      this.loadUserData();
+    } else {
+      console.log('用户未登录，跳过数据加载');
+    }
   },
 
   // 从云端获取最新的用户数据

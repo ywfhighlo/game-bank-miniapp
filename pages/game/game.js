@@ -10,6 +10,17 @@ Page({
     gameRecords: []       // 游戏记录
   },
 
+  onLoad() {
+    console.log('Game page onLoad');
+    this.loadUserData();
+  },
+
+  onShow() {
+    console.log('Game page onShow');
+    // 每次显示页面时重新加载数据
+    this.loadUserData();
+  },
+
   // 从云端获取最新的用户数据
   loadUserData() {
     if (!app.globalData.userId) {
@@ -25,43 +36,48 @@ Page({
         userId: app.globalData.userId
       },
       success: res => {
-        console.log('获取用户数据成功：', res);
+        console.log('获取用户数据成功：', res.result);
         if (res.result.code === 200) {
           const data = res.result.data;
+          console.log('获取到的数据：', data);
           
           // 更新全局数据
-          app.globalData.gameTime = data.gameTime || 0;
+          app.globalData.gameTimeBalance = data.gameTimeBalance;
           app.globalData.gameRecords = data.gameRecords || [];
 
           // 更新页面数据
-          this.setData({
-            gameTimeBalance: data.gameTime || 0,
+          const pageData = {
+            gameTimeBalance: data.gameTimeBalance || 0,
             gameRecords: data.gameRecords || []
-          });
+          };
+          
+          console.log('准备更新页面数据：', pageData);
+          this.setData(pageData);
+          console.log('页面数据更新完成');
 
           // 保存到本地存储
+          const userData = wx.getStorageSync('userData') || {};
           wx.setStorageSync('userData', {
-            ...wx.getStorageSync('userData'),
-            gameTime: data.gameTime || 0,
+            ...userData,
+            gameTimeBalance: data.gameTimeBalance || 0,
             gameRecords: data.gameRecords || []
           });
         } else {
           console.error('获取用户数据失败：', res.result.message);
+          wx.showToast({
+            title: '数据加载失败',
+            icon: 'none'
+          });
         }
       },
       fail: err => {
-        console.error('调用获取用户数据失败：', err);
+        console.error('调用云函数失败：', err);
+        wx.showToast({
+          title: '获取数据失败',
+          icon: 'none'
+        });
       }
     });
-  },
-
-  onLoad() {
-    this.loadUserData();
-  },
-
-  onShow() {
-    // 每次显示页面时都刷新数据
-    this.loadUserData();
   },
 
   startGame() {
