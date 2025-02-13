@@ -14,9 +14,13 @@
     </view>
   </view>
 
-  <view class="action-buttons">
-    <button class="btn-primary" bindtap="navigateToSport">记录运动</button>
-    <button class="btn-secondary" bindtap="navigateToGame">开始游戏</button>
+  <view class="menu-list">
+    <view class="menu-item" bindtap="navigateToSport">
+      <text>记录运动</text>
+    </view>
+    <view class="menu-item" bindtap="navigateToGame">
+      <text>开始游戏</text>
+    </view>
   </view>
 
   <view class="record-list card">

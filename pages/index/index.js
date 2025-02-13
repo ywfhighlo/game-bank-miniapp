@@ -158,13 +158,13 @@ Page({
   },
 
   navigateToSport() {
-    wx.switchTab({
+    wx.navigateTo({
       url: '/pages/sport/sport'
     });
   },
 
   navigateToGame() {
-    wx.switchTab({
+    wx.navigateTo({
       url: '/pages/game/game'
     });
   }

@@ -26,18 +26,6 @@
         "selectedIconPath": "images/home_selected.png"
       },
       {
-        "pagePath": "pages/sport/sport",
-        "text": "运动",
-        "iconPath": "images/sport.png",
-        "selectedIconPath": "images/sport_selected.png"
-      },
-      {
-        "pagePath": "pages/game/game",
-        "text": "游戏",
-        "iconPath": "images/game.png",
-        "selectedIconPath": "images/game_selected.png"
-      },
-      {
         "pagePath": "pages/profile/profile",
         "text": "我的",
         "iconPath": "images/profile.png",
