@@ -16,10 +16,18 @@
 
   <view class="menu-list">
     <view class="menu-item" bindtap="navigateToSport">
-      <text>记录运动</text>
+      <view class="menu-icon sport-icon"></view>
+      <view class="menu-text">
+        <text>记录运动</text>
+        <text class="arrow">></text>
+      </view>
     </view>
     <view class="menu-item" bindtap="navigateToGame">
-      <text>开始游戏</text>
+      <view class="menu-icon game-icon"></view>
+      <view class="menu-text">
+        <text>开始游戏</text>
+        <text class="arrow">></text>
+      </view>
     </view>
   </view>
 
