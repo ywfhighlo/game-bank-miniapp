@@ -12,7 +12,7 @@ Page({
   onAbout() {
     wx.showModal({
       title: '关于',
-      content: '动乐时光小程序 v1.0.0\n鼓励用户运动来兑换游戏时间，帮助用户培养健康的生活习惯。',
+      content: '动乐帮手小程序 v1.0.0\n鼓励用户运动来兑换游戏时间，帮助用户培养健康的生活习惯。',
       showCancel: false
     });
   },
