@@ -1,73 +1,125 @@
 // 登录页面的 JS
 Page({
-  data: {
-    // 如果采用微信授权登录，不需要传统的用户名、密码输入框
-    // 你可以将输入框隐藏或取消绑定
-  },
+  data: {},
   
-  // 用户授权后保存信息并跳转到首页
-  getUserProfile() {
+  // 微信授权登录函数
+  login() {
+    console.log("===== 开始登录流程 =====");
+    
+    // 获取用户信息
     wx.getUserProfile({
-      desc: '用于完善会员资料', // 必填字段，解释获取用户信息的用途
-      success: (res) => {
-        const userInfo = res.userInfo;
-        // 保存用户信息到本地缓存及全局数据中
-        wx.setStorageSync('userInfo', userInfo);
-        getApp().globalData.userInfo = userInfo;
-        wx.redirectTo({
-          url: '/pages/index/index'
-        });
+      desc: '用于完善会员资料',
+      success: (profileRes) => {
+        console.log("1. 获取用户信息成功：", profileRes.userInfo);
+        const userInfo = profileRes.userInfo;
+        
+        // 处理登录逻辑
+        this.handleLogin(userInfo);
       },
-      fail: () => {
+      fail: (err) => {
+        console.error("1. 获取用户信息失败：", err);
         wx.showToast({
-          title: '授权失败，请重试',
+          title: '需要您的授权才能继续使用',
           icon: 'none'
         });
       }
     });
   },
-
-  // 改为微信授权登录函数
-  login() {
-    console.log("点击了微信登录按钮");
-    
-    // 获取微信登录凭证
+  
+  // 处理登录逻辑
+  handleLogin(userInfo) {
     wx.login({
       success: res => {
-        console.log("wx.login 返回的 code:", res.code);
+        console.log("2. 获取登录code成功：", res.code);
         if (res.code) {
-          // 调用云函数进行微信登录，将 code 传过去，由云函数用 code 获取 openid 或其他信息
+          // 调用云函数登录
           wx.cloud.callFunction({
             name: 'api',
             data: {
               action: 'wxLogin',
-              code: res.code
+              code: res.code,
+              userInfo: userInfo
             },
-            success: result => {
-              console.log('微信登录成功，返回结果：', result);
-              if (result.result.code === 200) {
-                const userId = result.result.userId;
+            success: res => {
+              console.log('3. 调用登录云函数成功：', res.result);
+              if (res.result.code === 200) {
+                const userData = res.result.data;
+                
+                // 更新全局数据
                 const app = getApp();
-                app.globalData.userId = userId;
-                wx.setStorageSync('userId', userId);
-                console.log("登录成功后保存的 userId:", userId);
-                wx.showToast({ title: '登录成功', icon: 'success' });
-                wx.switchTab({ url: '/pages/sport/sport' });
+                app.globalData.userInfo = userInfo;
+                app.globalData.userId = userData.userId;
+                app.globalData.sportTime = userData.sportTime || 0;
+                app.globalData.gameTime = userData.gameTime || 0;
+                app.globalData.sportRecords = userData.sportRecords || [];
+                app.globalData.gameRecords = userData.gameRecords || [];
+                app.globalData.helperPhone = userData.helperPhone || '';
+                app.globalData.dailyLimit = userData.dailyLimit || 7200;
+                app.globalData.weeklyLimit = userData.weeklyLimit || 36000;
+                app.globalData.restInterval = userData.restInterval || 1800;
+                app.globalData.restDuration = userData.restDuration || 300;
+
+                // 保存到本地存储
+                wx.setStorageSync('userInfo', userInfo);
+                wx.setStorageSync('userId', userData.userId);
+                wx.setStorageSync('userData', {
+                  userId: userData.userId,
+                  sportTime: userData.sportTime || 0,
+                  gameTime: userData.gameTime || 0,
+                  sportRecords: userData.sportRecords || [],
+                  gameRecords: userData.gameRecords || [],
+                  helperPhone: userData.helperPhone || '',
+                  dailyLimit: userData.dailyLimit || 7200,
+                  weeklyLimit: userData.weeklyLimit || 36000,
+                  restInterval: userData.restInterval || 1800,
+                  restDuration: userData.restDuration || 300
+                });
+
+                // 显示成功提示
+                wx.showToast({
+                  title: '登录成功',
+                  icon: 'success',
+                  duration: 1500
+                });
+
+                // 延迟跳转，让用户看到成功提示
+                setTimeout(() => {
+                  // 跳转到首页
+                  wx.switchTab({
+                    url: '/pages/index/index'
+                  });
+                }, 1500);
+              } else {
+                console.error('4. 登录失败：', res.result.message);
+                wx.showToast({
+                  title: res.result.message || '登录失败',
+                  icon: 'none'
+                });
               }
             },
             fail: err => {
-              console.error("调用 wxLogin 云函数失败：", err);
+              console.error('4. 调用登录云函数失败：', err);
+              wx.showToast({
+                title: '登录失败',
+                icon: 'none'
+              });
             }
           });
         } else {
-          console.error("wx.login 获取 code 失败", res);
-          wx.showToast({ title: '微信登录失败', icon: 'none' });
+          console.error('2. 获取登录code失败');
+          wx.showToast({
+            title: '登录失败',
+            icon: 'none'
+          });
         }
       },
       fail: err => {
-        console.error("wx.login 调用失败：", err);
-        wx.showToast({ title: '微信登录接口调用失败', icon: 'none' });
+        console.error('2. 微信登录失败：', err);
+        wx.showToast({
+          title: '登录失败',
+          icon: 'none'
+        });
       }
     });
   }
-}); 
+});

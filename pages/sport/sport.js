@@ -3,9 +3,10 @@ const app = getApp();
 Page({
   data: {
     duration: '',            // 用户输入的运动时长（分钟）
-    pendingRecord: null,     // 保存待验证记录（例如：{ duration: 10 }）
+    pendingRecord: null,     // 保存待验证记录（例如：{ duration: 10, recordId: 'xxx' }）
     verificationCode: '',    // 用户输入的验证码
-    message: ''              // 用于页面下方显示提示信息
+    message: '',            // 用于页面下方显示提示信息
+    showVerification: false  // 是否显示验证码输入界面
   },
   // 页面加载时检查用户登录状态
   onLoad() {
@@ -32,89 +33,177 @@ Page({
       message: ''
     });
   },
-  // 提交运动记录，调用云函数（模拟发送短信，验证码固定为123456）
+  // 提交运动记录
   submitSportRecord() {
+    const app = getApp();
+    const userId = app.globalData.userId || wx.getStorageSync('userId');
+    
+    if (!userId) {
+      wx.showToast({
+        title: '请先登录',
+        icon: 'none',
+        duration: 1500
+      });
+      // 延迟跳转到登录页面
+      setTimeout(() => {
+        wx.redirectTo({
+          url: '/pages/login/login'
+        });
+      }, 1500);
+      return;
+    }
+
     const duration = parseInt(this.data.duration);
     if (!duration || duration <= 0) {
-      this.setData({ 
-         message: '请输入有效的运动时长'
+      wx.showToast({
+        title: '请输入运动时长',
+        icon: 'none'
       });
       return;
     }
-    const userId = app.globalData.userId || wx.getStorageSync('userId');
-    if (!userId) {
-      this.setData({ message: '请先登录' });
-      return;
-    }
+
+    wx.showLoading({
+      title: '提交中...',
+      mask: true
+    });
+
+    const token = app.globalData.token || wx.getStorageSync('token');
+    const record = {
+      duration: this.data.duration,
+      time: new Date().toLocaleString()
+    };
+
     wx.cloud.callFunction({
       name: 'api',
       data: {
         action: 'createRecord',
-        userId,
-        duration
+        userId: userId,
+        token: token,
+        duration: record.duration
       },
       success: res => {
-         if (res.result.code === 200) {
-             // 更新提示信息和待确认记录
-             this.setData({
-                message: '记录提交成功，验证码已发送',
-                pendingRecord: { duration }
-             });
-         } else {
-             this.setData({ message: res.result.message });
-         }
+        wx.hideLoading();
+        console.log('提交运动记录结果：', res);
+        if (res.result.code === 200) {
+          const { recordId, verificationCode } = res.result.data;
+          console.log('获取到的记录ID:', recordId);
+          console.log('获取到的验证码:', verificationCode);
+          
+          // 保存记录ID和验证码
+          this.setData({
+            pendingRecord: { 
+              duration,
+              recordId,
+              verificationCode  // 在测试环境中，我们直接显示验证码
+            },
+            message: `记录提交成功，验证码：${verificationCode}`,
+            showVerification: true  // 显示验证码输入界面
+          });
+
+          // 提示用户
+          wx.showModal({
+            title: '提交成功',
+            content: '请输入验证码以完成运动记录验证',
+            showCancel: false,
+            success: () => {
+              // 用户点击确定后，聚焦到验证码输入框
+              this.setData({
+                showVerification: true
+              });
+            }
+          });
+        } else {
+          this.setData({ 
+            message: res.result.message,
+            showVerification: false
+          });
+        }
       },
       fail: err => {
-         this.setData({ message: '记录提交失败' });
+        wx.hideLoading();
+        console.error('提交运动记录失败：', err);
+        this.setData({ 
+          message: '记录提交失败',
+          showVerification: false
+        });
       }
     });
   },
   // 记录验证码输入，同时清空提示消息
   onInputVerification(e) {
-    this.setData({ 
+    this.setData({
       verificationCode: e.detail.value,
       message: ''
     });
   },
   // 确认验证码，验证成功则增加游戏时间，并更新提示信息显示
   confirmRecord() {
-    const code = this.data.verificationCode;
-    if (code !== "123456") {
-      this.setData({
-        message: '验证码不正确'
-      });
+    const app = getApp();
+    const userId = app.globalData.userId || wx.getStorageSync('userId');
+    
+    if (!this.data.pendingRecord || !this.data.pendingRecord.recordId) {
+      this.setData({ message: '没有待验证的记录' });
       return;
     }
-    const pendingRecord = this.data.pendingRecord;
-    if (pendingRecord && pendingRecord.duration > 0) {
-      // 累加当前运动时长到全局游戏余额
-      app.globalData.gameTimeBalance = Number(app.globalData.gameTimeBalance) + Number(pendingRecord.duration);
-      
-      // 如果用户已登录才保存到持久化存储，否则只保留当前会话的临时数据
-      if (app.globalData.userInfo) {
-        wx.setStorageSync('gameTimeBalance', app.globalData.gameTimeBalance);
-      }
 
-      this.setData({
-        message: `验证成功，增加 ${pendingRecord.duration} 分钟游戏时间`,
-        pendingRecord: null,
-        verificationCode: '',
-        duration: ''
-      });
-
-      const now = new Date().toLocaleString();
-      const record = {
-        type: '运动',
-        duration: pendingRecord.duration,
-        time: now
-      };
-      if (!app.globalData.sportRecords) {
-        app.globalData.sportRecords = [];
-      }
-      app.globalData.sportRecords.push(record);
-      if (app.globalData.userInfo) {
-        wx.setStorageSync('sportRecords', app.globalData.sportRecords);
-      }
+    if (!this.data.verificationCode) {
+      this.setData({ message: '请输入验证码' });
+      return;
     }
+
+    wx.showLoading({
+      title: '验证中...',
+      mask: true
+    });
+
+    wx.cloud.callFunction({
+      name: 'api',
+      data: {
+        action: 'verifyRecord',
+        userId: userId,
+        recordId: this.data.pendingRecord.recordId,
+        code: this.data.verificationCode
+      },
+      success: res => {
+        wx.hideLoading();
+        console.log('验证结果：', res);
+        
+        if (res.result.code === 200) {
+          // 验证成功
+          const gameTime = res.result.data.gameTime;
+          wx.showModal({
+            title: '验证成功',
+            content: `恭喜获得${gameTime}分钟游戏时间！`,
+            showCancel: false,
+            success: () => {
+              // 清空表单
+              this.setData({
+                duration: '',
+                pendingRecord: null,
+                verificationCode: '',
+                message: '',
+                showVerification: false
+              });
+              
+              // 返回首页
+              wx.switchTab({
+                url: '/pages/index/index'
+              });
+            }
+          });
+        } else {
+          this.setData({
+            message: res.result.message || '验证失败'
+          });
+        }
+      },
+      fail: err => {
+        wx.hideLoading();
+        console.error('验证失败：', err);
+        this.setData({
+          message: '验证失败，请重试'
+        });
+      }
+    });
   }
 }); 

@@ -1,0 +1,18 @@
+<view class="settings-container">
+  <view class="settings-list">
+    <view class="settings-item" bindtap="onHelpFeedback">
+      <text>帮助与反馈</text>
+      <view class="arrow"></view>
+    </view>
+
+    <view class="settings-item" bindtap="onAbout">
+      <text>关于</text>
+      <text class="version">版本 1.0.0</text>
+      <view class="arrow"></view>
+    </view>
+  </view>
+
+  <view class="logout-button" bindtap="onLogout">
+    <text>退出登录</text>
+  </view>
+</view>
