@@ -1,33 +1,58 @@
 根据下面的要求，规划项目文件结构，帮我自动生成README.md。输出请用中文。
-# Project Name
 
-## Overview
+# 项目文档规范指南
 
-A brief description of the project and its purpose.
+## README.md 核心结构
 
-## Getting Started
+1. 项目名称和简介
+   - 项目名称应简洁明了
+   - 用一段话清晰描述项目的主要功能和目标用户
 
-Instructions on how to get started with the project.
+2. 项目特性和优势
+   - 列举3-5个核心特性
+   - 突出项目的独特优势
 
-## Project Documentation
+3. 快速开始指南
+   - 简明的步骤说明
+   - 必要的前置条件
 
-For more detailed information about the project, please refer to the following documents:
+4. 安装和部署说明
+   - 详细的环境配置要求
+   - 完整的安装步骤
 
-- [Requirements Document](docs/requirements.md): Detailed description of the project's requirements.
+5. 使用示例
+   - 基本功能的使用说明
+   - 常见场景示例
 
-- [Existing Functionality Document](docs/existing-functionality.md): Description of the project's current features and functionality.
+6. 技术栈概述
+   - 前端框架和主要依赖
+   - 后端服务和数据库
 
-- [Flowcharts Document](docs/flowcharts.md): Flowcharts and diagrams illustrating the project's architecture and workflows (using Mermaid format).
+7. 贡献指南链接
+   - 开发规范
+   - 提交代码流程
 
-- [Project Plan Document](docs/project-plan.md): Outline of the project's plan, including timelines, tasks (using [ ] checkbox format), and milestones.
+8. 许可证信息
+   - 开源协议说明
 
-## Documentation Standards
+## 项目文档体系
 
-1. Flowcharts and diagrams must be created using Mermaid format.
-2. Project tasks and milestones in project plan should use checkbox format (e.g., [ ] Task 1).
-3. Code style and development guidelines must be defined in .cursorrules file:
-   - Code formatting and style conventions
-   - Naming conventions for variables, functions, and files
-   - Project-specific rules and best practices
-   - AI assistant prompts for consistent code generation
-   - Regular updates to maintain alignment with project evolution
+项目详细信息请参考以下文档：
+
+- [需求文档](docs/new-requirements.md)：新功能需求描述和规格说明
+
+- [现有功能文档](docs/existing-functionality.md)：已实现功能清单和使用说明
+
+- [流程图文档](docs/flowcharts.md)：项目架构和工作流程图（使用Mermaid格式）
+
+- [项目计划文档](docs/project-plan.md)：项目时间线规划
+  - 已完成任务以里程碑形式粗粒度展示
+  - 进行中和待完成任务保持详细的任务分解和时间节点
+
+## 文档编写规范
+
+1. 流程图和系统架构图必须使用Mermaid格式创建
+2. 项目计划中的任务状态使用复选框格式：
+   - [x] 已完成任务
+   - [-] 进行中任务
+   - [ ] 待完成任务
