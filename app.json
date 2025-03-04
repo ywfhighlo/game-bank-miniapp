@@ -8,7 +8,8 @@
     "pages/profile/profile",
     "pages/settings/settings",
     "pages/holiday-countdown/holiday-countdown",
-    "pages/motivational-quote/motivational-quote"
+    "pages/motivational-quote/motivational-quote",
+    "pages/mood-card/mood-card"
   ],
   "window": {
     "backgroundTextStyle": "light",

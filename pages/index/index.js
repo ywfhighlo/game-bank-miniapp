@@ -196,6 +196,12 @@ Page({
     });
   },
 
+  navigateToMoodCard() {
+    wx.navigateTo({
+      url: '/pages/mood-card/mood-card'
+    });
+  },
+
   updateCountdown() {
     const now = new Date();
     const year = now.getFullYear();
