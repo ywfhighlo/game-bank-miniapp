@@ -192,7 +192,7 @@ Page({
 
   navigateToQuote() {
     wx.navigateTo({
-      url: '/pages/motivational-quote/motivational-quote'
+      url: '/pages/daily-inspiration/daily-inspiration'
     });
   },
 

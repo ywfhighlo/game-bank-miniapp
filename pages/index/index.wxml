@@ -45,43 +45,16 @@
     <view class="menu-item" bindtap="navigateToQuote">
       <view class="menu-icon quote-icon"></view>
       <view class="menu-text">
-        <text>励志金句</text>
+        <text>励志日历</text>
         <text class="arrow">></text>
       </view>
     </view>
     <view class="menu-item" bindtap="navigateToMoodCard">
+      <view class="menu-icon mood-icon"></view>
       <view class="menu-text">
         <text>心情卡片</text>
         <text class="arrow">></text>
       </view>
-    </view>
-  </view>
-
-  <view class="record-list card">
-    <view class="section-title">最近运动记录</view>
-    <block wx:if="{{sportRecords.length > 0}}">
-      <view class="record-item" wx:for="{{sportRecords}}" wx:key="index">
-        <text class="record-type">运动</text>
-        <text class="record-duration">{{item.duration}} 分钟</text>
-        <text class="record-time">{{item.time}}</text>
-      </view>
-    </block>
-    <view class="empty-records" wx:else>
-      <text>暂无运动记录</text>
-    </view>
-  </view>
-
-  <view class="record-list card">
-    <view class="section-title">最近游戏记录</view>
-    <block wx:if="{{gameRecords.length > 0}}">
-      <view class="record-item" wx:for="{{gameRecords}}" wx:key="index">
-        <text class="record-type">游戏{{item.mode ? ' (' + item.mode + ')' : ''}}</text>
-        <text class="record-duration">{{item.duration}} 分钟</text>
-        <text class="record-time">{{item.time}}</text>
-      </view>
-    </block>
-    <view class="empty-records" wx:else>
-      <text>暂无游戏记录</text>
     </view>
   </view>
 </view>

@@ -64,51 +64,44 @@
   border-radius: 8rpx;
   margin-right: 20rpx;
 }
-
+.mood-icon {
+  background-color: #9c27b0;
+}
 .sport-icon {
   background-color: #3cc51f;
 }
-
 .game-icon {
   background-color: #1296db;
 }
-
 .countdown-icon {
   background-color: #ff9933;
 }
-
 .quote-icon {
-  background-color: #9c27b0;
+  background-color: #ff0000;
 }
-
 .menu-text {
   flex: 1;
   display: flex;
   align-items: center;
 }
-
 .menu-text text {
   font-size: 34rpx;
   color: #333;
 }
-
 .arrow {
   color: #b2b2b2;
   font-family: "SimSun";
   margin-left: 8rpx;
 }
-
 .sport-records {
   width: 100%;
 }
-
 .section-title {
   font-size: 32rpx;
   font-weight: bold;
   color: var(--text-color);
   margin-bottom: 20rpx;
 }
-
 .record-item {
   display: flex;
   justify-content: space-between;
@@ -116,39 +109,32 @@
   padding: 20rpx 0;
   border-bottom: 1rpx solid #eee;
 }
-
 .record-item:last-child {
   border-bottom: none;
 }
-
 .sport-type {
   font-size: 28rpx;
   color: var(--text-color);
 }
-
 .sport-duration {
   font-size: 28rpx;
   color: var(--primary-color);
 }
-
 .sport-time {
   font-size: 24rpx;
   color: var(--secondary-color);
 }
-
 .empty-records {
   text-align: center;
   padding: 40rpx 0;
   color: var(--secondary-color);
 }
-
 .record-list {
   margin: 20rpx;
   padding: 20rpx;
   background-color: #fff;
   border-radius: 8rpx;
 }
-
 .record-type, 
 .record-duration, 
 .record-time {
