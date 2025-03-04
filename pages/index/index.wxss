@@ -73,6 +73,10 @@
   background-color: #1296db;
 }
 
+.countdown-icon {
+  background-color: #ff9933;
+}
+
 .menu-text {
   flex: 1;
   display: flex;
@@ -146,4 +150,39 @@
 .record-time {
   font-size: 28rpx;
   color: var(--text-color);
+}
+
+/* 新增倒计时样式 */
+.countdown-card {
+  width: 100%;
+  margin: 20rpx 0;
+  padding: 30rpx;
+  background: linear-gradient(135deg, #1296db, #3cc51f);
+  border-radius: 16rpx;
+}
+
+.countdown-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.countdown-text {
+  font-size: 36rpx;
+  color: #ffffff;
+  font-weight: bold;
+  text-shadow: 0 2rpx 4rpx rgba(0, 0, 0, 0.2);
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
 }

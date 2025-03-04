@@ -1,0 +1,154 @@
+.container {
+  padding: 30rpx;
+  background-color: #f8d7da; /* 喜庆的浅红色背景 */
+  min-height: 100vh;
+  position: relative;
+  overflow: hidden;
+}
+
+.countdown-section {
+  background: linear-gradient(135deg, #ff4d4f, #ff7875);
+  border-radius: 24rpx;
+  padding: 60rpx 40rpx;
+  margin: 40rpx 0;
+  box-shadow: 0 8rpx 16rpx rgba(255, 77, 79, 0.2);
+  position: relative;
+  overflow: hidden;
+}
+
+/* 添加装饰性边框 */
+.countdown-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border: 6rpx solid #ffeb3b;
+  border-radius: 24rpx;
+  margin: 8rpx;
+  pointer-events: none;
+}
+
+.holiday-type {
+  font-size: 48rpx;
+  color: #ffffff;
+  text-align: center;
+  margin-bottom: 40rpx;
+  font-weight: bold;
+  text-shadow: 2rpx 2rpx 4rpx rgba(0, 0, 0, 0.3);
+}
+
+.countdown-display {
+  text-align: center;
+  padding: 40rpx;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 16rpx;
+  position: relative;
+}
+
+.countdown-text {
+  font-size: 64rpx;
+  color: #ff4d4f;
+  font-weight: bold;
+  text-shadow: 4rpx 4rpx 8rpx rgba(0, 0, 0, 0.1);
+  animation: scaleBounce 2s infinite;
+}
+
+/* 弹跳动画效果 */
+@keyframes scaleBounce {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+.settings-section {
+  margin: 40rpx 0;
+}
+
+.setting-btn {
+  background: linear-gradient(135deg, #ffd666, #ffa940);
+  color: #873800;
+  font-size: 32rpx;
+  padding: 24rpx;
+  border-radius: 16rpx;
+  width: 100%;
+  border: none;
+  font-weight: bold;
+  box-shadow: 0 4rpx 8rpx rgba(255, 169, 64, 0.3);
+}
+
+.setting-btn::after {
+  border: none;
+}
+
+.holiday-info {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 16rpx;
+  padding: 30rpx;
+  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.1);
+}
+
+.info-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24rpx 0;
+  border-bottom: 2rpx solid rgba(255, 77, 79, 0.2);
+}
+
+.info-item:last-child {
+  border-bottom: none;
+}
+
+.info-label {
+  color: #ff4d4f;
+  font-size: 28rpx;
+  font-weight: 500;
+}
+
+.info-value {
+  color: #873800;
+  font-size: 28rpx;
+  font-weight: bold;
+}
+
+/* 添加装饰元素 */
+.decoration {
+  position: absolute;
+  width: 120rpx;
+  height: 120rpx;
+  background: rgba(255, 235, 59, 0.2);
+  border-radius: 50%;
+}
+
+.decoration-1 {
+  top: -60rpx;
+  left: -60rpx;
+}
+
+.decoration-2 {
+  bottom: -60rpx;
+  right: -60rpx;
+}
+
+/* 添加喜庆图案背景 */
+.pattern {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  opacity: 0.1;
+  background-image: repeating-linear-gradient(
+    45deg,
+    #ff4d4f 0px,
+    #ff4d4f 20px,
+    transparent 20px,
+    transparent 40px
+  );
+  pointer-events: none;
+} 

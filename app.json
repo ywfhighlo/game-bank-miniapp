@@ -6,7 +6,8 @@
     "pages/sport/sport",
     "pages/game/game",
     "pages/profile/profile",
-    "pages/settings/settings"
+    "pages/settings/settings",
+    "pages/holiday-countdown/holiday-countdown"
   ],
   "window": {
     "backgroundTextStyle": "light",
