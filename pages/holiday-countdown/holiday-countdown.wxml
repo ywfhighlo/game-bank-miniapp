@@ -1,32 +1,75 @@
 <view class="container">
-  <!-- 添加背景图案 -->
-  <view class="pattern"></view>
-  
-  <!-- 添加装饰圆形 -->
-  <view class="decoration decoration-1"></view>
-  <view class="decoration decoration-2"></view>
+  <!-- 烟花动画画布 -->
+  <canvas type="2d" id="fireworks" class="fireworks-canvas"></canvas>
 
+  <!-- 装饰元素 -->
+  <view class="decoration-container">
+    <view class="lantern left"></view>
+    <view class="lantern right"></view>
+    <view class="cloud cloud-1"></view>
+    <view class="cloud cloud-2"></view>
+  </view>
+
+  <!-- 倒计时主要内容 -->
   <view class="countdown-section">
-    <view class="holiday-type">{{holidayType}}倒计时</view>
+    <view class="holiday-type">距离{{targetDate}}还有</view>
+    
     <view class="countdown-display">
-      <text class="countdown-text">{{countdown}}</text>
+      <view class="time-block">
+        <text class="number">{{days}}</text>
+        <text class="unit">天</text>
+      </view>
+      <text class="time-separator">:</text>
+      <view class="time-block">
+        <text class="number">{{hours}}</text>
+        <text class="unit">时</text>
+      </view>
+      <text class="time-separator">:</text>
+      <view class="time-block">
+        <text class="number">{{minutes}}</text>
+        <text class="unit">分</text>
+      </view>
+      <text class="time-separator">:</text>
+      <view class="time-block">
+        <text class="number">{{seconds}}</text>
+        <text class="unit">秒</text>
+      </view>
+    </view>
+
+    <view class="progress-bar">
+      <view class="progress" style="width: {{progressPercent}}%"></view>
+    </view>
+
+    <view class="target-date">
+      <text>{{targetDate}}：{{currentHolidayDate}}</text>
+      <text class="remaining-text">已经度过 {{passedDays}} 天</text>
     </view>
   </view>
 
+  <!-- 设置按钮 -->
   <view class="settings-section">
     <button class="setting-btn" bindtap="showDatePicker">
+      <text class="btn-icon">⚙️</text>
       <text>设置假期时间</text>
     </button>
   </view>
 
+  <!-- 假期信息 -->
   <view class="holiday-info">
+    <view class="info-header">假期安排</view>
     <view class="info-item">
-      <text class="info-label">寒假开始时间</text>
-      <text class="info-value">{{holidayDates.winterStart}}</text>
+      <view class="info-left">
+        <text class="info-label">寒假开始</text>
+        <text class="info-sublabel">{{winterDuration}}天</text>
+      </view>
+      <text class="info-value">{{winterVacation}}</text>
     </view>
     <view class="info-item">
-      <text class="info-label">暑假开始时间</text>
-      <text class="info-value">{{holidayDates.summerStart}}</text>
+      <view class="info-left">
+        <text class="info-label">暑假开始</text>
+        <text class="info-sublabel">{{summerDuration}}天</text>
+      </view>
+      <text class="info-value">{{summerVacation}}</text>
     </view>
   </view>
 </view> 
