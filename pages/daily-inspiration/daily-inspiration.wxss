@@ -1,131 +1,194 @@
 .container {
-  padding: 30rpx;
   min-height: 100vh;
-  background: #f8f9fa;
+  background-color: #f5f5f5;
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  position: relative;
+  overflow: hidden;
 }
 
 .quote-card {
+  background: #fff;
+  flex: 1;
   width: 100%;
-  background: linear-gradient(135deg, #4a90e2, #2c5282);
-  border-radius: 20rpx;
-  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.2);
-  padding: 40rpx;
-  margin-bottom: 40rpx;
   position: relative;
-  transition: all 0.3s ease;
-  color: #ffffff;
+  transition: transform 0.3s ease;
+}
+
+.quote-card.show-actions {
+  transform: translateX(-200rpx);
 }
 
 .calendar-header {
+  background-color: #6B66FF;
+  color: #fff;
+  padding: 60rpx 40rpx 40rpx;
+  position: relative;
+  border-radius: 24rpx;
+  margin: 20rpx;
+}
+
+.date-section {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  margin-bottom: 40rpx;
-  padding-bottom: 20rpx;
-  border-bottom: 2rpx solid rgba(255, 255, 255, 0.2);
+  gap: 20rpx;
 }
 
 .date {
-  font-size: 48rpx;
+  font-size: 72rpx;
   font-weight: bold;
-  color: #ffffff;
-  margin-bottom: 10rpx;
+}
+
+.date-info {
+  display: flex;
+  flex-direction: column;
+  gap: 10rpx;
+}
+
+.lunar-date {
+  font-size: 32rpx;
+  opacity: 0.95;
 }
 
 .weekday {
-  font-size: 32rpx;
-  color: rgba(255, 255, 255, 0.8);
+  font-size: 28rpx;
+  opacity: 0.9;
+}
+
+.historical-event {
+  font-size: 24rpx;
+  opacity: 0.85;
+  line-height: 1.4;
+  margin-top: 10rpx;
+  padding-top: 20rpx;
+  border-top: 1rpx solid rgba(255, 255, 255, 0.2);
+}
+
+.activity-section {
+  display: flex;
+  align-items: center;
+  padding: 40rpx;
+  border-bottom: 1rpx solid #eee;
+  background: #fff;
+}
+
+.yi-icon {
+  width: 80rpx;
+  height: 80rpx;
+  background: #6B66FF;
+  color: #fff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 40rpx;
+  margin-right: 30rpx;
+}
+
+.activity {
+  font-size: 36rpx;
+  color: #333;
 }
 
 .quote-content {
-  text-align: center;
-  padding: 20rpx 0;
+  padding: 40rpx;
+  display: flex;
+  flex-direction: column;
+  gap: 30rpx;
+  background: #fff;
+  flex: 1;
 }
 
 .quote-text {
   font-size: 36rpx;
+  color: #333;
   line-height: 1.6;
-  margin-bottom: 20rpx;
-  display: block;
 }
 
-.quote-category {
-  font-size: 28rpx;
-  color: rgba(255, 255, 255, 0.8);
-  display: block;
-  margin-top: 20rpx;
+.quote-text-en {
+  font-size: 32rpx;
+  color: #666;
+  line-height: 1.5;
 }
+
 .swipe-hint {
   text-align: center;
+  padding: 20rpx;
+  color: #999;
   font-size: 24rpx;
-  color: #999999;
-  margin-top: 30rpx;
+  background: #fff;
 }
 
-.share-section {
-  width: 100%;
+/* 侧边操作按钮 */
+.action-buttons {
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 200rpx;
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
+  justify-content: center;
   gap: 20rpx;
+  padding: 20rpx;
+  opacity: 0;
+  transition: opacity 0.3s ease;
 }
 
-.share-btn, .save-btn {
-  flex: 1;
-  height: 80rpx;
-  line-height: 80rpx;
-  text-align: center;
-  border-radius: 40rpx;
+.action-buttons.show {
+  opacity: 1;
+}
+
+.action-btn {
+  width: 160rpx;
+  height: 160rpx;
+  border-radius: 50%;
+  background: #6B66FF;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
   font-size: 28rpx;
-  border: none;
+  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.1);
 }
 
-.share-btn {
-  background: #07c160;
-  color: #ffffff;
-}
-
-.save-btn {
-  background: #ffffff;
-  color: #07c160;
-  border: 2rpx solid #07c160;
-}
-
-.share-btn::after, .save-btn::after {
-  border: none;
+.btn-text {
+  margin-top: 10rpx;
+  font-size: 24rpx;
 }
 
 .hidden-canvas {
   position: fixed;
-  left: -9999px;
+  left: -2000rpx;
   visibility: hidden;
 }
 
-/* 添加翻页动画效果 */
-@keyframes flipIn {
+/* 添加上下滑动动画效果 */
+@keyframes slideInUp {
   from {
-    transform: rotateY(90deg);
-    opacity: 0;
+    transform: translateY(100%);
   }
   to {
-    transform: rotateY(0deg);
-    opacity: 1;
+    transform: translateY(0);
   }
 }
 
-@keyframes flipOut {
+@keyframes slideOutDown {
   from {
-    transform: rotateY(0deg);
-    opacity: 1;
+    transform: translateY(0);
   }
   to {
-    transform: rotateY(-90deg);
-    opacity: 0;
+    transform: translateY(-100%);
   }
 }
 
-.quote-content {
-  animation: flipIn 0.3s ease-out;
+.slide-in {
+  animation: slideInUp 0.3s ease-out;
+}
+
+.slide-out {
+  animation: slideOutDown 0.3s ease-out;
 }

@@ -101,6 +101,110 @@ const quotes = [
   { en: "In the realm of innovation, the only limit is our imagination.", zh: "在创新的领域里，唯一的限制是我们的想象力。" }
 ];
 
+// 添加推荐活动数组
+const activities = [
+  { type: '运动', items: [
+    '晨跑',
+    '健身打卡',
+    '跳绳',
+    '瑜伽',
+    '游泳',
+    '打球',
+    '骑行',
+    '散步',
+    '爬楼梯',
+    '跳操'
+  ]},
+  { type: '学习', items: [
+    '读书',
+    '背单词',
+    '练字',
+    '做题',
+    '看教学视频',
+    '记笔记',
+    '复习',
+    '做实验',
+    '写作',
+    '思考'
+  ]},
+  { type: '健康', items: [
+    '早睡',
+    '喝水',
+    '吃水果',
+    '冥想',
+    '户外活动',
+    '规律作息',
+    '营养早餐',
+    '保持微笑',
+    '远眺放松',
+    '正确坐姿'
+  ]}
+];
+
+// 添加历史上的大事件数组（按月日排序）
+const historicalEvents = [
+  { month: 1, day: 1, event: "1912年，孙中山就任中华民国临时大总统，宣告中华民国成立" },
+  { month: 1, day: 15, event: "1975年，中国成功发射第一颗返回式遥感卫星" },
+  { month: 2, day: 12, event: "1912年，清帝溥仪宣布退位，结束中国两千多年的帝制" },
+  { month: 3, day: 8, event: "1910年，法国克莱蒙-奥弗尔城市议会通过决议，确定国际妇女节" },
+  { month: 4, day: 5, event: "1975年，微软公司在美国成立" },
+  { month: 4, day: 24, event: "1970年，中国成功发射第一颗人造地球卫星" },
+  { month: 5, day: 1, event: "1886年，美国芝加哥工人大罢工，争取实行8小时工作制" },
+  { month: 5, day: 4, event: "1919年，中国爆发五四运动" },
+  { month: 6, day: 1, event: "1601年，清朝康熙皇帝颁布《康熙字典》" },
+  { month: 7, day: 1, event: "1997年，香港回归中国" },
+  { month: 7, day: 7, event: "1937年，卢沟桥事变爆发" },
+  { month: 8, day: 8, event: "2008年，北京奥运会开幕" },
+  { month: 9, day: 18, event: "1931年，日本发动九一八事变" },
+  { month: 10, day: 1, event: "1949年，中华人民共和国成立" },
+  { month: 11, day: 11, event: "1911年，清朝宣统皇帝溥仪退位" },
+  { month: 12, day: 13, event: "1937年，南京大屠杀" }
+];
+
+// 添加农历转换函数
+const lunar = {
+  tg: '甲乙丙丁戊己庚辛壬癸',
+  dz: '子丑寅卯辰巳午未申酉戌亥',
+  number: '一二三四五六七八九十',
+  month: '正二三四五六七八九十冬腊',
+  week: '日一二三四五六',
+  
+  // 简单的农历转换（这里使用简化版本，实际项目中建议使用完整的农历转换库）
+  convertDate(date) {
+    const year = date.getFullYear();
+    const month = date.getMonth() + 1;
+    const day = date.getDate();
+    
+    // 这里使用简单的偏移计算，实际项目中应该使用专业的农历转换算法
+    const lunarDay = ((day + 15) % 30) || 30;
+    const lunarMonth = ((month + 2) % 12) || 12;
+    
+    // 获取天干地支年
+    const yearGan = this.tg[(year - 4) % 10];
+    const yearZhi = this.dz[(year - 4) % 12];
+    
+    return {
+      yearGanZhi: yearGan + yearZhi + '年',
+      month: this.month[lunarMonth - 1] + '月',
+      day: this.formatDay(lunarDay)
+    };
+  },
+  
+  formatDay(day) {
+    if (day === 10) return '初十';
+    if (day === 20) return '二十';
+    if (day === 30) return '三十';
+    
+    const tens = Math.floor(day / 10);
+    const ones = day % 10;
+    
+    if (tens === 0) return '初' + this.number[ones - 1];
+    if (tens === 1) return '十' + (ones ? this.number[ones - 1] : '');
+    if (tens === 2) return '廿' + (ones ? this.number[ones - 1] : '');
+    return '三十' + (ones ? this.number[ones - 1] : '');
+  }
+};
+
 Page({
   data: {
     currentDate: '',
@@ -108,23 +212,53 @@ Page({
     currentQuote: {},
     showFullscreen: false,
     animation: {},
-    quoteIndex: 0
+    quoteIndex: 0,
+    cardStyle: 'traditional', // 新增：卡片样式
+    recommendActivity: '', // 新增：推荐活动
+    lunarDate: '', // 新增：农历日期
+    historicalEvent: '', // 新增：历史上的大事件
+    showActions: false,
+    touchStartX: 0,
+    touchStartY: 0
   },
 
   onLoad() {
-    // 初始化日期和星期
+    // 只在加载时更新一次日期和推荐活动
     this.updateDateTime();
-    // 每天更新一次金句
-    this.updateQuote();
+    this.updateRecommendActivity();
+    
+    // 根据日期生成随机但固定的索引获取今日金句
+    const today = new Date();
+    const seed = today.getFullYear() * 10000 + (today.getMonth() + 1) * 100 + today.getDate();
+    const index = seed % quotes.length;
+    const quote = quotes[index];
+    
+    this.setData({
+      currentQuote: {
+        content: quote.zh,
+        content_en: quote.en,
+        zh: quote.zh,
+        en: quote.en
+      },
+      quoteIndex: index
+    });
   },
 
   updateDateTime() {
     const now = new Date();
     const weekdays = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'];
+    const lunarInfo = lunar.convertDate(now);
+    
+    // 获取当天的历史事件
+    const month = now.getMonth() + 1;
+    const day = now.getDate();
+    const todayEvent = historicalEvents.find(event => event.month === month && event.day === day);
     
     this.setData({
-      currentDate: now.toLocaleDateString('zh-CN', { month: 'long', day: 'numeric' }),
-      currentWeekday: weekdays[now.getDay()]
+      currentDate: now.toLocaleDateString('zh-CN', { month: 'numeric', day: 'numeric' }),
+      currentWeekday: weekdays[now.getDay()],
+      lunarDate: `${lunarInfo.yearGanZhi} ${lunarInfo.month}${lunarInfo.day}`,
+      historicalEvent: todayEvent ? todayEvent.event : '暂无历史上的今日大事记'
     });
   },
 
@@ -146,51 +280,103 @@ Page({
     });
   },
 
-  // 左右滑动切换金句
-  onSwipeLeft() {
-    const nextIndex = (this.data.quoteIndex + 1) % quotes.length;
-    this.animateQuote('left', nextIndex);
+  updateRecommendActivity() {
+    const today = new Date();
+    const seed = today.getFullYear() * 10000 + (today.getMonth() + 1) * 100 + today.getDate();
+    
+    // 随机选择一个类型
+    const typeIndex = seed % activities.length;
+    const type = activities[typeIndex];
+    
+    // 基于日期随机选择一个活动
+    const activityIndex = Math.floor((seed * 7) % type.items.length);
+    const activity = type.items[activityIndex];
+    
+    this.setData({
+      recommendActivity: activity
+    });
   },
 
-  onSwipeRight() {
-    const nextIndex = (this.data.quoteIndex - 1 + quotes.length) % quotes.length;
-    this.animateQuote('right', nextIndex);
+  // 添加触摸事件处理方法
+  touchStart(e) {
+    this.setData({
+      touchStartX: e.touches[0].clientX,
+      touchStartY: e.touches[0].clientY
+    });
   },
 
-  animateQuote(direction, nextIndex) {
+  touchMove(e) {
+    const touchEndX = e.touches[0].clientX;
+    const touchEndY = e.touches[0].clientY;
+    const deltaX = touchEndX - this.data.touchStartX;
+    const deltaY = touchEndY - this.data.touchStartY;
+
+    // 如果水平滑动距离大于垂直滑动距离，且滑动距离超过50，则显示/隐藏操作按钮
+    if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > 50) {
+      this.setData({
+        showActions: deltaX < 0
+      });
+    }
+  },
+
+  touchEnd(e) {
+    const touchEndX = e.changedTouches[0].clientX;
+    const touchEndY = e.changedTouches[0].clientY;
+    const deltaX = touchEndX - this.data.touchStartX;
+    const deltaY = touchEndY - this.data.touchStartY;
+
+    // 如果垂直滑动距离大于水平滑动距离，且滑动距离超过100，则切换卡片
+    if (Math.abs(deltaY) > Math.abs(deltaX) && Math.abs(deltaY) > 100) {
+      if (deltaY < 0) {
+        // 向上滑动，显示下一张
+        const nextIndex = (this.data.quoteIndex + 1) % quotes.length;
+        this.updateQuoteWithAnimation('up', nextIndex);
+      } else {
+        // 向下滑动，显示上一张
+        const prevIndex = (this.data.quoteIndex - 1 + quotes.length) % quotes.length;
+        this.updateQuoteWithAnimation('down', prevIndex);
+      }
+    }
+  },
+
+  // 添加带动画的卡片切换方法
+  updateQuoteWithAnimation(direction, newIndex) {
+    const quote = quotes[newIndex];
     const animation = wx.createAnimation({
       duration: 300,
       timingFunction: 'ease'
     });
 
-    // 向左或向右滑出
-    animation.translateX(direction === 'left' ? '-100%' : '100%').opacity(0).step();
+    // 设置动画
+    if (direction === 'up') {
+      animation.translateY('-100%').step();
+    } else {
+      animation.translateY('100%').step();
+    }
+
     this.setData({
       animation: animation.export()
     });
 
     setTimeout(() => {
-      // 重置位置并更新内容
-      animation.translateX(0).opacity(1).step({ duration: 0 });
+      // 重置位置并只更新金句内容
+      animation.translateY(0).step({ duration: 0 });
       this.setData({
-        currentQuote: quotes[nextIndex],
-        quoteIndex: nextIndex,
+        currentQuote: {
+          content: quote.zh,
+          content_en: quote.en,
+          zh: quote.zh,
+          en: quote.en
+        },
+        quoteIndex: newIndex,
         animation: animation.export()
       });
     }, 300);
   },
 
-  // 点击放大查看
-  toggleFullscreen() {
-    this.setData({
-      showFullscreen: !this.data.showFullscreen
-    });
-  },
-
-  // 长按保存图片
+  // 修改长按保存图片方法，支持新样式
   async onLongPress() {
     try {
-      // 获取canvas上下文
       const query = wx.createSelectorQuery();
       query.select('#quoteCanvas')
         .fields({ node: true, size: true })
@@ -198,25 +384,48 @@ Page({
           const canvas = res[0].node;
           const ctx = canvas.getContext('2d');
           
+          // 设置画布大小
+          canvas.width = 300;
+          canvas.height = 400;
+          
           // 绘制卡片背景
           ctx.fillStyle = '#ffffff';
           ctx.fillRect(0, 0, canvas.width, canvas.height);
           
-          // 绘制日期和金句
-          ctx.fillStyle = '#333333';
+          // 绘制紫色日期区域
+          ctx.fillStyle = '#6B66FF';
+          ctx.fillRect(0, 0, canvas.width, 100);
+          
+          // 绘制日期
+          ctx.fillStyle = '#ffffff';
+          ctx.font = 'bold 36px sans-serif';
+          const dateText = this.data.currentDate.split('/')[1];
+          ctx.fillText(dateText, 20, 60);
+          
+          // 绘制农历和星期
+          ctx.font = '16px sans-serif';
+          ctx.fillText(this.data.lunarDate + ' · ' + this.data.currentWeekday, 20, 85);
+          
+          // 绘制宜字图标
+          ctx.fillStyle = '#6B66FF';
           ctx.font = 'bold 24px sans-serif';
-          ctx.fillText(this.data.currentDate, 20, 40);
+          ctx.fillText('宜', 20, 140);
           
-          // 绘制金句内容
+          // 绘制推荐活动
+          ctx.fillStyle = '#333333';
           ctx.font = '20px sans-serif';
-          ctx.fillText(this.data.currentQuote.zh, 20, 80);
-          ctx.fillText(this.data.currentQuote.en, 20, 110);
+          ctx.fillText(this.data.recommendActivity, 60, 140);
           
-          // 将canvas转换为图片
+          // 绘制金句
+          ctx.font = '18px sans-serif';
+          this.drawWrappedText(ctx, this.data.currentQuote.zh, 20, 200, canvas.width - 40);
+          ctx.font = '16px sans-serif';
+          this.drawWrappedText(ctx, this.data.currentQuote.en, 20, 260, canvas.width - 40);
+          
+          // 保存图片
           wx.canvasToTempFilePath({
             canvas: canvas,
             success: (res) => {
-              // 保存图片到相册
               wx.saveImageToPhotosAlbum({
                 filePath: res.tempFilePath,
                 success: () => {
@@ -241,6 +450,28 @@ Page({
         icon: 'error'
       });
     }
+  },
+
+  // 新增：文本自动换行方法
+  drawWrappedText(ctx, text, x, y, maxWidth) {
+    const characters = text.split('');
+    let line = '';
+    let lineHeight = 25;
+    
+    for (let i = 0; i < characters.length; i++) {
+      const testLine = line + characters[i];
+      const metrics = ctx.measureText(testLine);
+      
+      if (metrics.width > maxWidth && i > 0) {
+        ctx.fillText(line, x, y);
+        line = characters[i];
+        y += lineHeight;
+      } else {
+        line = testLine;
+      }
+    }
+    ctx.fillText(line, x, y);
+    return y + lineHeight;
   },
 
   // 分享功能
