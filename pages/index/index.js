@@ -190,6 +190,12 @@ Page({
     });
   },
 
+  navigateToQuote() {
+    wx.navigateTo({
+      url: '/pages/motivational-quote/motivational-quote'
+    });
+  },
+
   updateCountdown() {
     const now = new Date();
     const year = now.getFullYear();

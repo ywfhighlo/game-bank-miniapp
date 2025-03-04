@@ -77,6 +77,10 @@
   background-color: #ff9933;
 }
 
+.quote-icon {
+  background-color: #9c27b0;
+}
+
 .menu-text {
   flex: 1;
   display: flex;

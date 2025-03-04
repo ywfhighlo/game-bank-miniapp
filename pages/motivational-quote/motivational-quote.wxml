@@ -1,0 +1,31 @@
+<view class="container">
+  <view class="quote-card {{showFullscreen ? 'fullscreen' : ''}}" 
+        bindtap="toggleFullscreen" 
+        bindlongpress="onLongPress"
+        bindtouchstart="touchStart"
+        bindtouchend="touchEnd">
+    <view class="calendar-header">
+      <text class="date">{{currentDate}}</text>
+      <text class="weekday">{{currentWeekday}}</text>
+    </view>
+    
+    <view class="quote-content" animation="{{animation}}">
+      <text class="quote-text">{{currentQuote.content}}</text>
+      <text class="quote-category">{{currentQuote.category}}</text>
+    </view>
+
+    <view class="swipe-hint">
+      <text>左右滑动切换金句</text>
+    </view>
+  </view>
+
+  <view class="share-section">
+    <button class="share-btn" open-type="share">分享给好友</button>
+    <button class="save-btn" bindtap="onLongPress">保存到相册</button>
+  </view>
+
+  <!-- 用于生成分享图片的canvas -->
+  <canvas type="2d" id="quoteCanvas" class="hidden-canvas"
+    style="width: 600px; height: 400px;">
+  </canvas>
+</view> 

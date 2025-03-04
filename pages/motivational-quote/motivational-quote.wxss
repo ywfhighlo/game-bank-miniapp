@@ -1,0 +1,146 @@
+.container {
+  padding: 30rpx;
+  min-height: 100vh;
+  background: #f8f9fa;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.quote-card {
+  width: 100%;
+  background: #ffffff;
+  border-radius: 20rpx;
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.1);
+  padding: 40rpx;
+  margin-bottom: 40rpx;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.quote-card.fullscreen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: 0;
+  border-radius: 0;
+  z-index: 999;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.95);
+}
+
+.calendar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 40rpx;
+  padding-bottom: 20rpx;
+  border-bottom: 2rpx solid #f0f0f0;
+}
+
+.date {
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #333333;
+}
+
+.weekday {
+  font-size: 28rpx;
+  color: #666666;
+}
+
+.quote-content {
+  text-align: center;
+  padding: 40rpx 0;
+}
+
+.quote-text {
+  font-size: 36rpx;
+  color: #333333;
+  line-height: 1.6;
+  margin-bottom: 20rpx;
+  display: block;
+}
+
+.quote-category {
+  font-size: 24rpx;
+  color: #999999;
+  display: block;
+  margin-top: 20rpx;
+}
+
+.swipe-hint {
+  text-align: center;
+  font-size: 24rpx;
+  color: #999999;
+  margin-top: 30rpx;
+}
+
+.share-section {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  gap: 20rpx;
+}
+
+.share-btn, .save-btn {
+  flex: 1;
+  height: 80rpx;
+  line-height: 80rpx;
+  text-align: center;
+  border-radius: 40rpx;
+  font-size: 28rpx;
+  border: none;
+}
+
+.share-btn {
+  background: #07c160;
+  color: #ffffff;
+}
+
+.save-btn {
+  background: #ffffff;
+  color: #07c160;
+  border: 2rpx solid #07c160;
+}
+
+.share-btn::after, .save-btn::after {
+  border: none;
+}
+
+.hidden-canvas {
+  position: fixed;
+  left: -9999px;
+  visibility: hidden;
+}
+
+/* 添加翻页动画效果 */
+@keyframes flipIn {
+  from {
+    transform: rotateY(90deg);
+    opacity: 0;
+  }
+  to {
+    transform: rotateY(0deg);
+    opacity: 1;
+  }
+}
+
+@keyframes flipOut {
+  from {
+    transform: rotateY(0deg);
+    opacity: 1;
+  }
+  to {
+    transform: rotateY(-90deg);
+    opacity: 0;
+  }
+}
+
+.quote-content {
+  animation: flipIn 0.3s ease-out;
+} 
