@@ -2,20 +2,18 @@
   "lazyCodeLoading": "requiredComponents",
   "requiredBackgroundModes": [],
   "requiredPrivateInfos": [],
-  "checkSiteMap": false,
+
   "preloadRule": {},
   "resizable": false,
   "darkmode": false,
   "debug": false,
-  "minified": true,
+
   "useExtendedLib": {
     "weui": true
   },
-  "navigateToMiniProgramAppIdList": [],
+
   "permission": {},
-  "optimization": {
-    "subPackages": true
-  },
+
   "supportedMaterials": [],
   "networkTimeout": {
     "request": 60000,

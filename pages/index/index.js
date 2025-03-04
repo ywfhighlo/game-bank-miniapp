@@ -174,25 +174,29 @@ Page({
 
   navigateToSport() {
     wx.navigateTo({
-      url: '/pages/sport/sport'
+      url: '/pages/sport/sport',
+      webviewId: Date.now()
     });
   },
 
   navigateToGame() {
     wx.navigateTo({
-      url: '/pages/game/game'
+      url: '/pages/game/game',
+      webviewId: Date.now()
     });
   },
 
   navigateToCountdown() {
     wx.navigateTo({
-      url: '/pages/holiday-countdown/holiday-countdown'
+      url: '/pages/holiday-countdown/holiday-countdown',
+      webviewId: Date.now()
     });
   },
 
   navigateToQuote() {
     wx.navigateTo({
-      url: '/pages/daily-inspiration/daily-inspiration'
+      url: '/pages/daily-inspiration/daily-inspiration',
+      webviewId: Date.now()
     });
   },
 

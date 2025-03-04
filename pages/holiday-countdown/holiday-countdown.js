@@ -263,7 +263,7 @@ Page({
     const animate = () => {
       this.updateFireworks();
       this.drawFireworks();
-      this.animationTimer = requestAnimationFrame(animate);
+      this.animationTimer = wx.createAnimation({ duration: 16 }).step().export();
     };
     
     animate();
@@ -271,7 +271,7 @@ Page({
 
   stopFireworksAnimation() {
     if (this.animationTimer) {
-      cancelAnimationFrame(this.animationTimer);
+      this.animationTimer = null;
       this.animationTimer = null;
     }
   },
@@ -462,4 +462,4 @@ Page({
       title: `距离${holiday.name}还有${holiday.daysLeft}天`
     };
   }
-}); 
+});

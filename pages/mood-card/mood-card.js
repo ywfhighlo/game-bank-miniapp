@@ -227,7 +227,8 @@ Page({
   // 查看历史记录
   viewHistory() {
     wx.navigateTo({
-      url: '/pages/mood-history/mood-history'
+      url: '/pages/mood-history/mood-history',
+      webviewId: Date.now()
     });
   }
-}); 
+});
