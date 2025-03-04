@@ -72,4 +72,30 @@
       <text class="info-value">{{summerVacation}}</text>
     </view>
   </view>
+
+  <swiper class="holiday-swiper" bindchange="onSwiperChange" vertical="true" current="{{currentHolidayIndex}}" circular="true">
+    <swiper-item wx:for="{{sortedHolidays}}" wx:key="name" class="holiday-item">
+      <view class="holiday-card" style="background-color: {{item.color}}">
+        <view class="holiday-icon">{{item.icon}}</view>
+        <view class="holiday-name">{{item.name}}</view>
+        <view class="countdown-text">
+          <block wx:if="{{item.daysLeft > 0}}">
+            还有 <text class="days">{{item.daysLeft}}</text> 天
+          </block>
+          <block wx:else>
+            已经开始啦！
+          </block>
+        </view>
+        <view class="date-text">{{item.date}}</view>
+        <view class="holiday-message">{{item.message}}</view>
+      </view>
+    </swiper-item>
+  </swiper>
+  
+  <view class="hint-text">上下滑动切换节日</view>
+  
+  <view class="action-buttons">
+    <button class="share-btn" bindtap="onShareTap">分享倒计时</button>
+    <button class="remind-btn" bindtap="onRemindTap">设置提醒</button>
+  </view>
 </view> 

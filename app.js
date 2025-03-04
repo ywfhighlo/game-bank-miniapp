@@ -17,8 +17,12 @@ App({
     console.log('App onLaunch');
     
     // 检查基础库版本
-    if (!wx.cloud) {
-      console.error('请使用 2.2.3 或更高版本的基础库以使用云能力');
+    const version = wx.getSystemInfoSync().SDKVersion
+    if (this.compareVersion(version, '3.0.2') < 0) {
+      wx.showModal({
+        title: '提示',
+        content: '当前微信版本过低，部分功能可能无法使用。请升级到最新微信版本后重试。'
+      })
     } else {
       // 初始化云开发环境
       wx.cloud.init({
@@ -70,6 +74,28 @@ App({
         url: '/pages/login/login'
       });
     }
+  },
+
+  compareVersion(v1, v2) {
+    v1 = v1.split('.')
+    v2 = v2.split('.')
+    const len = Math.max(v1.length, v2.length)
+    while (v1.length < len) {
+      v1.push('0')
+    }
+    while (v2.length < len) {
+      v2.push('0')
+    }
+    for (let i = 0; i < len; i++) {
+      const num1 = parseInt(v1[i])
+      const num2 = parseInt(v2[i])
+      if (num1 > num2) {
+        return 1
+      } else if (num1 < num2) {
+        return -1
+      }
+    }
+    return 0
   },
 
   // 用户登录成功后加载持久化数据

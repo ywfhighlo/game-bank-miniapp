@@ -24,8 +24,12 @@ const cardStyles = [
   }
 ];
 
+const { moods } = require('./moods.js');
+
 Page({
   data: {
+    moods: moods,
+    currentMoodIndex: 0,
     currentDate: '',
     selectedMood: moodTypes[0],
     moodTypes,
@@ -37,6 +41,12 @@ Page({
   },
 
   onLoad() {
+    // 随机选择一个初始心情
+    const randomIndex = Math.floor(Math.random() * moods.length);
+    this.setData({
+      currentMoodIndex: randomIndex
+    });
+
     // 初始化日期
     const now = new Date();
     const currentDate = now.toLocaleDateString('zh-CN', { 
@@ -48,6 +58,63 @@ Page({
     this.setData({
       currentDate
     });
+  },
+
+  onSwiperChange(e) {
+    const { current } = e.detail;
+    this.setData({
+      currentMoodIndex: current
+    });
+  },
+
+  onShareTap() {
+    wx.showShareMenu({
+      withShareTicket: true,
+      menus: ['shareAppMessage', 'shareTimeline']
+    });
+  },
+
+  onSaveTap() {
+    const currentMood = this.data.moods[this.data.currentMoodIndex];
+    const now = new Date();
+    const record = {
+      timestamp: now.getTime(),
+      date: now.toLocaleDateString('zh-CN'),
+      time: now.toLocaleTimeString('zh-CN'),
+      mood: currentMood
+    };
+
+    // 获取已有记录
+    const records = wx.getStorageSync('moodRecords') || [];
+    records.unshift(record);  // 添加到开头
+
+    // 最多保存50条记录
+    if (records.length > 50) {
+      records.pop();
+    }
+
+    // 保存记录
+    wx.setStorageSync('moodRecords', records);
+
+    wx.showToast({
+      title: '已保存心情',
+      icon: 'success'
+    });
+  },
+
+  onShareAppMessage() {
+    const currentMood = this.data.moods[this.data.currentMoodIndex];
+    return {
+      title: `我现在感觉${currentMood.text}`,
+      path: '/pages/mood-card/mood-card'
+    };
+  },
+
+  onShareTimeline() {
+    const currentMood = this.data.moods[this.data.currentMoodIndex];
+    return {
+      title: `我现在感觉${currentMood.text}`
+    };
   },
 
   // 选择心情
@@ -162,19 +229,5 @@ Page({
     wx.navigateTo({
       url: '/pages/mood-history/mood-history'
     });
-  },
-
-  // 分享功能
-  onShareAppMessage() {
-    return {
-      title: `${this.data.currentDate}的心情记录`,
-      path: '/pages/mood-card/mood-card'
-    };
-  },
-
-  onShareTimeline() {
-    return {
-      title: `${this.data.currentDate}的心情记录`
-    };
   }
 }); 

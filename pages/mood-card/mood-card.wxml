@@ -1,78 +1,18 @@
 <view class="container">
-  <view class="card-editor {{isPreview ? 'hidden' : ''}}">
-    <view class="section">
-      <text class="section-title">今日日期</text>
-      <text class="date">{{currentDate}}</text>
-    </view>
-
-    <view class="section">
-      <text class="section-title">选择心情</text>
-      <view class="mood-list">
-        <view class="mood-item {{selectedMood.type === item.type ? 'selected' : ''}}"
-              wx:for="{{moodTypes}}"
-              wx:key="type"
-              data-index="{{index}}"
-              bindtap="onMoodSelect">
-          <text class="mood-icon">{{item.icon}}</text>
-          <text class="mood-text">{{item.text}}</text>
-        </view>
+  <swiper class="mood-swiper" bindchange="onSwiperChange" vertical="true" current="{{currentMoodIndex}}" circular="true">
+    <swiper-item wx:for="{{moods}}" wx:key="type" class="mood-item">
+      <view class="mood-card" style="background-color: {{item.color}}">
+        <view class="mood-icon">{{item.icon}}</view>
+        <view class="mood-text">{{item.text}}</view>
+        <view class="mood-message">{{item.message}}</view>
       </view>
-    </view>
-
-    <view class="section">
-      <text class="section-title">卡片样式</text>
-      <view class="style-list">
-        <view class="style-item {{selectedStyle.name === item.name ? 'selected' : ''}}"
-              wx:for="{{cardStyles}}"
-              wx:key="name"
-              data-index="{{index}}"
-              bindtap="onStyleSelect"
-              style="background: {{item.colors[0]}}">
-          <text>{{item.name}}</text>
-        </view>
-      </view>
-    </view>
-
-    <view class="section">
-      <text class="section-title">记录心情 (限100字)</text>
-      <textarea class="content-input"
-                value="{{content}}"
-                maxlength="100"
-                placeholder="写下此刻的心情..."
-                bindinput="onContentInput">
-      </textarea>
-      <text class="word-count">{{content.length}}/100</text>
-    </view>
+    </swiper-item>
+  </swiper>
+  
+  <view class="hint-text">上下滑动切换心情</view>
+  
+  <view class="action-buttons">
+    <button class="share-btn" bindtap="onShareTap">分享心情</button>
+    <button class="save-btn" bindtap="onSaveTap">保存记录</button>
   </view>
-
-  <!-- 预览卡片 -->
-  <view class="mood-card {{isPreview ? '' : 'hidden'}}"
-        style="background: {{selectedStyle.colors[0]}}">
-    <view class="card-header">
-      <text class="card-date">{{currentDate}}</text>
-    </view>
-    <view class="card-content">
-      <text class="mood-icon large">{{selectedMood.icon}}</text>
-      <text class="mood-text">{{selectedMood.text}}</text>
-      <text class="content-text">{{content}}</text>
-    </view>
-    <view class="card-footer">
-      <text class="watermark">我的心情卡片</text>
-    </view>
-  </view>
-
-  <!-- 底部按钮 -->
-  <view class="button-group">
-    <button class="btn" bindtap="togglePreview">
-      {{isPreview ? '返回编辑' : '预览卡片'}}
-    </button>
-    <button class="btn primary" bindtap="saveCard">保存卡片</button>
-    <button class="btn" open-type="share">分享</button>
-    <button class="btn" bindtap="viewHistory">历史记录</button>
-  </view>
-
-  <!-- 用于生成图片的canvas -->
-  <canvas type="2d" id="cardCanvas" class="hidden-canvas"
-          style="width: 600px; height: 800px">
-  </canvas>
 </view> 

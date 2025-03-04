@@ -1,3 +1,5 @@
+const { holidays } = require('./holidays.js');
+
 Page({
   data: {
     countdown: '',
@@ -21,7 +23,9 @@ Page({
     passedDays: 0,
     currentHolidayDate: '',
     winterDuration: 0,
-    summerDuration: 0
+    summerDuration: 0,
+    sortedHolidays: [],
+    currentHolidayIndex: 0
   },
 
   onLoad() {
@@ -44,6 +48,10 @@ Page({
 
     this.initCountdown();
     this.initCanvas();
+
+    this.initHolidays();
+    // 每天凌晨更新倒计时
+    this.setUpdateTimer();
   },
 
   onShow() {
@@ -354,5 +362,104 @@ Page({
         }
       }
     }
+  },
+
+  initHolidays() {
+    const now = new Date();
+    const sortedHolidays = holidays.map(holiday => {
+      const holidayDate = new Date(holiday.date);
+      const timeDiff = holidayDate.getTime() - now.getTime();
+      const daysLeft = Math.ceil(timeDiff / (1000 * 3600 * 24));
+      return {
+        ...holiday,
+        daysLeft
+      };
+    }).sort((a, b) => a.daysLeft - b.daysLeft);
+
+    // 找到最近的未过期节日的索引
+    const nextHolidayIndex = sortedHolidays.findIndex(h => h.daysLeft > 0);
+    
+    this.setData({
+      sortedHolidays,
+      currentHolidayIndex: nextHolidayIndex >= 0 ? nextHolidayIndex : 0
+    });
+  },
+
+  setUpdateTimer() {
+    // 计算到下一个凌晨的时间
+    const now = new Date();
+    const tomorrow = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
+    const timeToNextDay = tomorrow - now;
+
+    // 设置定时器
+    setTimeout(() => {
+      this.initHolidays();
+      this.setUpdateTimer(); // 递归设置下一天的定时器
+    }, timeToNextDay);
+  },
+
+  onSwiperChange(e) {
+    const { current } = e.detail;
+    this.setData({
+      currentHolidayIndex: current
+    });
+  },
+
+  onShareTap() {
+    wx.showShareMenu({
+      withShareTicket: true,
+      menus: ['shareAppMessage', 'shareTimeline']
+    });
+  },
+
+  onRemindTap() {
+    const holiday = this.data.sortedHolidays[this.data.currentHolidayIndex];
+    if (holiday.daysLeft <= 0) {
+      wx.showToast({
+        title: '该节日已经开始啦',
+        icon: 'none'
+      });
+      return;
+    }
+
+    wx.showModal({
+      title: '设置提醒',
+      content: `是否在${holiday.name}前一天提醒你？`,
+      success: (res) => {
+        if (res.confirm) {
+          // 这里可以调用订阅消息接口
+          wx.requestSubscribeMessage({
+            tmplIds: ['your-template-id'], // 替换为你的模板ID
+            success: (res) => {
+              wx.showToast({
+                title: '提醒设置成功',
+                icon: 'success'
+              });
+            },
+            fail: (err) => {
+              wx.showToast({
+                title: '提醒设置失败',
+                icon: 'none'
+              });
+            }
+          });
+        }
+      }
+    });
+  },
+
+  onShareAppMessage() {
+    const holiday = this.data.sortedHolidays[this.data.currentHolidayIndex];
+    return {
+      title: `距离${holiday.name}还有${holiday.daysLeft}天`,
+      path: '/pages/holiday-countdown/holiday-countdown'
+    };
+  },
+
+  onShareTimeline() {
+    const holiday = this.data.sortedHolidays[this.data.currentHolidayIndex];
+    return {
+      title: `距离${holiday.name}还有${holiday.daysLeft}天`
+    };
   }
 }); 
