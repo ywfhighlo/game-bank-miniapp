@@ -19,6 +19,11 @@
       <text class="activity">{{recommendActivity}}</text>
     </view>
 
+    <view class="food-section">
+      <view class="chi-icon">吃</view>
+      <text class="food">{{recommendFood}}</text>
+    </view>
+
     <view class="quote-content" animation="{{animation}}">
       <text class="quote-text">{{currentQuote.content}}</text>
       <text class="quote-text-en">{{currentQuote.content_en}}</text>
