@@ -2,31 +2,11 @@
       bindtouchstart="touchStart" 
       bindtouchmove="touchMove" 
       bindtouchend="touchEnd">
-  <view class="quote-card {{showActions ? 'show-actions' : ''}}">
-    <view class="calendar-header">
-      <view class="date-section">
-        <text class="date">{{currentDate}}</text>
-        <view class="date-info">
-          <text class="lunar-date">{{lunarDate}}</text>
-          <text class="weekday">{{currentWeekday}}</text>
-        </view>
-        <text class="historical-event">{{historicalEvent}}</text>
-      </view>
-    </view>
-    
-    <view class="activity-section">
-      <view class="yi-icon">宜</view>
-      <text class="activity">{{recommendActivity}}</text>
-    </view>
-
-    <view class="food-section">
-      <view class="chi-icon">吃</view>
-      <text class="food">{{recommendFood}}</text>
-    </view>
-
-    <view class="quote-content" animation="{{animation}}">
-      <text class="quote-text">{{currentQuote.content}}</text>
-      <text class="quote-text-en">{{currentQuote.content_en}}</text>
+  <view class="mood-card {{showActions ? 'show-actions' : ''}}">
+    <view class="mood-content" animation="{{animation}}" style="background: {{currentMood.color}}20">
+      <view class="mood-icon">{{currentMood.icon}}</view>
+      <view class="mood-type">{{currentMood.type}}</view>
+      <view class="mood-quote">{{currentMood.quote}}</view>
     </view>
 
     <view class="swipe-hint">
@@ -45,7 +25,7 @@
   </view>
 
   <!-- 用于生成分享图片的canvas -->
-  <canvas type="2d" id="quoteCanvas" class="hidden-canvas"
+  <canvas type="2d" id="moodCanvas" class="hidden-canvas"
     style="width: 300px; height: 400px;">
   </canvas>
 </view>

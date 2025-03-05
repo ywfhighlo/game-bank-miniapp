@@ -658,6 +658,52 @@ const foods = [
   ]}
 ];
 
+// 心情数组
+const moods = [
+  { type: '开心', color: '#FFD700', icon: '😊', 
+    quotes: [
+      '保持这份快乐，让它感染更多人',
+      '开心是最好的状态，继续保持',
+      '快乐是一种选择，你选对了'
+    ]
+  },
+  { type: '平静', color: '#87CEEB', icon: '😌',
+    quotes: [
+      '平静如水的心境最适合思考',
+      '内心的平静是最大的财富',
+      '保持平静，方能看清前方'
+    ]
+  },
+  { type: '焦虑', color: '#FFA500', icon: '😰',
+    quotes: [
+      '深呼吸，一切都会过去',
+      '把焦虑转化为行动的动力',
+      '焦虑提醒我们要更加努力'
+    ]
+  },
+  { type: '疲惫', color: '#778899', icon: '😪',
+    quotes: [
+      '适当的休息是为了更好的前进',
+      '调整好节奏，让身心都得到放松',
+      '休息是人生的充电时刻'
+    ]
+  },
+  { type: '生气', color: '#FF6B6B', icon: '😠',
+    quotes: [
+      '愤怒是一时的，冷静才是永恒',
+      '换个角度思考，也许会有不同发现',
+      '控制情绪，掌握自己'
+    ]
+  },
+  { type: '沮丧', color: '#9370DB', icon: '😞',
+    quotes: [
+      '低谷是人生的转折点',
+      '每个困难都是成长的机会',
+      '相信自己，明天会更好'
+    ]
+  }
+];
+
 Page({
   data: {
     currentDate: '',
@@ -673,13 +719,15 @@ Page({
     historicalEvent: '',
     showActions: false,
     touchStartX: 0,
-    touchStartY: 0
+    touchStartY: 0,
+    currentMood: null
   },
 
   onLoad() {
     // 初始化数据
     this.updateDateTime();
     this.updateDailyContent();
+    this.updateMood();
   },
 
   updateDateTime() {
@@ -738,6 +786,195 @@ Page({
   onShareTimeline: function() {
     return {
       title: this.data.currentQuote.zh + ' —— ' + this.data.currentQuote.en
+    };
+  },
+
+  // 更新心情卡片内容
+  updateMood() {
+    const randomMood = moods[Math.floor(Math.random() * moods.length)];
+    const randomQuote = randomMood.quotes[Math.floor(Math.random() * randomMood.quotes.length)];
+    
+    this.setData({
+      currentMood: {
+        ...randomMood,
+        quote: randomQuote
+      }
+    });
+  },
+
+  // 触摸开始事件
+  touchStart(e) {
+    this.setData({
+      touchStartX: e.touches[0].clientX,
+      touchStartY: e.touches[0].clientY
+    });
+  },
+
+  // 触摸移动事件
+  touchMove(e) {
+    const touchEndX = e.touches[0].clientX;
+    const touchEndY = e.touches[0].clientY;
+    
+    const deltaX = touchEndX - this.data.touchStartX;
+    const deltaY = touchEndY - this.data.touchStartY;
+    
+    // 水平滑动大于垂直滑动，且滑动距离超过50
+    if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > 50) {
+      this.setData({
+        showActions: deltaX < 0  // 向左滑动显示操作按钮
+      });
+    }
+    
+    // 垂直滑动大于水平滑动，且滑动距离超过50
+    if (Math.abs(deltaY) > Math.abs(deltaX) && Math.abs(deltaY) > 50) {
+      // 创建一个动画实例
+      const animation = wx.createAnimation({
+        duration: 300,
+        timingFunction: 'ease',
+      });
+      
+      if (deltaY < 0) {  // 向上滑动
+        animation.translateY(-50).opacity(0).step();
+      } else {  // 向下滑动
+        animation.translateY(50).opacity(0).step();
+      }
+      
+      this.setData({
+        animation: animation.export()
+      });
+      
+      // 等动画结束后更新内容
+      setTimeout(() => {
+        this.updateMood();
+        const resetAnimation = wx.createAnimation({
+          duration: 0
+        });
+        resetAnimation.translateY(0).opacity(1).step();
+        this.setData({
+          animation: resetAnimation.export()
+        });
+      }, 300);
+    }
+  },
+
+  // 触摸结束事件
+  touchEnd() {
+    // 重置触摸起始点
+    this.setData({
+      touchStartX: 0,
+      touchStartY: 0
+    });
+  },
+
+  // 长按保存图片
+  async onLongPress() {
+    try {
+      const canvas = await wx.createSelectorQuery()
+        .select('#moodCanvas')
+        .node()
+        .exec();
+      
+      if (!canvas[0]) {
+        throw new Error('获取画布节点失败');
+      }
+      
+      const ctx = canvas[0].getContext('2d');
+      const dpr = wx.getSystemInfoSync().pixelRatio;
+      canvas[0].width = 300 * dpr;
+      canvas[0].height = 400 * dpr;
+      
+      // 绘制背景
+      ctx.fillStyle = '#FFFFFF';
+      ctx.fillRect(0, 0, canvas[0].width, canvas[0].height);
+      
+      // 绘制心情图标和文字
+      ctx.textAlign = 'center';
+      ctx.fillStyle = this.data.currentMood.color;
+      ctx.font = `${48 * dpr}px sans-serif`;
+      ctx.fillText(this.data.currentMood.icon, canvas[0].width / 2, 100 * dpr);
+      
+      ctx.fillStyle = '#333333';
+      ctx.font = `${24 * dpr}px sans-serif`;
+      ctx.fillText(this.data.currentMood.type, canvas[0].width / 2, 150 * dpr);
+      
+      // 绘制励志语句
+      ctx.font = `${20 * dpr}px sans-serif`;
+      const quote = this.data.currentMood.quote;
+      const maxWidth = 250 * dpr;
+      let lineHeight = 30 * dpr;
+      let y = 200 * dpr;
+      
+      // 文本自动换行
+      let chars = quote.split('');
+      let temp = '';
+      let row = [];
+      
+      chars.forEach((char) => {
+        if (ctx.measureText(temp + char).width <= maxWidth) {
+          temp += char;
+        } else {
+          row.push(temp);
+          temp = char;
+        }
+      });
+      if (temp) {
+        row.push(temp);
+      }
+      
+      row.forEach((line) => {
+        ctx.fillText(line, canvas[0].width / 2, y);
+        y += lineHeight;
+      });
+      
+      // 保存图片
+      wx.canvasToTempFilePath({
+        canvas: canvas[0],
+        success: (res) => {
+          wx.saveImageToPhotosAlbum({
+            filePath: res.tempFilePath,
+            success: () => {
+              wx.showToast({
+                title: '保存成功',
+                icon: 'success'
+              });
+            },
+            fail: () => {
+              wx.showToast({
+                title: '保存失败',
+                icon: 'none'
+              });
+            }
+          });
+        },
+        fail: () => {
+          wx.showToast({
+            title: '生成图片失败',
+            icon: 'none'
+          });
+        }
+      });
+      
+    } catch (error) {
+      console.error('保存图片失败:', error);
+      wx.showToast({
+        title: '保存失败',
+        icon: 'none'
+      });
+    }
+  },
+
+  // 分享给好友
+  onShareAppMessage() {
+    return {
+      title: `${this.data.currentMood.type} - ${this.data.currentMood.quote}`,
+      path: '/pages/mood-card/mood-card'
+    };
+  },
+
+  // 分享到朋友圈
+  onShareTimeline() {
+    return {
+      title: `${this.data.currentMood.type} - ${this.data.currentMood.quote}`
     };
   }
 });
