@@ -1,4 +1,7 @@
-<view class="container">
+<view class="container {{slideClass}}"
+      bindtouchstart="touchStart" 
+      bindtouchmove="touchMove" 
+      bindtouchend="touchEnd">
   <view class="header">
     <text class="title">游戏时间</text>
   </view>

@@ -36,6 +36,7 @@
   box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.05);
   max-width: 650rpx;
   margin: 30rpx auto;
+  background: linear-gradient(to bottom, rgba(var(--mood-color), 0.35), rgba(var(--mood-color), 0.2));
 }
 
 .mood-quote {
@@ -158,8 +159,21 @@
   color: #666;
   text-align: center;
   line-height: 1.8;
-  font-style: italic;
   padding: 0 20rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10rpx;
+}
+
+.poem-content {
+  margin-bottom: 10rpx;
+}
+
+.poem-author {
+  font-size: 24rpx;
+  color: #999;
+  font-style: italic;
 }
 
 .swipe-hint {
@@ -168,52 +182,6 @@
   color: #999;
   font-size: 24rpx;
   background: #fff;
-}
-
-/* 侧边操作按钮 */
-.action-buttons {
-  position: absolute;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  width: 200rpx;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 20rpx;
-  padding: 20rpx;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-
-.action-buttons.show {
-  opacity: 1;
-}
-
-.action-btn {
-  width: 160rpx;
-  height: 160rpx;
-  border-radius: 50%;
-  background: #6B66FF;
-  color: #fff;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 0;
-  font-size: 28rpx;
-  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.1);
-}
-
-.btn-text {
-  margin-top: 10rpx;
-  font-size: 24rpx;
-}
-
-.hidden-canvas {
-  position: fixed;
-  left: -2000rpx;
-  visibility: hidden;
 }
 
 /* 添加滑动动画样式 */
@@ -233,6 +201,18 @@
   transition: all 0.25s ease-out;
 }
 
+.slide-left-animation {
+  transform: translateX(-100%);
+  opacity: 0;
+  transition: all 0.25s ease-out;
+}
+
+.slide-right-animation {
+  transform: translateX(100%);
+  opacity: 0;
+  transition: all 0.25s ease-out;
+}
+
 .slide-reset {
   transform: translateY(0);
   opacity: 1;
@@ -241,25 +221,81 @@
 
 /* 为每种心情定义背景渐变 */
 .mood-happy {
-  background: linear-gradient(to bottom, rgba(255, 117, 140, 0.1), rgba(255, 117, 140, 0.02)) !important;
+  --mood-color: 255, 117, 140;
 }
 
 .mood-peaceful {
-  background: linear-gradient(to bottom, rgba(50, 157, 156, 0.1), rgba(50, 157, 156, 0.02)) !important;
+  --mood-color: 50, 157, 156;
 }
 
 .mood-missing {
-  background: linear-gradient(to bottom, rgba(101, 166, 209, 0.1), rgba(101, 166, 209, 0.02)) !important;
+  --mood-color: 101, 166, 209;
 }
 
 .mood-yearning {
-  background: linear-gradient(to bottom, rgba(255, 167, 81, 0.1), rgba(255, 167, 81, 0.02)) !important;
+  --mood-color: 255, 167, 81;
 }
 
 .mood-lonely {
-  background: linear-gradient(to bottom, rgba(135, 149, 167, 0.1), rgba(135, 149, 167, 0.02)) !important;
+  --mood-color: 135, 149, 167;
 }
 
 .mood-hopeful {
-  background: linear-gradient(to bottom, rgba(40, 199, 111, 0.1), rgba(40, 199, 111, 0.02)) !important;
+  --mood-color: 40, 199, 111;
+}
+
+.mood-excited {
+  --mood-color: 237, 87, 54;
+}
+
+.mood-grateful {
+  --mood-color: 195, 39, 43;
+}
+
+.mood-relaxed {
+  --mood-color: 48, 223, 243;
+}
+
+.mood-proud {
+  --mood-color: 220, 48, 35;
+}
+
+.mood-blessed {
+  --mood-color: 240, 161, 168;
+}
+
+.mood-motivated {
+  --mood-color: 157, 41, 51;
+}
+
+.mood-creative {
+  --mood-color: 69, 185, 124;
+}
+
+.mood-calm {
+  --mood-color: 112, 243, 255;
+}
+
+.mood-nostalgic {
+  --mood-color: 137, 47, 29;
+}
+
+.mood-determined {
+  --mood-color: 0, 51, 113;
+}
+
+.mood-curious {
+  --mood-color: 72, 192, 163;
+}
+
+.mood-content {
+  --mood-color: 120, 146, 98;
+}
+
+.mood-energetic {
+  --mood-color: 255, 70, 31;
+}
+
+.mood-thankful {
+  --mood-color: 228, 198, 208;
 }

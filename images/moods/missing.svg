@@ -2,9 +2,9 @@
 <svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
   <!-- 信封 -->
   <path d="M20 30L40 45L60 30V55H20V30Z" 
-        stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="currentColor" fill-opacity="0.15"/>
   <path d="M20 30L40 45L60 30L40 15L20 30Z" 
-        stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="currentColor" fill-opacity="0.1"/>
   <!-- 飘动的羽毛 -->
   <path d="M65 20C63 22 60 25 58 28C60 26 63 25 65 25C63 28 60 30 58 32" 
         stroke="currentColor" stroke-width="2" stroke-linecap="round"/>

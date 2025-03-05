@@ -891,6 +891,8 @@ Page({
 
   // 触摸开始事件
   touchStart(e) {
+    if (this.data.isSliding) return;
+    
     this.setData({
       touchStartX: e.touches[0].clientX,
       touchStartY: e.touches[0].clientY
@@ -899,58 +901,50 @@ Page({
 
   // 触摸移动事件
   touchMove(e) {
+    if (this.data.isSliding) return;
+
     const touchEndX = e.touches[0].clientX;
     const touchEndY = e.touches[0].clientY;
-    
     const deltaX = touchEndX - this.data.touchStartX;
     const deltaY = touchEndY - this.data.touchStartY;
-    
-    // 水平滑动大于垂直滑动，且滑动距离超过50
-    if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > 50) {
-      this.setData({
-        showActions: deltaX < 0  // 向左滑动显示操作按钮
-      });
-    }
-    
-    // 垂直滑动大于水平滑动，且滑动距离超过50
-    if (Math.abs(deltaY) > Math.abs(deltaX) && Math.abs(deltaY) > 50) {
-      // 创建一个动画实例
-      const animation = wx.createAnimation({
-        duration: 300,
-        timingFunction: 'ease',
-      });
-      
-      if (deltaY < 0) {  // 向上滑动
-        animation.translateY(-50).opacity(0).step();
-      } else {  // 向下滑动
-        animation.translateY(50).opacity(0).step();
+
+    // 判断是水平滑动还是垂直滑动
+    if (Math.abs(deltaX) > Math.abs(deltaY)) {
+      // 水平滑动
+      if (Math.abs(deltaX) > 50) { // 滑动距离超过50才触发
+        if (deltaX > 0) {
+          // 右滑，返回主页
+          this.setData({
+            isSliding: true,
+            slideClass: 'slide-right-animation'
+          });
+          setTimeout(() => {
+            wx.reLaunch({
+              url: '/pages/index/index'
+            });
+          }, 300);
+        } else {
+          // 左滑，返回上一页
+          this.setData({
+            isSliding: true,
+            slideClass: 'slide-left-animation'
+          });
+          setTimeout(() => {
+            wx.navigateBack();
+          }, 300);
+        }
       }
-      
-      this.setData({
-        animation: animation.export()
-      });
-      
-      // 等动画结束后更新内容
-      setTimeout(() => {
-        this.updateMood();
-        const resetAnimation = wx.createAnimation({
-          duration: 0
-        });
-        resetAnimation.translateY(0).opacity(1).step();
-        this.setData({
-          animation: resetAnimation.export()
-        });
-      }, 300);
     }
   },
 
   // 触摸结束事件
   touchEnd() {
-    // 重置触摸起始点
-    this.setData({
-      touchStartX: 0,
-      touchStartY: 0
-    });
+    if (!this.data.isSliding) {
+      this.setData({
+        touchStartX: 0,
+        touchStartY: 0
+      });
+    }
   },
 
   // 长按保存图片

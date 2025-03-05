@@ -126,46 +126,6 @@
   background: #fff;
 }
 
-/* 侧边操作按钮 */
-.action-buttons {
-  position: absolute;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  width: 200rpx;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 20rpx;
-  padding: 20rpx;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-
-.action-buttons.show {
-  opacity: 1;
-}
-
-.action-btn {
-  width: 160rpx;
-  height: 160rpx;
-  border-radius: 50%;
-  background: #6B66FF;
-  color: #fff;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 0;
-  font-size: 28rpx;
-  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.1);
-}
-
-.btn-text {
-  margin-top: 10rpx;
-  font-size: 24rpx;
-}
-
 .hidden-canvas {
   position: fixed;
   left: -2000rpx;
@@ -204,22 +164,36 @@
   transition: all 0.3s ease-out;
 }
 
+/* 上下滑动动画 */
 .slide-up-animation {
-  transform: translateY(-50%);
+  transform: translateY(-15%);
   opacity: 0;
-  transition: all 0.3s ease-out;
+  transition: all 0.25s ease-out;
 }
 
 .slide-down-animation {
-  transform: translateY(50%);
+  transform: translateY(15%);
   opacity: 0;
-  transition: all 0.3s ease-out;
+  transition: all 0.25s ease-out;
 }
 
 .slide-reset {
   transform: translateY(0);
   opacity: 1;
   transition: all 0.3s ease-out;
+}
+
+/* 添加滑动动画样式 */
+.slide-left-animation {
+  transform: translateX(-100%);
+  opacity: 0;
+  transition: all 0.25s ease-out;
+}
+
+.slide-right-animation {
+  transform: translateX(100%);
+  opacity: 0;
+  transition: all 0.25s ease-out;
 }
 
 /* 优化食物和引用内容的过渡效果 */

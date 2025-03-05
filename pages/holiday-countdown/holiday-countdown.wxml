@@ -1,4 +1,7 @@
-<view class="container">
+<view class="container {{slideClass}}"
+      bindtouchstart="touchStart" 
+      bindtouchmove="touchMove" 
+      bindtouchend="touchEnd">
   <view class="title">放松一下</view>
   <view class="subtitle">深呼吸，一切都会过去</view>
   

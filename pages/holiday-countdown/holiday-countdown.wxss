@@ -144,6 +144,19 @@
   opacity: 0;
 }
 
+/* 添加滑动动画样式 */
+.slide-left-animation {
+  transform: translateX(-100%);
+  opacity: 0;
+  transition: all 0.25s ease-out;
+}
+
+.slide-right-animation {
+  transform: translateX(100%);
+  opacity: 0;
+  transition: all 0.25s ease-out;
+}
+
 /* 渐变背景色数组 */
 .bg-color-1 { background: linear-gradient(135deg, #6B66FF 0%, #4B7BF5 100%); }
 .bg-color-2 { background: linear-gradient(135deg, #FF6B6B 0%, #FF8E53 100%); }

@@ -677,11 +677,43 @@ Page({
 
   onLoad() {
     this.updateDateTime();
-    this.updateDailyContent();
+    // 初始化时更新食物、金句和推荐活动
+    const foodCategory = foods[Math.floor(Math.random() * foods.length)];
+    const randomFood = foodCategory.items[Math.floor(Math.random() * foodCategory.items.length)];
+    const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
+    
+    // 添加活动数组
+    const activities = [
+      '晨跑',
+      '健身打卡',
+      '跳绳',
+      '瑜伽',
+      '游泳',
+      '打球',
+      '骑行',
+      '散步',
+      '爬楼梯',
+      '跳操',
+      '读书',
+      '背单词',
+      '练字',
+      '做题',
+      '看教学视频',
+      '记笔记',
+      '复习',
+      '做实验',
+      '写作',
+      '思考'
+    ];
+    
+    this.setData({
+      recommendFood: randomFood,
+      currentQuote: randomQuote,
+      recommendActivity: activities[Math.floor(Math.random() * activities.length)]  // 添加推荐活动
+    });
   },
 
   touchStart(e) {
-    if (this.data.isSliding) return;
     this.setData({
       touchStartX: e.touches[0].clientX,
       touchStartY: e.touches[0].clientY
@@ -690,27 +722,58 @@ Page({
 
   touchMove(e) {
     if (this.data.isSliding) return;
+    
     const touchEndX = e.touches[0].clientX;
     const touchEndY = e.touches[0].clientY;
     const deltaX = touchEndX - this.data.touchStartX;
     const deltaY = touchEndY - this.data.touchStartY;
 
-    // 调整滑动阈值，降低灵敏度
-    if (Math.abs(deltaY) > Math.abs(deltaX) && Math.abs(deltaY) > 30) {
-      const direction = deltaY > 0 ? 'down' : 'up';
-      this.startSlideAnimation(direction);
+    // 判断是水平滑动还是垂直滑动
+    if (Math.abs(deltaX) > Math.abs(deltaY)) {
+      // 水平滑动
+      if (Math.abs(deltaX) > 50) { // 滑动距离超过50才触发
+        if (deltaX > 0) {
+          // 右滑，返回主页
+          this.setData({
+            isSliding: true,
+            slideClass: 'slide-right-animation'
+          });
+          setTimeout(() => {
+            wx.reLaunch({
+              url: '/pages/index/index'
+            });
+          }, 300);
+        } else {
+          // 左滑，返回上一页
+          this.setData({
+            isSliding: true,
+            slideClass: 'slide-left-animation'
+          });
+          setTimeout(() => {
+            wx.navigateBack();
+          }, 300);
+        }
+      }
     }
   },
 
-  touchEnd() {
-    // 触摸结束后重置状态
-    if (this.data.slideClass) {
-      setTimeout(() => {
-        this.setData({
-          slideClass: '',
-          isSliding: false
-        });
-      }, 300); // 缩短重置时间
+  touchEnd(e) {
+    if (this.data.isSliding) return;
+    
+    const touchEndX = e.changedTouches[0].clientX;
+    const touchEndY = e.changedTouches[0].clientY;
+    const deltaX = touchEndX - this.data.touchStartX;
+    const deltaY = touchEndY - this.data.touchStartY;
+
+    // 判断是否为垂直滑动
+    if (Math.abs(deltaY) > Math.abs(deltaX) && Math.abs(deltaY) > 50) {
+      if (deltaY < 0) {
+        // 向上滑动
+        this.startSlideAnimation('up');
+      } else {
+        // 向下滑动
+        this.startSlideAnimation('down');
+      }
     }
   },
 
@@ -723,11 +786,53 @@ Page({
     });
 
     setTimeout(() => {
-      this.updateDailyContent();
+      // 只更新食物和金句
+      this.updateFoodAndQuote();
       this.setData({
-        slideClass: 'slide-reset'
+        slideClass: 'slide-reset',
+        isSliding: false
       });
-    }, 300); // 缩短动画时间
+    }, 300);
+  },
+
+  updateFoodAndQuote() {
+    // 随机选择食物类别和具体食物
+    const foodCategory = foods[Math.floor(Math.random() * foods.length)];
+    const randomFood = foodCategory.items[Math.floor(Math.random() * foodCategory.items.length)];
+    
+    // 随机选择金句
+    const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
+    
+    // 活动数组
+    const activities = [
+      '晨跑',
+      '健身打卡',
+      '跳绳',
+      '瑜伽',
+      '游泳',
+      '打球',
+      '骑行',
+      '散步',
+      '爬楼梯',
+      '跳操',
+      '读书',
+      '背单词',
+      '练字',
+      '做题',
+      '看教学视频',
+      '记笔记',
+      '复习',
+      '做实验',
+      '写作',
+      '思考'
+    ];
+
+    // 更新所有内容
+    this.setData({
+      recommendFood: randomFood,
+      currentQuote: randomQuote,
+      recommendActivity: activities[Math.floor(Math.random() * activities.length)]
+    });
   },
 
   updateDateTime() {

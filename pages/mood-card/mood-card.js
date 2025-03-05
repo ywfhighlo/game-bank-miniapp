@@ -665,9 +665,6 @@ Page({
     currentDate: '',
     currentWeekday: '',
     currentMood: null,
-    showFullscreen: false,
-    animation: {},
-    showActions: false,
     touchStartX: 0,
     touchStartY: 0,
     isSliding: false,
@@ -746,12 +743,17 @@ Page({
     const quote = mood.quotes[Math.floor(Math.random() * mood.quotes.length)];
     const poem = mood.poems[Math.floor(Math.random() * mood.poems.length)];
     
+    // 分离诗词内容和作者
+    const [poemTitle, ...poemParts] = poem.split('：');
+    const poemContent = poemParts.join('：');
+    
     this.setData({
       currentMood: {
         type: mood.text,
         color: mood.color,
         quote: quote,
-        poem: poem
+        poemContent: poemContent,
+        poemAuthor: poemTitle
       },
       slideClass: '',  // 重置滑动类
       containerClass: `mood-${mood.type}`  // 添加心情类名
@@ -771,38 +773,66 @@ Page({
   // 触摸移动事件
   touchMove(e) {
     if (this.data.isSliding) return;
-    
+
     const touchEndX = e.touches[0].clientX;
     const touchEndY = e.touches[0].clientY;
-    
     const deltaX = touchEndX - this.data.touchStartX;
     const deltaY = touchEndY - this.data.touchStartY;
-    
-    // 水平滑动大于垂直滑动，且滑动距离超过50
-    if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > 50) {
-      this.setData({
-        showActions: deltaX < 0  // 向左滑动显示操作按钮
-      });
-    }
-    
-    // 垂直滑动大于水平滑动，且滑动距离超过50
-    if (Math.abs(deltaY) > Math.abs(deltaX) && Math.abs(deltaY) > 50) {
-      this.setData({ isSliding: true });
-      
-      if (deltaY < 0) {  // 向上滑动
-        this.startSlideAnimation('up');
-      } else {  // 向下滑动
-        this.startSlideAnimation('down');
+
+    // 判断是水平滑动还是垂直滑动
+    if (Math.abs(deltaX) > Math.abs(deltaY)) {
+      // 水平滑动
+      if (Math.abs(deltaX) > 50) { // 滑动距离超过50才触发
+        if (deltaX > 0) {
+          // 右滑，返回主页
+          this.setData({
+            isSliding: true,
+            slideClass: 'slide-right-animation'
+          });
+          setTimeout(() => {
+            wx.reLaunch({
+              url: '/pages/index/index'
+            });
+          }, 300);
+        } else {
+          // 左滑，返回上一页
+          this.setData({
+            isSliding: true,
+            slideClass: 'slide-left-animation'
+          });
+          setTimeout(() => {
+            wx.navigateBack();
+          }, 300);
+        }
+      }
+    } else {
+      // 垂直滑动
+      if (Math.abs(deltaY) > 50) { // 滑动距离超过50才触发
+        if (!this.data.isSliding) {
+          this.setData({
+            isSliding: true
+          });
+          
+          if (deltaY < 0) {
+            // 上滑
+            this.startSlideAnimation('up');
+          } else {
+            // 下滑
+            this.startSlideAnimation('down');
+          }
+        }
       }
     }
   },
 
   // 触摸结束事件
   touchEnd() {
-    this.setData({
-      touchStartX: 0,
-      touchStartY: 0
-    });
+    if (!this.data.isSliding) {
+      this.setData({
+        touchStartX: 0,
+        touchStartY: 0
+      });
+    }
   },
 
   // 开始滑动动画
@@ -829,8 +859,8 @@ Page({
           isSliding: false,
           slideClass: ''
         });
-      }, 500);  // 增加到500ms
-    }, 400);  // 增加到400ms
+      }, 500);
+    }, 400);
   },
 
   // 长按保存图片
