@@ -202,6 +202,19 @@ Page({
 
   navigateToMoodCard() {
     wx.navigateTo({
+      url: '/pages/mood-card/mood-card',
+      webviewId: Date.now()
+    });
+  },
+
+  navigateToPoetry() {
+    wx.navigateTo({
+      url: '/pages/poetry-challenge/poetry-challenge',
+      webviewId: Date.now()
+    });
+  },
+  navigateToMoodCard() {
+    wx.navigateTo({
       url: '/pages/mood-card/mood-card'
     });
   },

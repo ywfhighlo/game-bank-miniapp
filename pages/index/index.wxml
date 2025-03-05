@@ -56,5 +56,12 @@
         <text class="arrow">></text>
       </view>
     </view>
+    <view class="menu-item" bindtap="navigateToPoetry">
+      <view class="menu-icon poetry-icon"></view>
+      <view class="menu-text">
+        <text>诗词闯关</text>
+        <text class="arrow">></text>
+      </view>
+    </view>
   </view>
 </view>

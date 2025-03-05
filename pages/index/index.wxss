@@ -42,7 +42,9 @@
   color: var(--text-color);
   font-weight: bold;
 }
-
+.poetry-icon {
+  background-color: #ffeb3b;
+}
 .menu-list {
   width: 100%;
   background: #fff;

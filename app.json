@@ -30,7 +30,8 @@
     "pages/settings/settings",
     "pages/holiday-countdown/holiday-countdown",
     "pages/daily-inspiration/daily-inspiration",
-    "pages/mood-card/mood-card"
+    "pages/mood-card/mood-card",
+    "pages/poetry-challenge/poetry-challenge"
   ],
   "window": {
     "backgroundTextStyle": "light",

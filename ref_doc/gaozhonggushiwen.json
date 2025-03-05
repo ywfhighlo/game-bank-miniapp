@@ -1,0 +1,136 @@
+{
+    "必修上册": {
+      "必修课文": [
+        {"title": "沁园春·长沙", "author": "毛泽东"},
+        {"title": "芣苢", "source": "诗经"},
+        {"title": "插秧歌", "author": "杨万里"},
+        {"title": "短歌行", "author": "曹操"},
+        {"title": "归园田居·其一", "author": "陶渊明"},
+        {"title": "梦游天姥吟留别", "author": "李白"},
+        {"title": "登高", "author": "杜甫"},
+        {"title": "琵琶行并序", "author": "白居易"},
+        {"title": "念奴娇·赤壁怀古", "author": "苏轼"},
+        {"title": "永遇乐·京口北固亭怀古", "author": "辛弃疾"},
+        {"title": "声声慢·寻寻觅觅", "author": "李清照"},
+        {"title": "劝学", "author": "荀子"},
+        {"title": "师说", "author": "韩愈"},
+        {"title": "赤壁赋", "author": "苏轼"},
+        {"title": "登泰山记", "author": "姚鼐"}
+      ],
+      "古诗词诵读": [
+        {"title": "静女", "source": "诗经"},
+        {"title": "涉江采芙蓉", "source": "楚辞"},
+        {"title": "虞美人·春花秋月何时了", "author": "李煜"},
+        {"title": "鹊桥仙·纤云弄巧", "author": "秦观"}
+      ]
+    },
+    "必修下册": {
+      "必修课文": [
+        {"title": "子路、曾皙、冉有、公西华侍坐", "source": "论语"},
+        {"title": "齐桓晋文之事", "source": "左传"},
+        {"title": "庖丁解牛", "author": "庄周"},
+        {"title": "烛之武退秦师", "author": "左丘明"},
+        {"title": "鸿门宴", "author": "司马迁"},
+        {"title": "窦娥冤", "author": "关汉卿"},
+        {"title": "谏逐客书", "author": "李斯"},
+        {"title": "与妻书", "author": "林觉民"},
+        {"title": "促织", "author": "蒲松龄"},
+        {"title": "谏太宗十思疏", "author": "魏征"},
+        {"title": "答司马谏议书", "author": "王安石"},
+        {"title": "阿房宫赋", "author": "杜牧"},
+        {"title": "六国论", "author": "苏洵"}
+      ],
+      "古诗词诵读": [
+        {"title": "登岳阳楼", "author": "杜甫"},
+        {"title": "桂枝香·金陵怀古", "author": "王安石"},
+        {"title": "念奴娇·过洞庭", "author": "张孝祥"},
+        {"title": "游园", "author": "汤显祖"}
+      ]
+    },
+    "选择性必修上册": {
+      "必修课文": [
+        {"title": "论语十二章", "source": "论语"},
+        {"title": "大学之道", "source": "礼记"},
+        {"title": "人皆有不忍之心", "source": "孟子"},
+        {"title": "老子四章", "author": "老子"},
+        {"title": "五石之瓠", "source": "庄子"},
+        {"title": "兼爱", "author": "墨子"}
+      ],
+      "古诗词诵读": [
+        {"title": "无衣", "source": "诗经"},
+        {"title": "春江花月夜", "author": "张若虚"},
+        {"title": "将进酒", "author": "李白"},
+        {"title": "江城子", "author": "苏轼"}
+      ]
+    },
+    "选择性必修中册": {
+      "必修课文": [
+        {"title": "屈原列传", "author": "司马迁"},
+        {"title": "苏武传", "author": "班固"},
+        {"title": "过秦论(上篇)", "author": "贾谊"},
+        {"title": "五代史伶官传序", "author": "欧阳修"}
+      ],
+      "古诗词诵读": [
+        {"title": "燕歌行并序", "author": "高适"},
+        {"title": "李凭箜篌引", "author": "李贺"},
+        {"title": "锦瑟", "author": "李商隐"},
+        {"title": "书愤", "author": "陆游"}
+      ]
+    },
+    "选择性必修下册": {
+      "必修课文": [
+        {"title": "氓", "source": "诗经"},
+        {"title": "离骚(节选)", "author": "屈原"},
+        {"title": "孔雀东南飞", "author": "佚名"},
+        {"title": "蜀道难", "author": "李白"},
+        {"title": "蜀相", "author": "杜甫"},
+        {"title": "望海潮·东南形胜", "author": "柳永"},
+        {"title": "扬州慢·淮左名都", "author": "姜夔"},
+        {"title": "陈情表", "author": "李密"},
+        {"title": "项脊轩志", "author": "归有光"},
+        {"title": "兰亭集序", "author": "王羲之"},
+        {"title": "归去来兮辞并序", "author": "陶渊明"},
+        {"title": "种树郭橐驼传", "author": "柳宗元"},
+        {"title": "石钟山记", "author": "苏轼"}
+      ],
+      "古诗词诵读": [
+        {"title": "拟行路难·其四", "author": "鲍照"},
+        {"title": "客至", "author": "杜甫"},
+        {"title": "登快阁", "author": "黄庭坚"},
+        {"title": "临安春雨初霁", "author": "陆游"}
+      ]
+    },
+    "选修(中国古代诗歌散文欣赏)": {
+      "课文": [
+        {"title": "长恨歌", "author": "白居易"},
+        {"title": "湘夫人", "author": "屈原"},
+        {"title": "咏怀八十二首·其一", "author": "阮籍"},
+        {"title": "杂诗十二首·其二", "author": "陶渊明"},
+        {"title": "越中览古", "author": "李白"},
+        {"title": "一剪梅·红藕香残玉簟秋", "author": "李清照"},
+        {"title": "今别离·其一", "author": "黄遵宪"},
+        {"title": "夜归鹿门山歌", "author": "孟浩然"},
+        {"title": "登岳阳楼", "author": "杜甫"},
+        {"title": "菩萨蛮·其二", "author": "韦庄"},
+        {"title": "积雨辋川庄作", "author": "王维"},
+        {"title": "旅夜书怀", "author": "杜甫"},
+        {"title": "新城道中·其一", "author": "苏轼"},
+        {"title": "阁夜", "author": "杜甫"},
+        {"title": "苏幕遮·燎沉香", "author": "周邦彦"},
+        {"title": "国殇", "author": "屈原"},
+        {"title": "登柳州城楼寄漳汀封连四州", "author": "柳宗元"},
+        {"title": "菩萨蛮·小山重叠金明灭", "author": "温庭筠"},
+        {"title": "般涉调·哨遍", "author": "睢景臣"},
+        {"title": "过小孤山大孤山", "author": "陆游"},
+        {"title": "项羽之死", "author": "司马迁"},
+        {"title": "方山子传", "author": "苏轼"},
+        {"title": "大铁椎传", "author": "魏禧"},
+        {"title": "祭十二郎文", "author": "韩愈"},
+        {"title": "狱中杂记", "author": "方苞"},
+        {"title": "陶庵梦忆序", "author": "张岱"},
+        {"title": "春夜宴从弟桃花园序", "author": "李白"},
+        {"title": "游兰溪", "author": "苏轼"},
+        {"title": "苦斋记", "author": "刘基"}
+      ]
+    }
+}
