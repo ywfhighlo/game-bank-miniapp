@@ -1,101 +1,18 @@
 <view class="container">
-  <!-- 烟花动画画布 -->
-  <canvas type="2d" id="fireworks" class="fireworks-canvas"></canvas>
-
-  <!-- 装饰元素 -->
-  <view class="decoration-container">
-    <view class="lantern left"></view>
-    <view class="lantern right"></view>
-    <view class="cloud cloud-1"></view>
-    <view class="cloud cloud-2"></view>
-  </view>
-
-  <!-- 倒计时主要内容 -->
-  <view class="countdown-section">
-    <view class="holiday-type">距离{{targetDate}}还有</view>
-    
-    <view class="countdown-display">
-      <view class="time-block">
-        <text class="number">{{days}}</text>
-        <text class="unit">天</text>
-      </view>
-      <text class="time-separator">:</text>
-      <view class="time-block">
-        <text class="number">{{hours}}</text>
-        <text class="unit">时</text>
-      </view>
-      <text class="time-separator">:</text>
-      <view class="time-block">
-        <text class="number">{{minutes}}</text>
-        <text class="unit">分</text>
-      </view>
-      <text class="time-separator">:</text>
-      <view class="time-block">
-        <text class="number">{{seconds}}</text>
-        <text class="unit">秒</text>
-      </view>
-    </view>
-
-    <view class="progress-bar">
-      <view class="progress" style="width: {{progressPercent}}%"></view>
-    </view>
-
-    <view class="target-date">
-      <text>{{targetDate}}：{{currentHolidayDate}}</text>
-      <text class="remaining-text">已经度过 {{passedDays}} 天</text>
-    </view>
-  </view>
-
-  <!-- 设置按钮 -->
-  <view class="settings-section">
-    <button class="setting-btn" bindtap="showDatePicker">
-      <text class="btn-icon">⚙️</text>
-      <text>设置假期时间</text>
-    </button>
-  </view>
-
-  <!-- 假期信息 -->
-  <view class="holiday-info">
-    <view class="info-header">假期安排</view>
-    <view class="info-item">
-      <view class="info-left">
-        <text class="info-label">寒假开始</text>
-        <text class="info-sublabel">{{winterDuration}}天</text>
-      </view>
-      <text class="info-value">{{winterVacation}}</text>
-    </view>
-    <view class="info-item">
-      <view class="info-left">
-        <text class="info-label">暑假开始</text>
-        <text class="info-sublabel">{{summerDuration}}天</text>
-      </view>
-      <text class="info-value">{{summerVacation}}</text>
-    </view>
-  </view>
-
-  <swiper class="holiday-swiper" bindchange="onSwiperChange" vertical="true" current="{{currentHolidayIndex}}" circular="true">
-    <swiper-item wx:for="{{sortedHolidays}}" wx:key="name" class="holiday-item">
-      <view class="holiday-card" style="background-color: {{item.color}}">
-        <view class="holiday-icon">{{item.icon}}</view>
-        <view class="holiday-name">{{item.name}}</view>
-        <view class="countdown-text">
-          <block wx:if="{{item.daysLeft > 0}}">
-            还有 <text class="days">{{item.daysLeft}}</text> 天
-          </block>
-          <block wx:else>
-            已经开始啦！
-          </block>
-        </view>
-        <view class="date-text">{{item.date}}</view>
-        <view class="holiday-message">{{item.message}}</view>
-      </view>
-    </swiper-item>
-  </swiper>
+  <view class="title">放松一下</view>
+  <view class="subtitle">深呼吸，一切都会过去</view>
   
-  <view class="hint-text">上下滑动切换节日</view>
-  
-  <view class="action-buttons">
-    <button class="share-btn" bindtap="onShareTap">分享倒计时</button>
-    <button class="remind-btn" bindtap="onRemindTap">设置提醒</button>
+  <view class="countdown-card">
+    <view class="holiday-title">{{currentHoliday.name}}倒计时</view>
+    <view class="countdown-number pulse">{{countdown}}</view>
+    <view class="countdown-label">天</view>
+    <view class="holiday-info">
+      <text>{{currentHoliday.name}}时间：</text>
+      <text class="holiday-date">{{currentHoliday.date}}</text>
+    </view>
   </view>
-</view> 
+
+  <view class="next-holiday" wx:if="{{nextHoliday}}">
+    <text>下一个假期：{{nextHoliday.name}} ({{nextHoliday.date}})</text>
+  </view>
+</view>
