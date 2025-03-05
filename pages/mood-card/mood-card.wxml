@@ -1,18 +1,51 @@
-<view class="container">
-  <swiper class="mood-swiper" bindchange="onSwiperChange" vertical="true" current="{{currentMoodIndex}}" circular="true">
-    <swiper-item wx:for="{{moods}}" wx:key="type" class="mood-item">
-      <view class="mood-card" style="background-color: {{item.color}}">
-        <view class="mood-icon">{{item.icon}}</view>
-        <view class="mood-text">{{item.text}}</view>
-        <view class="mood-message">{{item.message}}</view>
+<view class="container" 
+      bindtouchstart="touchStart" 
+      bindtouchmove="touchMove" 
+      bindtouchend="touchEnd">
+  <view class="quote-card {{showActions ? 'show-actions' : ''}}">
+    <view class="calendar-header">
+      <view class="date-section">
+        <text class="date">{{currentDate}}</text>
+        <view class="date-info">
+          <text class="lunar-date">{{lunarDate}}</text>
+          <text class="weekday">{{currentWeekday}}</text>
+        </view>
+        <text class="historical-event">{{historicalEvent}}</text>
       </view>
-    </swiper-item>
-  </swiper>
-  
-  <view class="hint-text">上下滑动切换心情</view>
-  
-  <view class="action-buttons">
-    <button class="share-btn" bindtap="onShareTap">分享心情</button>
-    <button class="save-btn" bindtap="onSaveTap">保存记录</button>
+    </view>
+    
+    <view class="activity-section">
+      <view class="yi-icon">宜</view>
+      <text class="activity">{{recommendActivity}}</text>
+    </view>
+
+    <view class="food-section">
+      <view class="chi-icon">吃</view>
+      <text class="food">{{recommendFood}}</text>
+    </view>
+
+    <view class="quote-content" animation="{{animation}}">
+      <text class="quote-text">{{currentQuote.content}}</text>
+      <text class="quote-text-en">{{currentQuote.content_en}}</text>
+    </view>
+
+    <view class="swipe-hint">
+      <text>上下滑动切换 · 左右滑动显示操作</text>
+    </view>
   </view>
-</view> 
+
+  <!-- 侧边操作按钮 -->
+  <view class="action-buttons {{showActions ? 'show' : ''}}">
+    <button class="action-btn save-btn" bindtap="onLongPress">
+      <text class="btn-text">保存相册</text>
+    </button>
+    <button class="action-btn share-btn" open-type="share">
+      <text class="btn-text">分享好友</text>
+    </button>
+  </view>
+
+  <!-- 用于生成分享图片的canvas -->
+  <canvas type="2d" id="quoteCanvas" class="hidden-canvas"
+    style="width: 300px; height: 400px;">
+  </canvas>
+</view>

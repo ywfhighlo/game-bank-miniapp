@@ -1,294 +1,200 @@
 .container {
-  height: 100vh;
+  min-height: 100vh;
+  background-color: #f5f5f5;
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  background: #f5f5f5;
+  position: relative;
+  overflow: hidden;
 }
 
-.section {
-  margin-bottom: 40rpx;
+.quote-card {
+  background: #fff;
+  flex: 1;
+  width: 100%;
+  position: relative;
+  transition: transform 0.3s ease;
 }
 
-.section-title {
-  font-size: 32rpx;
-  font-weight: bold;
-  color: #333;
-  margin-bottom: 20rpx;
-  display: block;
+.quote-card.show-actions {
+  transform: translateX(-200rpx);
+}
+
+.calendar-header {
+  background-color: #6B66FF;
+  color: #fff;
+  padding: 60rpx 40rpx 40rpx;
+  position: relative;
+  border-radius: 24rpx;
+  margin: 20rpx;
+}
+
+.date-section {
+  display: flex;
+  flex-direction: column;
+  gap: 20rpx;
 }
 
 .date {
-  font-size: 36rpx;
-  color: #666;
-}
-
-.mood-list {
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 20rpx;
-}
-
-.mood-item {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  height: 100%;
-  padding: 20rpx;
-  box-sizing: border-box;
-}
-
-.mood-item.selected {
-  background: #e6f7ff;
-  border: 2rpx solid #1890ff;
-  transform: scale(1.05);
-}
-
-.mood-icon {
-  font-size: 120rpx;
-  margin-bottom: 30rpx;
-}
-
-.mood-text {
-  font-size: 48rpx;
+  font-size: 72rpx;
   font-weight: bold;
-  color: #333;
-  margin-bottom: 40rpx;
 }
 
-.mood-message {
-  font-size: 32rpx;
-  color: #333;
-  text-align: center;
-  line-height: 1.6;
-  padding: 0 20rpx;
-}
-
-.hint-text {
-  font-size: 28rpx;
-  color: #999;
-  margin: 30rpx 0;
-}
-
-.style-list {
+.date-info {
   display: flex;
-  gap: 20rpx;
-  overflow-x: auto;
-  padding: 10rpx 0;
+  flex-direction: column;
+  gap: 10rpx;
 }
 
-.style-item {
-  padding: 20rpx 40rpx;
-  border-radius: 12rpx;
+.lunar-date {
+  font-size: 32rpx;
+  opacity: 0.95;
+}
+
+.weekday {
   font-size: 28rpx;
-  color: #333;
-  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.1);
-  white-space: nowrap;
-  transition: all 0.3s ease;
+  opacity: 0.9;
 }
 
-.style-item.selected {
-  border: 2rpx solid #1890ff;
-  transform: scale(1.05);
-}
-
-.content-input {
-  width: 100%;
-  height: 200rpx;
-  padding: 20rpx;
-  background: #fff;
-  border-radius: 12rpx;
-  font-size: 28rpx;
-  line-height: 1.6;
-  box-sizing: border-box;
-  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.1);
-}
-
-.word-count {
+.historical-event {
   font-size: 24rpx;
-  color: #999;
-  text-align: right;
+  opacity: 0.85;
+  line-height: 1.4;
   margin-top: 10rpx;
+  padding-top: 20rpx;
+  border-top: 1rpx solid rgba(255, 255, 255, 0.2);
 }
 
-.mood-card {
-  width: 90%;
-  height: 90%;
-  border-radius: 20rpx;
-  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.1);
+.activity-section, .food-section {
+  display: flex;
+  align-items: center;
+  margin: 20rpx 30rpx;
+  padding: 20rpx;
+  background: #f8f8f8;
+  border-radius: 16rpx;
+}
+
+.yi-icon, .chi-icon {
+  width: 60rpx;
+  height: 60rpx;
+  background: #6B66FF;
+  color: white;
+  border-radius: 30rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32rpx;
+  margin-right: 20rpx;
+}
+
+.chi-icon {
+  background: #FF6B6B;  /* 使用不同的颜色区分 */
+}
+
+.activity, .food {
+  flex: 1;
+  font-size: 32rpx;
+  color: #333;
+}
+
+.quote-content {
+  padding: 40rpx;
+  display: flex;
+  flex-direction: column;
+  gap: 30rpx;
+  background: #fff;
+  flex: 1;
+}
+
+.quote-text {
+  font-size: 36rpx;
+  color: #333;
+  line-height: 1.6;
+}
+
+.quote-text-en {
+  font-size: 32rpx;
+  color: #666;
+  line-height: 1.5;
+}
+
+.swipe-hint {
+  text-align: center;
+  padding: 20rpx;
+  color: #999;
+  font-size: 24rpx;
+  background: #fff;
+}
+
+/* 侧边操作按钮 */
+.action-buttons {
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 200rpx;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 20rpx;
+  padding: 20rpx;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.action-buttons.show {
+  opacity: 1;
+}
+
+.action-btn {
+  width: 160rpx;
+  height: 160rpx;
+  border-radius: 50%;
+  background: #6B66FF;
+  color: #fff;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 40rpx;
-  box-sizing: border-box;
-  transition: all 0.3s ease;
-}
-
-.mood-card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 200rpx;
-  background: linear-gradient(to bottom, rgba(255,255,255,0.1), transparent);
-  pointer-events: none;
-}
-
-.card-header {
-  margin-bottom: 40rpx;
-  position: relative;
-  z-index: 1;
-}
-
-.card-date {
-  font-size: 32rpx;
-  color: #333;
-  font-weight: bold;
-  text-shadow: 0 2rpx 4rpx rgba(0,0,0,0.1);
-}
-
-.card-content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 20rpx;
-  position: relative;
-  z-index: 1;
-}
-
-.mood-icon.large {
-  font-size: 80rpx;
-  text-shadow: 0 4rpx 8rpx rgba(0,0,0,0.2);
-  animation: float 3s ease-in-out infinite;
-}
-
-@keyframes float {
-  0%, 100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-10rpx);
-  }
-}
-
-.content-text {
-  font-size: 32rpx;
-  color: #333;
-  line-height: 1.6;
-  text-align: center;
-  margin-top: 20rpx;
-  padding: 0 40rpx;
-}
-
-.card-footer {
-  margin-top: 40rpx;
-  text-align: center;
-  position: relative;
-  z-index: 1;
-}
-
-.watermark {
-  font-size: 24rpx;
-  color: #999;
-  opacity: 0.8;
-}
-
-.button-group {
-  display: flex;
-  gap: 20rpx;
-  margin-top: 40rpx;
-  flex-wrap: wrap;
-}
-
-.btn {
-  flex: 1;
-  min-width: 160rpx;
-  height: 80rpx;
-  line-height: 80rpx;
-  text-align: center;
-  border-radius: 40rpx;
+  padding: 0;
   font-size: 28rpx;
-  background: #fff;
-  color: #333;
-  border: 2rpx solid #ddd;
-  padding: 0 30rpx;
-  transition: all 0.3s ease;
-  box-shadow: 0 2rpx 8rpx rgba(0,0,0,0.1);
+  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.1);
 }
 
-.btn:active {
-  transform: scale(0.98);
-}
-
-.btn.primary {
-  background: linear-gradient(135deg, #1890ff, #096dd9);
-  color: #fff;
-  border: none;
-}
-
-.hidden {
-  display: none;
+.btn-text {
+  margin-top: 10rpx;
+  font-size: 24rpx;
 }
 
 .hidden-canvas {
   position: fixed;
-  left: -9999px;
+  left: -2000rpx;
   visibility: hidden;
 }
 
-/* 添加页面切换动画 */
-.card-editor, .mood-card {
-  animation: fadeIn 0.3s ease-out;
-}
-
-@keyframes fadeIn {
+/* 添加上下滑动动画效果 */
+@keyframes slideInUp {
   from {
-    opacity: 0;
-    transform: translateY(20rpx);
+    transform: translateY(100%);
   }
   to {
-    opacity: 1;
     transform: translateY(0);
   }
 }
 
-.mood-swiper {
-  width: 100%;
-  height: 70vh;
+@keyframes slideOutDown {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-100%);
+  }
 }
 
-.action-buttons {
-  width: 100%;
-  padding: 30rpx;
-  display: flex;
-  justify-content: space-around;
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  background: #fff;
-  box-shadow: 0 -2rpx 10rpx rgba(0, 0, 0, 0.05);
+.slide-in {
+  animation: slideInUp 0.3s ease-out;
 }
 
-.share-btn, .save-btn {
-  width: 45%;
-  height: 80rpx;
-  line-height: 80rpx;
-  border-radius: 40rpx;
-  font-size: 32rpx;
-  border: none;
+.slide-out {
+  animation: slideOutDown 0.3s ease-out;
 }
-
-.share-btn {
-  background: #3cc51f;
-  color: #fff;
-}
-
-.save-btn {
-  background: #fff;
-  color: #3cc51f;
-  border: 2rpx solid #3cc51f;
-} 
