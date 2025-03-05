@@ -733,6 +733,48 @@ function getSpringFestivalDate(year) {
   return new Date(year, 0, 25); // 暂定1月25日
 }
 
+// 添加金句数组
+const inspirationalQuotes = [
+  "每一个不曾起舞的日子，都是对生命的辜负",
+  "把握现在，就是创造未来",
+  "成功不是终点，失败也不是终结",
+  "今天的付出是为了明天更好的收获",
+  "坚持下去，你就是自己的光",
+  "没有人能够阻挡一个想要进步的人",
+  "每一个成功者都有一个开始",
+  "相信自己，你比想象中更强大",
+  "只要开始，就不算晚",
+  "当你感到疲惫时，就是在进步"
+];
+
+// 添加食物推荐数组
+const foodRecommendations = [
+  "水果沙拉",
+  "全麦面包",
+  "燕麦粥",
+  "鸡胸肉",
+  "三文鱼",
+  "牛油果",
+  "坚果",
+  "酸奶",
+  "西兰花",
+  "红薯"
+];
+
+// 添加励志语句数组
+const motivationalTexts = [
+  "加油！离目标更近一步",
+  "坚持就是胜利",
+  "你是最棒的",
+  "保持热爱，奔赴山海",
+  "未来的你一定会感谢现在努力的自己",
+  "相信自己，你可以的",
+  "每一天都是新的开始",
+  "不要让任何事物阻挡你的脚步",
+  "梦想还是要有的，万一实现了呢",
+  "今天的汗水是明天的收获"
+];
+
 Page({
   data: {
     currentDate: '',
@@ -752,7 +794,15 @@ Page({
     currentMood: null,
     currentHoliday: null,
     nextHoliday: null,
-    countdown: 0
+    countdown: 0,
+    dailyQuote: '',
+    motivationText: '',
+    touchStartY: 0,
+    lastTapTime: 0,
+    bgColorIndex: 0,
+    isSliding: false,
+    slideDirection: '',
+    slideClass: ''
   },
 
   onLoad() {
@@ -761,8 +811,10 @@ Page({
     this.updateDailyContent();
     this.updateMood();
     this.updateHolidayInfo();
+    this.updateCountdownContent();
     // 每天0点更新倒计时
     this.setUpdateTimer();
+    this.updateInspirationContent();
   },
 
   updateDateTime() {
@@ -1103,5 +1155,113 @@ Page({
     const month = (date.getMonth() + 1).toString().padStart(2, '0');
     const day = date.getDate().toString().padStart(2, '0');
     return `${year}-${month}-${day}`;
+  },
+
+  // 更新励志内容
+  updateInspirationContent() {
+    const randomQuote = inspirationalQuotes[Math.floor(Math.random() * inspirationalQuotes.length)];
+    const randomFood = foodRecommendations[Math.floor(Math.random() * foodRecommendations.length)];
+    const randomMotivation = motivationalTexts[Math.floor(Math.random() * motivationalTexts.length)];
+    
+    this.setData({
+      dailyQuote: randomQuote,
+      recommendFood: randomFood,
+      motivationText: randomMotivation
+    });
+  },
+
+  // 更新倒计时卡片背景色和励志语
+  updateCountdownCard() {
+    const newColorIndex = (this.data.bgColorIndex + 1) % 5;
+    const randomMotivation = motivationalTexts[Math.floor(Math.random() * motivationalTexts.length)];
+    
+    this.setData({
+      bgColorIndex: newColorIndex,
+      motivationText: randomMotivation
+    });
+    
+    // 更新卡片样式
+    const countdownCard = this.selectComponent('.countdown-card');
+    if (countdownCard) {
+      countdownCard.setStyle({
+        background: `var(--bg-color-${newColorIndex + 1})`
+      });
+    }
+  },
+
+  // 更新倒计时内容
+  updateCountdownContent() {
+    const randomQuote = inspirationalQuotes[Math.floor(Math.random() * inspirationalQuotes.length)];
+    const randomFood = foodRecommendations[Math.floor(Math.random() * foodRecommendations.length)];
+    const randomMotivation = motivationalTexts[Math.floor(Math.random() * motivationalTexts.length)];
+    
+    this.setData({
+      dailyQuote: randomQuote,
+      recommendFood: randomFood,
+      motivationText: randomMotivation
+    });
+  },
+
+  handleTouchStart(e) {
+    if (this.data.isSliding) return;
+    
+    this.setData({
+      touchStartY: e.touches[0].clientY
+    });
+  },
+
+  handleTouchMove(e) {
+    if (this.data.isSliding) return;
+    
+    const touchEndY = e.touches[0].clientY;
+    const moveDistance = touchEndY - this.data.touchStartY;
+    const cardType = e.currentTarget.dataset.cardType;
+    
+    if (Math.abs(moveDistance) > 50) {
+      this.setData({ isSliding: true });
+      
+      if (moveDistance > 0) {
+        // 下滑
+        this.startSlideAnimation(cardType, 'down');
+      } else {
+        // 上滑
+        this.startSlideAnimation(cardType, 'up');
+      }
+    }
+  },
+
+  handleTouchEnd() {
+    this.setData({
+      touchStartY: 0
+    });
+  },
+
+  startSlideAnimation(cardType, direction) {
+    const slideClass = direction === 'up' ? 'slide-up-animation' : 'slide-down-animation';
+    
+    this.setData({
+      slideDirection: direction,
+      slideClass: slideClass
+    });
+
+    // 等待动画结束后更新内容
+    setTimeout(() => {
+      if (cardType === 'holiday-countdown') {
+        this.updateCountdownCard();
+      }
+
+      // 重置卡片位置
+      this.setData({
+        slideClass: 'slide-reset'
+      });
+
+      // 动画完成后重置状态
+      setTimeout(() => {
+        this.setData({
+          isSliding: false,
+          slideClass: ''
+        });
+      }, 300);
+    }, 300);
   }
 });

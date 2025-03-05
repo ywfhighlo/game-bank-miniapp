@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M40 20L45 25L50 20M40 20L35 25L30 20" 
+        stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+  <path d="M20 40C20 30 30 20 40 20C50 20 60 30 60 40C60 50 50 60 40 60C30 60 20 50 20 40Z" 
+        stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <path d="M30 45C35 50 45 50 50 45" 
+        stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+  <path d="M25 35L35 35M45 35L55 35" 
+        stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+</svg> 

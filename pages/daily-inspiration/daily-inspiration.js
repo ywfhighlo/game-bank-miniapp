@@ -662,24 +662,72 @@ Page({
   data: {
     currentDate: '',
     currentWeekday: '',
-    currentQuote: {},
-    showFullscreen: false,
-    animation: {},
-    quoteIndex: 0,
-    cardStyle: 'traditional',
-    recommendActivity: '',
-    recommendFood: '',  // 新增：推荐美食
     lunarDate: '',
     historicalEvent: '',
+    recommendActivity: '',
+    recommendFood: '',
+    currentQuote: null,
     showActions: false,
     touchStartX: 0,
-    touchStartY: 0
+    touchStartY: 0,
+    isSliding: false,
+    slideClass: '',
+    slideDirection: ''
   },
 
   onLoad() {
-    // 初始化数据
     this.updateDateTime();
     this.updateDailyContent();
+  },
+
+  touchStart(e) {
+    if (this.data.isSliding) return;
+    this.setData({
+      touchStartX: e.touches[0].clientX,
+      touchStartY: e.touches[0].clientY
+    });
+  },
+
+  touchMove(e) {
+    if (this.data.isSliding) return;
+    const touchEndX = e.touches[0].clientX;
+    const touchEndY = e.touches[0].clientY;
+    const deltaX = touchEndX - this.data.touchStartX;
+    const deltaY = touchEndY - this.data.touchStartY;
+
+    // 调整滑动阈值，降低灵敏度
+    if (Math.abs(deltaY) > Math.abs(deltaX) && Math.abs(deltaY) > 30) {
+      const direction = deltaY > 0 ? 'down' : 'up';
+      this.startSlideAnimation(direction);
+    }
+  },
+
+  touchEnd() {
+    // 触摸结束后重置状态
+    if (this.data.slideClass) {
+      setTimeout(() => {
+        this.setData({
+          slideClass: '',
+          isSliding: false
+        });
+      }, 300); // 缩短重置时间
+    }
+  },
+
+  startSlideAnimation(direction) {
+    if (this.data.isSliding) return;
+    
+    this.setData({
+      isSliding: true,
+      slideClass: direction === 'up' ? 'slide-up-animation' : 'slide-down-animation'
+    });
+
+    setTimeout(() => {
+      this.updateDailyContent();
+      this.setData({
+        slideClass: 'slide-reset'
+      });
+    }, 300); // 缩短动画时间
   },
 
   updateDateTime() {
@@ -702,24 +750,40 @@ Page({
   },
 
   updateDailyContent() {
-    // 获取随机名言
-    const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
+    // 更新推荐食物
+    const foods = [
+      '火锅', '烤肉', '寿司', '披萨', '炸鸡', '面条',
+      '沙拉', '汉堡', '饺子', '粥', '包子', '三明治',
+      '炒饭', '牛排', '海鲜', '煲仔饭', '麻辣烫', '冒菜',
+      '烧烤', '卤味', '小龙虾', '川菜', '粤菜', '湘菜'
+    ];
     
-    // 获取随机活动
-    const randomActivityType = activities[Math.floor(Math.random() * activities.length)];
-    const randomActivity = randomActivityType.items[Math.floor(Math.random() * randomActivityType.items.length)];
+    // 更新推荐活动
+    const activities = [
+      '晨跑', '健身', '阅读', '写作', '学习', '冥想',
+      '听音乐', '画画', '摄影', '烹饪', '园艺', '打球',
+      '游泳', '瑜伽', '散步', '骑行', '爬山', '跳舞',
+      '看展览', '做手工', '练字', '弹琴', '编程', '写日记'
+    ];
 
-    // 获取随机美食
-    const randomFoodType = foods[Math.floor(Math.random() * foods.length)];
-    const randomFood = randomFoodType.items[Math.floor(Math.random() * randomFoodType.items.length)];
+    // 更新励志语录
+    const quotes = [
+      { content: '生命不息，奋斗不止', content_en: 'Life is a journey, keep moving forward' },
+      { content: '今天的付出是明天的收获', content_en: `Today's efforts will lead to tomorrow's success` },
+      { content: '相信自己，你就是最好的', content_en: 'Believe in yourself, you are the best' },
+      { content: '每一个不曾起舞的日子都是对生命的辜负', content_en: 'Every day without dancing is a waste of life' },
+      { content: '成功不是终点，失败也不是终结', content_en: 'Success is not final, failure is not fatal' },
+      { content: '最大的敌人是自己的懒惰', content_en: 'The biggest enemy is your own laziness' },
+      { content: '坚持做你认为对的事', content_en: 'Stick to what you believe is right' },
+      { content: '把每一天都当作新的开始', content_en: 'Treat each day as a new beginning' },
+      { content: '态度决定高度', content_en: 'Attitude determines altitude' },
+      { content: '没有人能阻挡一个想要进步的人', content_en: 'No one can stop a person who wants to progress' }
+    ];
 
     this.setData({
-      currentQuote: {
-        content: randomQuote.zh,
-        content_en: randomQuote.en
-      },
-      recommendActivity: randomActivity,
-      recommendFood: randomFood
+      recommendActivity: activities[Math.floor(Math.random() * activities.length)],
+      recommendFood: foods[Math.floor(Math.random() * foods.length)],
+      currentQuote: quotes[Math.floor(Math.random() * quotes.length)]
     });
   },
 

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="40" cy="40" r="10" 
+        stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <path d="M40 20L40 30M20 40L30 40M50 40L60 40M40 50L40 60" 
+        stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+  <path d="M25 25L35 35M45 35L55 25M25 55L35 45M45 45L55 55" 
+        stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+</svg> 

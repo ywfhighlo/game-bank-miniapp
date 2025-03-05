@@ -98,6 +98,59 @@
   box-shadow: 0 4rpx 12rpx rgba(0,0,0,0.05);
 }
 
+/* 励志日历卡片样式 */
+.inspiration-card {
+  background: linear-gradient(135deg, #FF9966 0%, #FF5E62 100%);
+  width: 100%;
+  border-radius: 24rpx;
+  padding: 40rpx;
+  box-shadow: 0 8rpx 24rpx rgba(255, 94, 98, 0.2);
+  margin: 40rpx 0;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.3s ease;
+}
+
+.daily-quote {
+  font-size: 36rpx;
+  color: #fff;
+  text-align: center;
+  margin-bottom: 20rpx;
+  font-weight: 500;
+}
+
+.food-recommendation {
+  font-size: 28rpx;
+  color: rgba(255, 255, 255, 0.9);
+  text-align: center;
+}
+
+.motivation-text {
+  font-size: 28rpx;
+  color: rgba(255, 255, 255, 0.9);
+  text-align: center;
+  margin-top: 20rpx;
+  font-style: italic;
+}
+
+/* 滑动动画 */
+.slide-up {
+  transform: translateY(-100%);
+  opacity: 0;
+}
+
+.slide-down {
+  transform: translateY(100%);
+  opacity: 0;
+}
+
+/* 渐变背景色数组 */
+.bg-color-1 { background: linear-gradient(135deg, #6B66FF 0%, #4B7BF5 100%); }
+.bg-color-2 { background: linear-gradient(135deg, #FF6B6B 0%, #FF8E53 100%); }
+.bg-color-3 { background: linear-gradient(135deg, #4CAF50 0%, #8BC34A 100%); }
+.bg-color-4 { background: linear-gradient(135deg, #9C27B0 0%, #E91E63 100%); }
+.bg-color-5 { background: linear-gradient(135deg, #2196F3 0%, #03A9F4 100%); }
+
 /* 动画效果 */
 @keyframes pulse {
   0% {

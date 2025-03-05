@@ -198,3 +198,37 @@
 .slide-out {
   animation: slideOutDown 0.3s ease-out;
 }
+
+/* 添加滑动动画样式 */
+.slide-transition {
+  transition: all 0.3s ease-out;
+}
+
+.slide-up-animation {
+  transform: translateY(-50%);
+  opacity: 0;
+  transition: all 0.3s ease-out;
+}
+
+.slide-down-animation {
+  transform: translateY(50%);
+  opacity: 0;
+  transition: all 0.3s ease-out;
+}
+
+.slide-reset {
+  transform: translateY(0);
+  opacity: 1;
+  transition: all 0.3s ease-out;
+}
+
+/* 优化食物和引用内容的过渡效果 */
+.food-section,
+.quote-content {
+  transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+}
+
+/* 确保内容在动画过程中不会溢出 */
+.container {
+  overflow: hidden;
+}

@@ -3,10 +3,20 @@
       bindtouchmove="touchMove" 
       bindtouchend="touchEnd">
   <view class="mood-card {{showActions ? 'show-actions' : ''}}">
-    <view class="mood-content" animation="{{animation}}" style="background: {{currentMood.color}}20">
-      <view class="mood-icon">{{currentMood.icon}}</view>
-      <view class="mood-type">{{currentMood.type}}</view>
+    <view class="mood-content {{slideClass}} {{containerClass}}">
       <view class="mood-quote">{{currentMood.quote}}</view>
+      
+      <view class="mood-main">
+        <view class="mood-icon-wrapper">
+          <image class="mood-icon" src="/images/moods/{{currentMood.type}}.svg" mode="aspectFit"></image>
+        </view>
+        <view class="mood-type">{{currentMood.type}}</view>
+      </view>
+
+      <view class="poem-section">
+        <view class="poem-divider"></view>
+        <view class="mood-poem">{{currentMood.poem}}</view>
+      </view>
     </view>
 
     <view class="swipe-hint">

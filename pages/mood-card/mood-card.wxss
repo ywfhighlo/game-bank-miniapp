@@ -25,33 +25,141 @@
 .mood-content {
   flex: 1;
   margin: 30rpx;
-  padding: 40rpx;
+  padding: 60rpx 40rpx;
   border-radius: 24rpx;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 30rpx;
-  transition: all 0.3s ease;
-}
-
-.mood-icon {
-  font-size: 120rpx;
-  line-height: 1;
-}
-
-.mood-type {
-  font-size: 48rpx;
-  font-weight: bold;
-  color: #333;
+  gap: 60rpx;
+  transition: all 0.25s ease-out;
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.05);
+  max-width: 650rpx;
+  margin: 30rpx auto;
 }
 
 .mood-quote {
-  font-size: 32rpx;
-  color: #666;
+  font-size: 36rpx;
+  color: #333;
   text-align: center;
   line-height: 1.6;
-  margin-top: 20rpx;
+  font-weight: 500;
+  padding: 0;
+  letter-spacing: 2rpx;
+  max-width: 550rpx;
+}
+
+.mood-main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 30rpx;
+  padding: 20rpx 0;
+}
+
+.mood-icon-wrapper {
+  width: 120rpx;
+  height: 120rpx;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 6rpx 16rpx rgba(0, 0, 0, 0.1);
+  margin: 10rpx 0;
+}
+
+.mood-icon {
+  width: 80rpx;
+  height: 80rpx;
+}
+
+/* 为每种心情定义特定的样式 */
+.mood-happy .mood-icon-wrapper {
+  background: linear-gradient(135deg, #ff7eb3 0%, #ff758c 100%);
+  box-shadow: 0 6rpx 16rpx rgba(255, 117, 140, 0.2);
+}
+
+.mood-peaceful .mood-icon-wrapper {
+  background: linear-gradient(135deg, #7be495 0%, #329d9c 100%);
+  box-shadow: 0 6rpx 16rpx rgba(50, 157, 156, 0.2);
+}
+
+.mood-missing .mood-icon-wrapper {
+  background: linear-gradient(135deg, #90d5ec 0%, #65a6d1 100%);
+  box-shadow: 0 6rpx 16rpx rgba(101, 166, 209, 0.2);
+}
+
+.mood-yearning .mood-icon-wrapper {
+  background: linear-gradient(135deg, #ffd26f 0%, #ffa751 100%);
+  box-shadow: 0 6rpx 16rpx rgba(255, 167, 81, 0.2);
+}
+
+.mood-lonely .mood-icon-wrapper {
+  background: linear-gradient(135deg, #b8c6db 0%, #8795a7 100%);
+  box-shadow: 0 6rpx 16rpx rgba(135, 149, 167, 0.2);
+}
+
+.mood-hopeful .mood-icon-wrapper {
+  background: linear-gradient(135deg, #81fbb8 0%, #28c76f 100%);
+  box-shadow: 0 6rpx 16rpx rgba(40, 199, 111, 0.2);
+}
+
+.mood-type {
+  font-size: 44rpx;
+  font-weight: bold;
+  color: #333;
+  letter-spacing: 6rpx;
+}
+
+.poem-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  gap: 20rpx;
+  max-width: 550rpx;
+}
+
+.poem-divider {
+  width: 40rpx;
+  height: 3rpx;
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 2rpx;
+  margin: 0;
+}
+
+/* 为每种心情定义分隔线样式 */
+.mood-happy .poem-divider {
+  background: rgba(255, 117, 140, 0.3);
+}
+
+.mood-peaceful .poem-divider {
+  background: rgba(50, 157, 156, 0.3);
+}
+
+.mood-missing .poem-divider {
+  background: rgba(101, 166, 209, 0.3);
+}
+
+.mood-yearning .poem-divider {
+  background: rgba(255, 167, 81, 0.3);
+}
+
+.mood-lonely .poem-divider {
+  background: rgba(135, 149, 167, 0.3);
+}
+
+.mood-hopeful .poem-divider {
+  background: rgba(40, 199, 111, 0.3);
+}
+
+.mood-poem {
+  font-size: 28rpx;
+  color: #666;
+  text-align: center;
+  line-height: 1.8;
+  font-style: italic;
+  padding: 0 20rpx;
 }
 
 .swipe-hint {
@@ -108,33 +216,50 @@
   visibility: hidden;
 }
 
-/* 添加上下滑动动画效果 */
-@keyframes slideInUp {
-  from {
-    transform: translateY(100%);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
+/* 添加滑动动画样式 */
+.slide-transition {
+  transition: all 0.25s ease-out;
 }
 
-@keyframes slideOutDown {
-  from {
-    transform: translateY(0);
-    opacity: 1;
-  }
-  to {
-    transform: translateY(-100%);
-    opacity: 0;
-  }
+.slide-up-animation {
+  transform: translateY(-30%);
+  opacity: 0;
+  transition: all 0.25s ease-out;
 }
 
-.slide-in {
-  animation: slideInUp 0.3s ease-out;
+.slide-down-animation {
+  transform: translateY(30%);
+  opacity: 0;
+  transition: all 0.25s ease-out;
 }
 
-.slide-out {
-  animation: slideOutDown 0.3s ease-out;
+.slide-reset {
+  transform: translateY(0);
+  opacity: 1;
+  transition: all 0.25s ease-out;
+}
+
+/* 为每种心情定义背景渐变 */
+.mood-happy {
+  background: linear-gradient(to bottom, rgba(255, 117, 140, 0.1), rgba(255, 117, 140, 0.02)) !important;
+}
+
+.mood-peaceful {
+  background: linear-gradient(to bottom, rgba(50, 157, 156, 0.1), rgba(50, 157, 156, 0.02)) !important;
+}
+
+.mood-missing {
+  background: linear-gradient(to bottom, rgba(101, 166, 209, 0.1), rgba(101, 166, 209, 0.02)) !important;
+}
+
+.mood-yearning {
+  background: linear-gradient(to bottom, rgba(255, 167, 81, 0.1), rgba(255, 167, 81, 0.02)) !important;
+}
+
+.mood-lonely {
+  background: linear-gradient(to bottom, rgba(135, 149, 167, 0.1), rgba(135, 149, 167, 0.02)) !important;
+}
+
+.mood-hopeful {
+  background: linear-gradient(to bottom, rgba(40, 199, 111, 0.1), rgba(40, 199, 111, 0.02)) !important;
 }

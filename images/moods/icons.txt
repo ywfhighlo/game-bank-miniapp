@@ -1,0 +1,187 @@
+happy.svg:
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M40 20C45 30 55 35 65 35C55 45 55 55 40 65C25 55 25 45 15 35C25 35 35 30 40 20Z" 
+        stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <circle cx="40" cy="40" r="5" fill="currentColor"/>
+  <path d="M40 15C42 12 44 10 47 8M40 15C38 12 36 10 33 8" 
+        stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+</svg>
+
+peaceful.svg:
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M15 40C25 40 30 35 40 35C50 35 55 40 65 40" 
+        stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+  <path d="M15 50C25 50 30 45 40 45C50 45 55 50 65 50" 
+        stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+  <path d="M40 20C45 20 50 25 50 30C50 35 45 40 40 40C45 40 50 35 50 30C50 25 45 20 40 20Z" 
+        fill="currentColor"/>
+</svg>
+
+missing.svg:
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M20 30L40 45L60 30V55H20V30Z" 
+        stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <path d="M20 30L40 45L60 30L40 15L20 30Z" 
+        stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <path d="M65 20C63 22 60 25 58 28C60 26 63 25 65 25C63 28 60 30 58 32" 
+        stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+</svg>
+
+yearning.svg:
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M30 40C35 35 40 35 45 40C40 42 35 42 30 40Z" 
+        fill="currentColor"/>
+  <path d="M25 38C30 30 40 30 45 38" 
+        stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+  <path d="M45 45C48 45 50 47 50 50C50 53 48 55 45 55H35C32 55 30 53 30 50C30 47 32 45 35 45C35 42 37 40 40 40C43 40 45 42 45 45Z" 
+        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+</svg>
+
+lonely.svg:
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M40 55V40" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+  <path d="M40 40C35 40 32 35 32 30C32 25 35 20 40 20C45 20 48 25 48 30C48 35 45 40 40 40Z" 
+        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <path d="M55 25C58 25 60 27 60 30C60 33 58 35 55 35C57 35 60 33 60 30C60 27 57 25 55 25Z" 
+        fill="currentColor"/>
+  <line x1="30" y1="55" x2="50" y2="55" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+</svg>
+
+hopeful.svg:
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M40 55C40 45 45 40 50 35C45 35 40 40 40 45V55Z" 
+        fill="currentColor"/>
+  <path d="M40 55C40 45 35 40 30 35C35 35 40 40 40 45V55Z" 
+        fill="currentColor"/>
+  <line x1="40" y1="55" x2="40" y2="65" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+  <path d="M40 15L40 25M30 20L35 25M50 20L45 25M20 30L25 35M60 30L55 35" 
+        stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+</svg>
+
+excited.svg:
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M40 20L45 15L50 20L45 25L40 20ZM40 20L35 15L30 20L35 25L40 20Z" 
+        fill="currentColor"/>
+  <path d="M25 35C35 45 45 45 55 35" 
+        stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+  <path d="M40 50C45 50 50 45 50 40M40 50C35 50 30 45 30 40" 
+        stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+</svg>
+
+grateful.svg:
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M40 60C50 60 55 50 55 40C55 30 50 20 40 20C30 20 25 30 25 40C25 50 30 60 40 60Z" 
+        stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <path d="M40 50C45 50 48 45 48 40C48 35 45 30 40 30C35 30 32 35 32 40C32 45 35 50 40 50Z" 
+        fill="currentColor"/>
+</svg>
+
+relaxed.svg:
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M30 40C35 40 40 35 40 30C40 35 45 40 50 40C45 40 40 45 40 50C40 45 35 40 30 40Z" 
+        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <path d="M20 30C25 30 30 25 30 20M60 30C55 30 50 25 50 20M20 50C25 50 30 55 30 60M60 50C55 50 50 55 50 60" 
+        stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+</svg>
+
+proud.svg:
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M40 20L50 30L40 60L30 30L40 20Z" 
+        stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <path d="M35 15L40 10L45 15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+</svg>
+
+blessed.svg:
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M40 60C50 60 55 50 55 40C55 30 50 20 40 20C30 20 25 30 25 40C25 50 30 60 40 60Z" 
+        stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <path d="M40 50L45 40L40 30L35 40L40 50Z" fill="currentColor"/>
+</svg>
+
+motivated.svg:
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M20 40L35 25L45 35L60 20M60 20H50M60 20V30" 
+        stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M20 50L35 35L45 45L60 30" 
+        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+
+creative.svg:
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M40 20C45 20 50 25 50 30C50 35 45 40 40 40C35 40 30 35 30 30C30 25 35 20 40 20Z" 
+        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <path d="M40 40V60M30 50L50 50" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+  <path d="M35 25L45 35M45 25L35 35" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+</svg>
+
+calm.svg:
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M20 40H60" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+  <path d="M30 30H50M30 50H50" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+</svg>
+
+nostalgic.svg:
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M30 40C30 30 35 20 40 20C45 20 50 30 50 40C50 50 45 60 40 60C35 60 30 50 30 40Z" 
+        stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <path d="M40 30V50M30 40H50" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+</svg>
+
+determined.svg:
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M20 60L40 20L60 60H20Z" 
+        stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <path d="M40 40L40 50" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+</svg>
+
+curious.svg:
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="40" cy="35" r="15" 
+        stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <path d="M40 55V60" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+  <path d="M35 35C35 33 37 30 40 30C43 30 45 33 45 35C45 37 43 40 40 40" 
+        stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+</svg>
+
+content.svg:
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M30 40C30 35 35 30 40 30C45 30 50 35 50 40C50 45 45 50 40 50C35 50 30 45 30 40Z" 
+        stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <path d="M40 35V45M35 40H45" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+</svg>
+
+energetic.svg:
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M40 20L50 35H30L40 50" 
+        stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M30 25L35 20M50 25L45 20M30 55L35 50M50 55L45 50" 
+        stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+</svg>
+
+thankful.svg:
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M40 60C50 60 55 50 55 40C55 30 50 20 40 20C30 20 25 30 25 40C25 50 30 60 40 60Z" 
+        stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <path d="M30 40L35 45L45 35" 
+        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+</svg> 

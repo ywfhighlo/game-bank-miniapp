@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- 小树 -->
+  <path d="M40 55V40" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+  <path d="M40 40C35 40 32 35 32 30C32 25 35 20 40 20C45 20 48 25 48 30C48 35 45 40 40 40Z" 
+        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <!-- 月亮 -->
+  <path d="M55 25C58 25 60 27 60 30C60 33 58 35 55 35C57 35 60 33 60 30C60 27 57 25 55 25Z" 
+        fill="currentColor"/>
+  <!-- 地面 -->
+  <line x1="30" y1="55" x2="50" y2="55" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+</svg> 
