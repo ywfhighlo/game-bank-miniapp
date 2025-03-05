@@ -1,0 +1,301 @@
+.container {
+  min-height: 100vh;
+  background-color: #f5f5f5;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+}
+
+.mood-card {
+  background: #fff;
+  flex: 1;
+  width: 100%;
+  position: relative;
+  transition: transform 0.3s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.mood-card.show-actions {
+  transform: translateX(-200rpx);
+}
+
+.mood-content {
+  flex: 1;
+  margin: 30rpx;
+  padding: 60rpx 40rpx;
+  border-radius: 24rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 60rpx;
+  transition: all 0.25s ease-out;
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.05);
+  max-width: 650rpx;
+  margin: 30rpx auto;
+  background: linear-gradient(to bottom, rgba(var(--mood-color), 0.35), rgba(var(--mood-color), 0.2));
+}
+
+.mood-quote {
+  font-size: 36rpx;
+  color: #333;
+  text-align: center;
+  line-height: 1.6;
+  font-weight: 500;
+  padding: 0;
+  letter-spacing: 2rpx;
+  max-width: 550rpx;
+}
+
+.mood-main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 30rpx;
+  padding: 20rpx 0;
+}
+
+.mood-icon-wrapper {
+  width: 120rpx;
+  height: 120rpx;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 6rpx 16rpx rgba(0, 0, 0, 0.1);
+  margin: 10rpx 0;
+}
+
+.mood-icon {
+  width: 80rpx;
+  height: 80rpx;
+}
+
+/* 为每种心情定义特定的样式 */
+.mood-happy .mood-icon-wrapper {
+  background: linear-gradient(135deg, #ff7eb3 0%, #ff758c 100%);
+  box-shadow: 0 6rpx 16rpx rgba(255, 117, 140, 0.2);
+}
+
+.mood-peaceful .mood-icon-wrapper {
+  background: linear-gradient(135deg, #7be495 0%, #329d9c 100%);
+  box-shadow: 0 6rpx 16rpx rgba(50, 157, 156, 0.2);
+}
+
+.mood-missing .mood-icon-wrapper {
+  background: linear-gradient(135deg, #90d5ec 0%, #65a6d1 100%);
+  box-shadow: 0 6rpx 16rpx rgba(101, 166, 209, 0.2);
+}
+
+.mood-yearning .mood-icon-wrapper {
+  background: linear-gradient(135deg, #ffd26f 0%, #ffa751 100%);
+  box-shadow: 0 6rpx 16rpx rgba(255, 167, 81, 0.2);
+}
+
+.mood-lonely .mood-icon-wrapper {
+  background: linear-gradient(135deg, #b8c6db 0%, #8795a7 100%);
+  box-shadow: 0 6rpx 16rpx rgba(135, 149, 167, 0.2);
+}
+
+.mood-hopeful .mood-icon-wrapper {
+  background: linear-gradient(135deg, #81fbb8 0%, #28c76f 100%);
+  box-shadow: 0 6rpx 16rpx rgba(40, 199, 111, 0.2);
+}
+
+.mood-type {
+  font-size: 44rpx;
+  font-weight: bold;
+  color: #333;
+  letter-spacing: 6rpx;
+}
+
+.poem-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  gap: 20rpx;
+  max-width: 550rpx;
+}
+
+.poem-divider {
+  width: 40rpx;
+  height: 3rpx;
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 2rpx;
+  margin: 0;
+}
+
+/* 为每种心情定义分隔线样式 */
+.mood-happy .poem-divider {
+  background: rgba(255, 117, 140, 0.3);
+}
+
+.mood-peaceful .poem-divider {
+  background: rgba(50, 157, 156, 0.3);
+}
+
+.mood-missing .poem-divider {
+  background: rgba(101, 166, 209, 0.3);
+}
+
+.mood-yearning .poem-divider {
+  background: rgba(255, 167, 81, 0.3);
+}
+
+.mood-lonely .poem-divider {
+  background: rgba(135, 149, 167, 0.3);
+}
+
+.mood-hopeful .poem-divider {
+  background: rgba(40, 199, 111, 0.3);
+}
+
+.mood-poem {
+  font-size: 28rpx;
+  color: #666;
+  text-align: center;
+  line-height: 1.8;
+  padding: 0 20rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10rpx;
+}
+
+.poem-content {
+  margin-bottom: 10rpx;
+}
+
+.poem-author {
+  font-size: 24rpx;
+  color: #999;
+  font-style: italic;
+}
+
+.swipe-hint {
+  text-align: center;
+  padding: 20rpx;
+  color: #999;
+  font-size: 24rpx;
+  background: #fff;
+}
+
+/* 添加滑动动画样式 */
+.slide-transition {
+  transition: all 0.25s ease-out;
+}
+
+.slide-up-animation {
+  transform: translateY(-30%);
+  opacity: 0;
+  transition: all 0.25s ease-out;
+}
+
+.slide-down-animation {
+  transform: translateY(30%);
+  opacity: 0;
+  transition: all 0.25s ease-out;
+}
+
+.slide-left-animation {
+  transform: translateX(-100%);
+  opacity: 0;
+  transition: all 0.25s ease-out;
+}
+
+.slide-right-animation {
+  transform: translateX(100%);
+  opacity: 0;
+  transition: all 0.25s ease-out;
+}
+
+.slide-reset {
+  transform: translateY(0);
+  opacity: 1;
+  transition: all 0.25s ease-out;
+}
+
+/* 为每种心情定义背景渐变 */
+.mood-happy {
+  --mood-color: 255, 117, 140;
+}
+
+.mood-peaceful {
+  --mood-color: 50, 157, 156;
+}
+
+.mood-missing {
+  --mood-color: 101, 166, 209;
+}
+
+.mood-yearning {
+  --mood-color: 255, 167, 81;
+}
+
+.mood-lonely {
+  --mood-color: 135, 149, 167;
+}
+
+.mood-hopeful {
+  --mood-color: 40, 199, 111;
+}
+
+.mood-excited {
+  --mood-color: 237, 87, 54;
+}
+
+.mood-grateful {
+  --mood-color: 195, 39, 43;
+}
+
+.mood-relaxed {
+  --mood-color: 48, 223, 243;
+}
+
+.mood-proud {
+  --mood-color: 220, 48, 35;
+}
+
+.mood-blessed {
+  --mood-color: 240, 161, 168;
+}
+
+.mood-motivated {
+  --mood-color: 157, 41, 51;
+}
+
+.mood-creative {
+  --mood-color: 69, 185, 124;
+}
+
+.mood-calm {
+  --mood-color: 112, 243, 255;
+}
+
+.mood-nostalgic {
+  --mood-color: 137, 47, 29;
+}
+
+.mood-determined {
+  --mood-color: 0, 51, 113;
+}
+
+.mood-curious {
+  --mood-color: 72, 192, 163;
+}
+
+.mood-content {
+  --mood-color: 120, 146, 98;
+}
+
+.mood-energetic {
+  --mood-color: 255, 70, 31;
+}
+
+.mood-thankful {
+  --mood-color: 228, 198, 208;
+}

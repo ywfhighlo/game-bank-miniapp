@@ -1,12 +1,36 @@
 {
   "lazyCodeLoading": "requiredComponents",
+  "requiredBackgroundModes": [],
+  "requiredPrivateInfos": [],
+
+  "preloadRule": {},
+  "resizable": false,
+  "darkmode": false,
+  "debug": false,
+
+  "useExtendedLib": {
+    "weui": true
+  },
+
+  "permission": {},
+
+  "supportedMaterials": [],
+  "networkTimeout": {
+    "request": 60000,
+    "connectSocket": 60000,
+    "uploadFile": 60000,
+    "downloadFile": 60000
+  },
   "pages": [
     "pages/index/index",
     "pages/login/login",
     "pages/sport/sport",
     "pages/game/game",
     "pages/profile/profile",
-    "pages/settings/settings"
+    "pages/settings/settings",
+    "pages/holiday-countdown/holiday-countdown",
+    "pages/daily-inspiration/daily-inspiration",
+    "pages/mood-card/mood-card"
   ],
   "window": {
     "backgroundTextStyle": "light",

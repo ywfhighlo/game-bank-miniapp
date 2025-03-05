@@ -45,4 +45,17 @@
   color: #333;
   text-align: center;
   padding: 10rpx;
+}
+
+/* 添加滑动动画样式 */
+.slide-left-animation {
+  transform: translateX(-100%);
+  opacity: 0;
+  transition: all 0.25s ease-out;
+}
+
+.slide-right-animation {
+  transform: translateX(100%);
+  opacity: 0;
+  transition: all 0.25s ease-out;
 } 

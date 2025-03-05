@@ -14,7 +14,15 @@ Page({
     dailyLimit: 7200,
     weeklyLimit: 36000,
     restInterval: 1800,
-    restDuration: 300
+    restDuration: 300,
+    countdown: '',
+    holidayType: '',
+    holidayDates: {
+      winterStart: '2024-01-15',
+      winterEnd: '2024-02-15',
+      summerStart: '2024-07-01',
+      summerEnd: '2024-08-31'
+    }
   },
 
   // 获取用户运动记录和游戏时间数据
@@ -111,6 +119,13 @@ Page({
     console.log('Global user info:', app.globalData.userInfo);
     console.log('Global userId:', app.globalData.userId);
     
+    // 初始化倒计时
+    this.updateCountdown();
+    // 每分钟更新一次倒计时
+    setInterval(() => {
+      this.updateCountdown();
+    }, 60000);
+    
     // 检查用户是否已登录
     const storedUserInfo = wx.getStorageSync('userInfo');
     if (storedUserInfo && storedUserInfo.userId) {
@@ -159,13 +174,68 @@ Page({
 
   navigateToSport() {
     wx.navigateTo({
-      url: '/pages/sport/sport'
+      url: '/pages/sport/sport',
+      webviewId: Date.now()
     });
   },
 
   navigateToGame() {
     wx.navigateTo({
-      url: '/pages/game/game'
+      url: '/pages/game/game',
+      webviewId: Date.now()
+    });
+  },
+
+  navigateToCountdown() {
+    wx.navigateTo({
+      url: '/pages/holiday-countdown/holiday-countdown',
+      webviewId: Date.now()
+    });
+  },
+
+  navigateToQuote() {
+    wx.navigateTo({
+      url: '/pages/daily-inspiration/daily-inspiration',
+      webviewId: Date.now()
+    });
+  },
+
+  navigateToMoodCard() {
+    wx.navigateTo({
+      url: '/pages/mood-card/mood-card'
+    });
+  },
+
+  updateCountdown() {
+    const now = new Date();
+    const year = now.getFullYear();
+    const winterStart = new Date(this.data.holidayDates.winterStart);
+    const summerStart = new Date(this.data.holidayDates.summerStart);
+    
+    let targetDate;
+    let holidayType;
+    
+    if (now < winterStart) {
+      targetDate = winterStart;
+      holidayType = '寒假';
+    } else if (now < summerStart) {
+      targetDate = summerStart;
+      holidayType = '暑假';
+    } else {
+      // 如果当前日期超过今年暑假，则计算到下一年寒假的时间
+      const nextYearWinter = new Date(year + 1 + '-01-15');
+      targetDate = nextYearWinter;
+      holidayType = '寒假';
+    }
+    
+    const timeDiff = targetDate - now;
+    const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
+    
+    this.setData({
+      countdown: `距离${holidayType}还有 ${days}天${hours}小时${minutes}分钟`,
+      holidayType: holidayType
     });
   }
 });

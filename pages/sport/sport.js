@@ -6,7 +6,11 @@ Page({
     pendingRecord: null,     // 保存待验证记录（例如：{ duration: 10, recordId: 'xxx' }）
     verificationCode: '',    // 用户输入的验证码
     message: '',            // 用于页面下方显示提示信息
-    showVerification: false  // 是否显示验证码输入界面
+    showVerification: false,  // 是否显示验证码输入界面
+    touchStartX: 0,
+    touchStartY: 0,
+    isSliding: false,
+    slideClass: ''
   },
   // 页面加载时检查用户登录状态
   onLoad() {
@@ -205,5 +209,62 @@ Page({
         });
       }
     });
-  }
+  },
+  // 触摸开始事件
+  touchStart(e) {
+    if (this.data.isSliding) return;
+    
+    this.setData({
+      touchStartX: e.touches[0].clientX,
+      touchStartY: e.touches[0].clientY
+    });
+  },
+
+  // 触摸移动事件
+  touchMove(e) {
+    if (this.data.isSliding) return;
+
+    const touchEndX = e.touches[0].clientX;
+    const touchEndY = e.touches[0].clientY;
+    const deltaX = touchEndX - this.data.touchStartX;
+    const deltaY = touchEndY - this.data.touchStartY;
+
+    // 判断是水平滑动还是垂直滑动
+    if (Math.abs(deltaX) > Math.abs(deltaY)) {
+      // 水平滑动
+      if (Math.abs(deltaX) > 50) { // 滑动距离超过50才触发
+        if (deltaX > 0) {
+          // 右滑，返回主页
+          this.setData({
+            isSliding: true,
+            slideClass: 'slide-right-animation'
+          });
+          setTimeout(() => {
+            wx.reLaunch({
+              url: '/pages/index/index'
+            });
+          }, 300);
+        } else {
+          // 左滑，返回上一页
+          this.setData({
+            isSliding: true,
+            slideClass: 'slide-left-animation'
+          });
+          setTimeout(() => {
+            wx.navigateBack();
+          }, 300);
+        }
+      }
+    }
+  },
+
+  // 触摸结束事件
+  touchEnd() {
+    if (!this.data.isSliding) {
+      this.setData({
+        touchStartX: 0,
+        touchStartY: 0
+      });
+    }
+  },
 }); 

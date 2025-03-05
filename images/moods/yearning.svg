@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- 飞鸟 -->
+  <path d="M30 40C35 35 40 35 45 40C40 42 35 42 30 40Z" 
+        fill="currentColor"/>
+  <path d="M25 38C30 30 40 30 45 38" 
+        stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+  <!-- 云朵 -->
+  <path d="M45 45C48 45 50 47 50 50C50 53 48 55 45 55H35C32 55 30 53 30 50C30 47 32 45 35 45C35 42 37 40 40 40C43 40 45 42 45 45Z" 
+        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+</svg> 

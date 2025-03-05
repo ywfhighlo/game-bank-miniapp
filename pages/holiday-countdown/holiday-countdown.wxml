@@ -1,0 +1,27 @@
+<view class="container {{slideClass}}"
+      bindtouchstart="touchStart" 
+      bindtouchmove="touchMove" 
+      bindtouchend="touchEnd">
+  <view class="title">放松一下</view>
+  <view class="subtitle">深呼吸，一切都会过去</view>
+  
+  <!-- 倒计时卡片 -->
+  <view class="countdown-card {{slideClass}}" 
+        bindtouchstart="handleTouchStart" 
+        bindtouchmove="handleTouchMove" 
+        bindtouchend="handleTouchEnd"
+        data-card-type="holiday-countdown">
+    <view class="holiday-title">{{currentHoliday.name}}倒计时</view>
+    <view class="countdown-number pulse">{{countdown}}</view>
+    <view class="countdown-label">天</view>
+    <view class="holiday-info">
+      <text>{{currentHoliday.name}}时间：</text>
+      <text class="holiday-date">{{currentHoliday.date}}</text>
+    </view>
+    <view class="motivation-text">{{motivationText}}</view>
+  </view>
+
+  <view class="next-holiday" wx:if="{{nextHoliday}}">
+    <text>下一个假期：{{nextHoliday.name}} ({{nextHoliday.date}})</text>
+  </view>
+</view>

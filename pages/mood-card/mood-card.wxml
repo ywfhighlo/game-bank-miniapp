@@ -1,0 +1,34 @@
+<view class="container" 
+      bindtouchstart="touchStart" 
+      bindtouchmove="touchMove" 
+      bindtouchend="touchEnd">
+  <view class="mood-card">
+    <view class="mood-content {{slideClass}} {{containerClass}}">
+      <view class="mood-quote">{{currentMood.quote}}</view>
+      
+      <view class="mood-main">
+        <view class="mood-icon-wrapper">
+          <image class="mood-icon" src="/images/moods/{{currentMood.type}}.svg" mode="aspectFit"></image>
+        </view>
+        <view class="mood-type">{{currentMood.type}}</view>
+      </view>
+
+      <view class="poem-section">
+        <view class="poem-divider"></view>
+        <view class="mood-poem">
+          <text class="poem-content">{{currentMood.poemContent}}</text>
+          <text class="poem-author">{{currentMood.poemAuthor}}</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="swipe-hint">
+      <text>上下滑动切换心情 · 左滑返回 · 右滑到首页</text>
+    </view>
+  </view>
+
+  <!-- 用于生成分享图片的canvas -->
+  <canvas type="2d" id="moodCanvas" class="hidden-canvas"
+    style="width: 300px; height: 400px;">
+  </canvas>
+</view>
